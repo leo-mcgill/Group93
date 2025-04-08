@@ -1,0 +1,83 @@
+<!--
+    CITS3403 project 2025
+    Group 93
+    Introductory view
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<html>
+    <!--head of html doc which contains metadata, title and link to external
+        css
+    -->
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Introductory View</title>
+        <link rel="stylesheet" type="text/css" href="./css_styles/common_styles.css">
+        
+    </head>
+    <body>
+        <!--title and navbar used to navigate around the website-->
+        <div class="website_title"><h1>Website Name</h2></div>
+        <nav class="navbar">
+            <ul class="nav_links">
+                <li><a href="">Introduction</a></li>
+                <li><a href="">Upload Data</a></li>
+                <li><a href="">Visualise Data</a></li>
+                <li><a href="">Share Data</a></li>
+            </ul>
+        </nav>
+        <!--login, signup and about sections which are used for accessing
+            the website. These elements are in divs so that resizing the page
+            will also resize and reposition the elements inside the divs.-->
+        <div style="justify-content: center; align-items: center; display: flex">
+            <div class="centered_container">
+                <div class="centered_div">
+                    <div class="title_container">
+                    <h1 class="title">App title here</h1>
+                </div>
+                    <!--login container has a form for the user to enter login details
+                        this will be sent to the server-->
+                <div class="login_container">
+                    <h2 class="subtitle login_title">Login</h2>
+                    <form action="" class="">
+                        <input class="introductory_input" type="text" name="login" id="login_username"
+                               placeholder="Enter username"><br><br>
+                        <input class="introductory_input" type="password" name="password" id="login_password"
+                               placeholder="Enter password"><br><br>
+                        <input class="introductory_submit" type="submit" value="Login">
+                    </form>
+                </div>
+                <!--sign up container has a form for the user to enter login account
+                    details and create an account.
+                    this will be sent to the server-->
+                <div class="signup_container">
+                    <h2 class="subtitle signup_title">Sign up</h2>
+                    <form action="">
+                        <input class="introductory_input" type="text" name="login" id="signup_username"
+                               placeholder="Enter username"><br><br>
+                        <input class="introductory_input" type="password" name="password" id="signup_password"
+                               placeholder="Enter password"><br><br>
+                        <input class="introductory_submit" type="submit" value="Sign Up">
+                    </form>
+                </div>
+            <!--this about container contains some text explaining what
+                the website is and what it does.-->
+            </div>    
+                <div class="centered_div">
+                    <div class="title_container">
+                        <h1 class="title">About</h1>
+                    </div>
+                    <div class="about_container">
+                        <p class="">This is some information about what this website is and what this
+                        website does.</p>
+                    </div>
+                    <div class="about_container">
+                        <p class="">Website developed by group 93 for CITS3403 Assignment 2025</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
