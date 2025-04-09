@@ -3,13 +3,15 @@ Agile Web Development project created by Group 93
 
 Instructions to run Flask application
 
-Create python virtual environment:
-$ python -m venv venv # Only need to do this once
+Create python virtual environment (Only need to do this once):
+$ python -m venv venv
+
+Activate your virtual environment:
 $ source venv/bin/activate # macOS/Linux
 $ venv\scripts\acticate # Windows
 
-Install Flask on Venv:
-$ pip install Flask
+Install requirements on Venv (only need to do this once):
+$ pip install -r requirements.txt
 
 run the app:
 $ python app.py

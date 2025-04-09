@@ -1,1 +1,6 @@
 Flask
+Flask-SQLAlchemy
+Flask-Login
+Werkzeug
+requests
+python-dotenv
