@@ -1,48 +1,47 @@
 <!-- templates/index.html -->
 {% extends "base.html" %}
 
-{% block title %}Introductory View{% endblock %}
+{% block title %}Introduction{% endblock %}
 
 {% block content %}
-<div style="justify-content: center; align-items: center; display: flex">
+<div class="body_container">
     <div class="centered_container">
-        <div class="centered_div">
+        <div class="centered_div column_direction">
             <div class="title_container">
-                <h1 class="title">App title here</h1>
+                <h1 class="title">Login</h1>
             </div>
-
+            <!--login container has a form for the user to enter login details
+                this will be sent to the server-->
             <div class="login_container">
-                <h2 class="subtitle login_title">Login</h2>
+                <h2 class="subtitle white_font">Login</h2>
                 <form action="" class="">
-                    <input class="introductory_input" type="text" name="login" id="login_username"
-                        placeholder="Enter username"><br><br>
-                    <input class="introductory_input" type="password" name="password" id="login_password"
-                        placeholder="Enter password"><br><br>
-                    <input class="introductory_submit" type="submit" value="Login">
+                    <input class="input" type="text" name="login" id="login_username"
+                           placeholder="Enter username"><br><br>
+                    <input class="input" type="password" name="password" id="login_password"
+                           placeholder="Enter password"><br><br>
+                    <input class="submit" type="submit" value="Login">
                 </form>
             </div>
-
+            <!--sign up container has a form for the user to enter login account
+                details and create an account.
+                this will be sent to the server-->
             <div class="signup_container">
-                <h2 class="subtitle signup_title">Sign up</h2>
-                <form action="">
-                    <input class="introductory_input" type="text" name="login" id="signup_username"
-                        placeholder="Enter username"><br><br>
-                    <input class="introductory_input" type="password" name="password" id="signup_password"
-                        placeholder="Enter password"><br><br>
-                    <input class="introductory_submit" type="submit" value="Sign Up">
-                </form>
+                <h2 class="subtitle white_font">Sign up</h2>
+                <a href="/login"><button class="submit">Sign Up</button></a>
             </div>
         </div>
-
-        <div class="centered_div">
+            <!--this about container contains some text explaining what
+                the website is and what it does.-->   
+        <div class="centered_div column_direction">
             <div class="title_container">
                 <h1 class="title">About</h1>
             </div>
             <div class="about_container">
-                <p>This is some information about what this website is and what this website does.</p>
+                <p class="">This is some information about what this website is and what this
+                website does.</p>
             </div>
             <div class="about_container">
-                <p>Website developed by group 93 for CITS3403 Assignment 2025</p>
+                <p class="">Website developed by group 93 for CITS3403 Assignment 2025</p>
             </div>
         </div>
     </div>

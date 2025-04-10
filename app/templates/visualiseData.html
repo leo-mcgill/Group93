@@ -2,6 +2,39 @@
 
 {% block title %}Visualise Data{% endblock %}
 
-{% block content %}
+{% set stylesheet_file = 'css_styles/visualise_styles.css' %}
 
+{% block content %}
+<!--Visualise Data section-->
+<div class="body_container">
+    <div class="centered_container column_direction">
+        <div class="centered_div">
+            <div class="title_container">
+                <h1 class="title">Visualise Data</h1>
+            </div>
+        </div>
+        <div class="centered_div row_direction">
+            <div class="movie_container">
+                <h2 class="subtitle white_font">Movie 1</h2>
+            </div>
+            <div class="movie_image_container">
+                <h2 class="subtitle white_font">Movie Image</h2>
+            </div>
+            <div class="grey_container">
+                <h2 class="subtitle white_font">Movie Details</h2>
+            </div>
+        </div>
+        <div class="centered_div row_direction">
+            <div class="movie_container">
+                <h2 class="subtitle white_font">Movie 2</h2>
+            </div>
+            <div class="movie_image_container">
+                <h2 class="subtitle white_font">Movie Image</h2>
+            </div>
+            <div class="grey_container">
+                <h2 class="subtitle white_font">Movie Details</h2>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

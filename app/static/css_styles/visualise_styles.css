@@ -1,0 +1,20 @@
+.movie_container {
+    background-color: darkgreen;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-bottom: 30px;
+}
+
+.movie_image_container{
+    background-color: darkblue;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-bottom: 30px;
+}
+
+.grey_container{
+    background-color: grey;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-bottom: 30px;
+}

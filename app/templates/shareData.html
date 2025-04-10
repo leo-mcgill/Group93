@@ -2,6 +2,37 @@
 
 {% block title %}Share Data{% endblock %}
 
+{% set stylesheet_file = 'css_styles/share_styles.css' %}
+
 {% block content %}
+
+<!--Share Data section-->
+<div class="body_container">
+    <div class="centered_container">
+        <div class="centered_div column_direction">
+            <div class="title_container">
+                <h1 class="title">Share Data</h1>
+            </div>
+            <div class="share_user_container">
+                <h2 class="subtitle white_font">Share Data</h2>
+                <form action="" class="">
+                    <input class="input" type="text" name="login" id="login_username"
+                           placeholder="Enter username"><br><br>
+                    <input class="share_submit" type="submit" value="Share Data">
+                </form>
+            </div>
+        </div>
+        <div class="centered_div column_direction">
+            <div class="title_container">
+                <h1 class="title">Shared Users</h1>
+            </div>
+            <div class="about_container">
+                <p class="">user1</p>
+                <p class="">user2</p>
+                <p class="">user3</p>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

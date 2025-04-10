@@ -1,0 +1,15 @@
+.share_user_container {
+    background-color: darkgreen;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-bottom: 30px;
+}
+
+.share_submit {
+    font-size: 30px;
+    border: none;
+    background-color: lightgreen;
+    border-radius: 4px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
