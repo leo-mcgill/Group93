@@ -52,21 +52,17 @@
     font-size: 25px;
 }
 
-.login_title{
+.white_font{
     color: white;
 }
 
-.signup_title{
-    color: white;
-}
-
-.introductory_input{
+.input{
     font-size: 25px;
     border: 1px solid black;
     border-radius: 4px;
 }
 
-.introductory_submit{
+.submit{
     font-size: 30px;
     border: none;
     background-color: lightgreen;
