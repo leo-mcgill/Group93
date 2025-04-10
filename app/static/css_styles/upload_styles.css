@@ -1,11 +1,11 @@
-.share_user_container {
+.upload_container {
     background-color: darkgreen;
     padding-left: 30px;
     padding-right: 30px;
     padding-bottom: 30px;
 }
 
-.share_submit {
+.upload_submit{
     font-size: 30px;
     border: none;
     background-color: lightgreen;
