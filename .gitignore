@@ -1,0 +1,6 @@
+# Ignore the venv folder in the project root
+venv/
+
+# Ignore all __pycache__ folders across the entire project
+__pycache__/
+
