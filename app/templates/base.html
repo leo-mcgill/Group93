@@ -1,0 +1,30 @@
+<!-- templates/base.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Website Name{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css_styles/common_styles.css') }}">
+</head>
+<body>
+    <div class="website_title"><h1>Website Name</h1></div>
+
+    <nav class="navbar">
+        <ul class="nav_links">
+            <li><a href="/">Introduction</a></li>
+            <li><a href="/uploadData">Upload Data</a></li>
+            <li><a href="/visualiseData">Visualise Data</a></li>
+            <li><a href="/shareData">Share Data</a></li>
+            {% if current_user.is_authenticated %}
+                <li><a href="/logout">Logout ({{ current_user.username }})</a></li>
+            {% else %}
+                <li><a href="/login">Login / Sign Up</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <!-- Page-specific content will be injected here -->
+    {% block content %}{% endblock %}
+</body>
+</html>

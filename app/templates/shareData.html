@@ -1,36 +1,7 @@
-<!--
-    CITS3403 project 2025
-    Group 93
-    uploadData
--->
+{% extends "base.html" %}
 
-<!DOCTYPE html>
-<html lang="en">
-<html>
-    <!--head of html doc which contains metadata, title and link to external
-        css
-    -->
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Share Data</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='css_styles/common_styles.css') }}">
-        
-    </head>
-    <body>
-        <!--title and navbar used to navigate around the website-->
-        <div class="website_title"><h1>Website Name</h2></div>
-            <nav class="navbar">
-                <ul class="nav_links">
-                    <li><a href="/">Introduction</a></li>
-                    <li><a href="/uploadData">Upload Data</a></li>
-                    <li><a href="visualiseData">Visualise Data</a></li>
-                    <li><a href="shareData">Share Data</a></li>
-                </ul>
-            </nav>
-        
+{% block title %}Share Data{% endblock %}
 
-        
-         
-    </body>
-</html>
+{% block content %}
+
+{% endblock %}
