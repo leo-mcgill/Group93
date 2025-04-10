@@ -1,8 +1,15 @@
 from flask import Flask, render_template, redirect, url_for, request, flash
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from models import db, User, Movie
+from dotenv import load_dotenv
+import os
+
 
 app = Flask(__name__)
+
+load_dotenv()
+app.secret_key = os.getenv('SECRET_KEY')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///yourdb.sqlite3'
 db.init_app(app)
@@ -24,7 +31,7 @@ def login():
         if user and user.check_password(password):
             login_user(user)
             flash('Logged in successfully.', 'success')
-            return redirect(url_for('index'))
+            return redirect(url_for('home'))
         else:
             flash('Invalid credentials.', 'danger')
     return render_template("login.html")
@@ -51,7 +58,7 @@ def signup():
 def logout():
     logout_user()
     flash("Logged out successfully.", "info")
-    return redirect(url_for("index"))
+    return redirect(url_for("home"))
 
 @app.route('/')
 def home():
