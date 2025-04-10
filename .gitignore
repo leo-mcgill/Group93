@@ -1,0 +1,33 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+env/
+
+# Environment variables
+.env
+
+# SQLite DB (if you don't want to track your dev DB)
+*.sqlite3
+
+# Logs
+*.log
+
+# Mac-specific
+.DS_Store
+
+# VS Code config (optional)
+.vscode/
+
+# PyCharm config (optional)
+.idea/
+
+# Flask cache / temp files
+instance/
+*.pid
+
+# Migrations (optional — keep if you want to version them)
+migrations/
