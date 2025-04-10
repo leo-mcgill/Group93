@@ -5,6 +5,10 @@ app = Flask(__name__)
 @app.route('/')
 def home():
     return render_template('index.html')
+
+@app.route('/signUp')
+def signUp():
+    return render_template("signUp.html")
     
 @app.route('/uploadData')
 def uploadData():
