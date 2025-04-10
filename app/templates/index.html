@@ -31,35 +31,35 @@
         <!--login, signup and about sections which are used for accessing
             the website. These elements are in divs so that resizing the page
             will also resize and reposition the elements inside the divs.-->
-        <div style="justify-content: center; align-items: center; display: flex">
+        <div class="body_container">
             <div class="centered_container">
-                <div class="centered_div">
+                <div class="centered_div column_direction">
                     <div class="title_container">
-                    <h1 class="title">Login</h1>
-                </div>
+                        <h1 class="title">Login</h1>
+                    </div>
                     <!--login container has a form for the user to enter login details
                         this will be sent to the server-->
-                <div class="login_container">
-                    <h2 class="subtitle white_font">Login</h2>
-                    <form action="" class="">
-                        <input class="input" type="text" name="login" id="login_username"
-                               placeholder="Enter username"><br><br>
-                        <input class="input" type="password" name="password" id="login_password"
-                               placeholder="Enter password"><br><br>
-                        <input class="submit" type="submit" value="Login">
-                    </form>
+                    <div class="login_container">
+                        <h2 class="subtitle white_font">Login</h2>
+                        <form action="" class="">
+                            <input class="input" type="text" name="login" id="login_username"
+                                   placeholder="Enter username"><br><br>
+                            <input class="input" type="password" name="password" id="login_password"
+                                   placeholder="Enter password"><br><br>
+                            <input class="submit" type="submit" value="Login">
+                        </form>
+                    </div>
+                    <!--sign up container has a form for the user to enter login account
+                        details and create an account.
+                        this will be sent to the server-->
+                    <div class="signup_container">
+                        <h2 class="subtitle white_font">Sign up</h2>
+                        <a href="/signUp"><button class="submit">Sign Up</button></a>
+                    </div>
                 </div>
-                <!--sign up container has a form for the user to enter login account
-                    details and create an account.
-                    this will be sent to the server-->
-                <div class="signup_container">
-                    <h2 class="subtitle white_font">Sign up</h2>
-                    <a href="/signUp"><button class="submit">Sign Up</button></a>
-                </div>
-            <!--this about container contains some text explaining what
-                the website is and what it does.-->
-            </div>    
-                <div class="centered_div">
+                    <!--this about container contains some text explaining what
+                        the website is and what it does.-->   
+                <div class="centered_div column_direction">
                     <div class="title_container">
                         <h1 class="title">About</h1>
                     </div>

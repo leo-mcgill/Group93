@@ -25,13 +25,26 @@
     text-decoration: none;
 }
 
+.body_container{
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
 .centered_div{
     display: flex;
-    flex-direction: column;
     width: 100%;
     height: 100%;
     flex-wrap: wrap;
     flex: 1;
+}
+
+.column_direction{
+    flex-direction: column;
+}
+
+.row_direction{
+    flex-direction: row;
 }
 
 .centered_container{
