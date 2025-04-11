@@ -2,24 +2,33 @@
 
 {% block title %}Login / Signup{% endblock %}
 
-{% block content %}
-    <div class="login-signup-wrapper">
-        <div class="login_container">
-            <h2>Login</h2>
-            <form action="{{ url_for('login') }}" method="POST">
-                <input type="text" name="username" placeholder="Username" required><br><br>
-                <input type="password" name="password" placeholder="Password" required><br><br>
-                <input type="submit" value="Login">
-            </form>
-        </div>
+{% set stylesheet_file = 'css_styles/signUp.css' %}
 
-        <div class="signup_container">
-            <h2>Sign Up</h2>
-            <form action="{{ url_for('signup') }}" method="POST">
-                <input type="text" name="username" placeholder="Username" required><br><br>
-                <input type="password" name="password" placeholder="Password" required><br><br>
-                <input type="submit" value="Sign Up">
-            </form>
+{% block content %}
+<div class="body_container">
+    <div class="centered_container">
+        <div class="centered_div column_direction">
+            <div class="title_container">
+                <h1 class="title">Sign up</h1>
+            </div>
+            <div class="login_container">
+                <h2 class="subtitle white_font">Login</h2>
+                <a href="/"><button class="submit">Login</button></a>
+            </div>
+            <!--sign up container has a form for the user to enter login account
+                details and create an account.
+                this will be sent to the server-->
+            <div class="signup_container">
+                <h2 class="subtitle white_font">Sign up</h2>
+                <form action="">
+                    <input class="input" type="text" name="login" id="signup_username"
+                           placeholder="Enter username"><br><br>
+                    <input class="input" type="password" name="password" id="signup_password"
+                           placeholder="Enter password"><br><br>
+                    <input class="submit" type="submit" value="Sign Up">
+                </form>
+            </div>
         </div>
     </div>
+</div>
 {% endblock %}

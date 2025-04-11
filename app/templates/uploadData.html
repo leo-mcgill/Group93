@@ -2,15 +2,26 @@
 
 {% block title %}Upload Data{% endblock %}
 
+{% set stylesheet_file = 'css_styles/upload_styles.css' %}
+
 {% block content %}
-    <h1>Add a Movie</h1>
-    <form method="POST">
-        <label for="movie_title">Movie Title:</label>
-        <input type="text" name="movie_title" placeholder="Enter a movie title" required>
-
-        <label for="user_rating">Your Rating (0-10):</label>
-        <input type="number" name="user_rating" min="0" max="10" step="0.1" placeholder="e.g., 8.5" required>
-
-        <button type="submit">Add Movie</button>
-    </form>
+<div class="body_container">
+    <div class="centered_container">
+        <div class="centered_div column_direction">
+            <div class="title_container">
+                <h1 class="title">Add a Movie</h1>
+            </div>
+            <div class="upload_container">
+                <form class="" method="POST">
+                    <label for="movie_title"><h2 class="white_font">Movie Title:</h2></label>
+                    <input class="input" type="text" name="movie_title" placeholder="Enter a movie title" required>
+                    <label class="white_font" for="user_rating"><h2 class="white_font">Your Rating (0-10):</h2></label>
+                    <input class="input" type="number" name="user_rating" min="0" max="10"
+                           step="0.1" placeholder="e.g., 8.5" required><br><br>
+                    <button class="upload_submit" type="submit">Add Movie</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
