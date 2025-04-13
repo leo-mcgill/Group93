@@ -1,8 +1,9 @@
-from flask import Flask, render_template, redirect, url_for, request, flash
+from flask import Flask, render_template, redirect, url_for, request, flash, jsonify
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from models import db, User, Movie
 from dotenv import load_dotenv
 import os
+import requests
 
 
 app = Flask(__name__)
@@ -10,6 +11,7 @@ app = Flask(__name__)
 load_dotenv()
 app.secret_key = os.getenv('SECRET_KEY')
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+API_KEY = os.getenv("API_KEY")
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///yourdb.sqlite3'
 db.init_app(app)
@@ -66,7 +68,20 @@ def home():
     
 @app.route('/uploadData')
 def uploadData():
-    return render_template("uploadData.html")
+    return render_template("uploadData.html", api_key=API_KEY)
+
+@app.route('/fetch_movie', methods=['POST'])
+def fetch_movie():
+    data = request.get_json()
+    title = data.get("title")
+
+    if not title:
+        return jsonify({"error": "Missing movie title"}), 400
+
+    import requests
+    omdb_url = f"https://www.omdbapi.com/?t={title}&apikey={API_KEY}"
+    response = requests.get(omdb_url)
+    return jsonify(response.json())
 
 @app.route('/shareData')
 def shareData():
@@ -78,4 +93,4 @@ def visualiseData():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True) 
