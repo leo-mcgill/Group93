@@ -1,4 +1,4 @@
-#py script to remove all entries from all tables
+#py script to remove all entries from all movie table
 
 import sys
 import os
@@ -9,7 +9,5 @@ from models import User, Movie
 
 with app.app_context():
     db.session.query(Movie).delete()
-    db.session.query(User).delete()
     db.session.commit()
-    print("All records deleted.")
-    
+    print("All movies deleted.")

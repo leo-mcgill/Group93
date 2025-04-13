@@ -42,8 +42,7 @@ http://127.0.0.1:5000/
 To quit:
 ctrl + c in terminal
 
-Make sure to leave your virtual environment once you want to commit or pull:
+Make sure to leave your virtual environment once you want to commit or pull/push:
 $ deactivate
 
-May need to cd into Group93 to activate venv depending on where you create it.
-Make sure you cd into app to run $ python app.py
+May need to cd into Group93 to activate venv depending on where you create it.s

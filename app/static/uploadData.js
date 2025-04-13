@@ -1,16 +1,11 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const form = document.querySelector("form");
+document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("movieForm");
 
-    form.addEventListener("submit", async function (event) {
-        event.preventDefault(); // Stop the form from submitting the traditional way
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
 
-        const movieTitle = form.movie_title.value;
-        const userRating = form.user_rating.value;
-
-        if (!movieTitle || !userRating) {
-            alert("Please enter both a movie title and a rating.");
-            return;
-        }
+        const movieTitle = form.elements["movie_title"].value;
+        const userRating = form.elements["user_rating"].value;
 
         try {
             const response = await fetch("/fetch_movie", {
@@ -18,22 +13,24 @@ document.addEventListener("DOMContentLoaded", function () {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ title: movieTitle })
+                body: JSON.stringify({
+                    movie_title: movieTitle,
+                    user_rating: userRating
+                })
             });
 
-            const data = await response.json();
-            console.log("OMDB API Response:", data);
-
-            if (data.Response === "False") {
-                alert("Movie not found. Please check the title.");
+            const result = await response.json();
+            const resultDiv = document.getElementById("movieResult");
+            if (response.ok) {
+                resultDiv.textContent = result.message;
+                resultDiv.style.color = "lightgreen";
             } else {
-                alert(`Movie found: ${data.Title} (${data.Year})`);
-                // You could also post to another Flask route to save this in the DB
-                // Or render info dynamically on the page
+                resultDiv.textContent = result.error || "Error occurred";
+                resultDiv.style.color = "red";
             }
         } catch (error) {
-            console.error("Error fetching movie data:", error);
-            alert("There was an error contacting the server.");
+            console.error("Error submitting movie:", error);
+            document.getElementById("movieResult").textContent = "Request failed.";
         }
     });
 });
