@@ -36,6 +36,7 @@ def login():
             return redirect(url_for('home'))
         else:
             flash('Invalid credentials.', 'danger')
+            return redirect(url_for('home'))
     return render_template("login.html")
 
 @app.route("/signup", methods=["POST"])
@@ -67,10 +68,12 @@ def home():
     return render_template('index.html')
     
 @app.route('/uploadData')
+@login_required
 def uploadData():
     return render_template("uploadData.html", api_key=API_KEY)
 
 @app.route('/fetch_movie', methods=['POST'])
+@login_required
 def fetch_movie():
     data = request.get_json()
     title = data.get("title")
@@ -84,10 +87,12 @@ def fetch_movie():
     return jsonify(response.json())
 
 @app.route('/shareData')
+@login_required
 def shareData():
     return render_template("shareData.html")
 
 @app.route('/visualiseData')
+@login_required
 def visualiseData():
     return render_template("visualiseData.html")
 
