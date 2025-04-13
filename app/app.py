@@ -72,19 +72,73 @@ def home():
 def uploadData():
     return render_template("uploadData.html", api_key=API_KEY)
 
+### Methods to handle N/A responses from OMDB ###
+def safe_float(val, default=None):
+    try:
+        return float(val) if val not in [None, "N/A"] else default
+    except:
+        return default
+
+def safe_int(val, default=None):
+    try:
+        return int(val) if val not in [None, "N/A"] else default
+    except:
+        return default
+
+### ROUTE TO MAKE THE OMDB REQUEST, AND STORE THE RESPONSE IN THE DB ###
+
 @app.route('/fetch_movie', methods=['POST'])
 @login_required
 def fetch_movie():
-    data = request.get_json()
-    title = data.get("title")
+    try:
+        data = request.get_json()
+        title = data.get('movie_title')
+        print(title)
+        user_rating = data.get('user_rating')
 
-    if not title:
-        return jsonify({"error": "Missing movie title"}), 400
+        api_key = os.getenv('API_KEY')
+        response = requests.get(f"https://www.omdbapi.com/?t={title}&apikey={api_key}")
+        movie_data = response.json()
 
-    import requests
-    omdb_url = f"https://www.omdbapi.com/?t={title}&apikey={API_KEY}"
-    response = requests.get(omdb_url)
-    return jsonify(response.json())
+        if movie_data.get("Response") == "False":
+            return jsonify({"error": "Movie not found"}), 404
+
+        # Safely extract fields
+        runtime_str = movie_data.get("Runtime", "0").replace(" min", "")
+        runtime = safe_int(runtime_str, default=0)
+
+        imdb_rating = safe_float(movie_data.get("imdbRating"))
+        metascore = safe_int(movie_data.get("Metascore"))
+
+        new_movie = Movie(
+            title=movie_data.get("Title", "Unknown"),
+            year=movie_data.get("Year"),
+            rated=movie_data.get("Rated"),
+            released=movie_data.get("Released"),
+            runtime=runtime,
+            genre=movie_data.get("Genre"),
+            director=movie_data.get("Director"),
+            writer=movie_data.get("Writer"),
+            actors=movie_data.get("Actors", "Unknown"),
+            language=movie_data.get("Language"),
+            country=movie_data.get("Country"),
+            user_rating=safe_float(user_rating),
+            imdb_rating=imdb_rating,
+            rt_rating=movie_data.get("Ratings", [{}])[1].get("Value") if len(movie_data.get("Ratings", [])) > 1 else None,
+            metascore=metascore,
+            box_office=movie_data.get("BoxOffice"),
+            user_id=current_user.id
+        )
+
+        db.session.add(new_movie)
+        db.session.commit()
+
+        return jsonify({"message": "Movie stored successfully!"}), 200
+
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return jsonify({"error": f"Failed to store movie: {str(e)}"}), 500
 
 @app.route('/shareData')
 @login_required
