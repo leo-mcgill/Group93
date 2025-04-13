@@ -14,8 +14,8 @@
                 this will be sent to the server-->
             <div class="login_container">
                 <h2 class="subtitle white_font">Login</h2>
-                <form action="" class="">
-                    <input class="input" type="text" name="login" id="login_username"
+                <form action="{{ url_for('login') }}" method="POST">
+                    <input class="input" type="text" name="username" id="login_username"
                            placeholder="Enter username"><br><br>
                     <input class="input" type="password" name="password" id="login_password"
                            placeholder="Enter password"><br><br>
