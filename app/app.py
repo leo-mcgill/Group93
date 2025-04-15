@@ -140,6 +140,29 @@ def fetch_movie():
         traceback.print_exc()
         return jsonify({"error": f"Failed to store movie: {str(e)}"}), 500
 
+### ROUTE FOR TO SEND API REQUEST TO AUTOCOMPLETE ###
+
+@app.route("/autocomplete_movie")
+def autocomplete_movie():
+    query = request.args.get('q', '')  # Get the query string from the request
+    if not query:
+        return jsonify({'error': 'No query parameter provided'}), 400
+
+    # Call the OMDB API or use another service to get movie suggestions
+    response = requests.get(f"http://www.omdbapi.com/?s={query}&apikey={API_KEY}")
+    
+    # Check if the response is valid and contains movie results
+    if response.status_code == 200:
+        data = response.json()
+        if 'Search' in data:
+            movies = [movie['Title'] for movie in data['Search']]
+            return jsonify({'results': movies})  # Send movie titles as the response
+        else:
+            return jsonify({'results': []})  # No results found
+    else:
+        return jsonify({'error': 'Failed to fetch data from OMDB API'}), 500
+
+
 @app.route('/shareData')
 @login_required
 def shareData():
