@@ -14,7 +14,8 @@
             <div class="upload_container">
                 <form id="movieForm" onsubmit="return false;">
                     <label for="movie_title"><h2 class="white_font">Movie Title:</h2></label>
-                    <input class="input" type="text" name="movie_title" placeholder="Enter a movie title" required>
+                    <input class="input" type="text" id="movie_title" name="movie_title" placeholder="Enter a movie title" autocomplete="off" required>
+                    <ul id="autocomplete-results" class="autocomplete-results"></ul>
                     <label class="white_font" for="user_rating"><h2 class="white_font">Your Rating (0-10):</h2></label>
                     <input class="input" type="number" name="user_rating" min="0" max="10"
                            step="0.1" placeholder="e.g., 8.5" required><br><br>
