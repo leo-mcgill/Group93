@@ -1,0 +1,98 @@
+/* --- 通用重置 & 基础设置 --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    background: #f4f4f4;
+    font-family: sans-serif;
+  }
+  
+  /* --- 最外层容器 --- */
+  .login-container {
+    position: relative;       /* 方便让弹出框以此容器为定位参考 */
+    width: 100px;            /* 可根据需要调整 */
+    margin: 100px auto;      /* 让容器居中 */
+    text-align: center;      /* 内容居中 */
+  }
+  
+  /* --- 圆形按钮 --- */
+  .login-circle-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #00AEEC;
+    color: #fff;
+    line-height: 60px;       /* 垂直居中文字 */
+    text-align: center;      /* 水平居中文字 */
+    cursor: pointer;
+    margin: 0 auto;
+    transition: background-color 0.3s ease;
+  }
+  
+  .login-circle-btn:hover {
+    background-color: #2d80b6;  /* 悬停时变色 */
+  }
+  
+  /* --- 弹出框 --- */
+  .login-popout {
+    position: absolute;
+    top: 80px;          /* 控制弹出框距离圆形按钮顶部的距离 */
+    left: 50%;          /* 让弹出框中心与按钮中心对齐 */
+    transform: translateX(-50%) translateY(-20px); 
+    width: 450px;       /* 弹出框宽度可根据需要调整 */
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    border: 1px solid #ccc;
+  
+    /* 默认先隐藏 */
+    opacity: 0;                     
+    visibility: hidden;     
+    transition: all 0.3s ease;  /* 过渡动画 */
+  }
+  
+  /* --- 当鼠标悬停在父容器 .login-container 上时，让弹出框出现 --- */
+  .login-container:hover .login-popout {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
+  
+  /* --- 弹出框内部样式 --- */
+  .login-popout h3 {
+    margin-bottom: 10px;
+  }
+  
+  .login-popout ul {
+    list-style: none;
+    margin-bottom: 10px;
+  }
+  
+  .login-popout li {
+    margin-bottom: 5px;
+  }
+  
+  /* 按钮样式 */
+  .popout-btn {
+    display: inline-block;
+    background: #00AEEC;
+    color: #fff;
+    border: none;
+    padding: 12px 90px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    border-radius: 4px;
+  }
+  
+  .popout-btn:hover {
+    background: #2d80b6;
+  }
+  
+  .login-popout p {
+    margin-top: 10px;
+    font-size: 14px;
+  }
