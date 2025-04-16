@@ -1,0 +1,26 @@
+.footer_title_container {
+    background-color: green;
+    text-align: center;
+    padding: 5px;
+    margin-top: 20px;
+}
+
+.footer_developers {
+    justify-content: center;
+    display: flex;
+    flex-direction: row;
+}
+
+.footer_text {
+    font-size: 25px;
+    color: white;
+}
+
+.footer_text2 {
+    font-size: 20px;
+    color: white;
+}
+
+.footer_numbers {
+    margin: 20px;
+}

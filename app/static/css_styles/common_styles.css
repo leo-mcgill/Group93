@@ -16,6 +16,12 @@
     font-size: 25px;
 }
 
+.underlined_tab{
+    display: inline-block;
+    border-bottom: 10px solid blue;
+    padding-bottom: 10px;
+}
+
 .nav_links li{
     list-style: none;
     margin-right: 20px;
