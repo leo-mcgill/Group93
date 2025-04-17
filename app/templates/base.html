@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Website Name{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css_styles/common_styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css_styles/footer_styles.css') }}">
     {% if stylesheet_file is defined %}
     <link rel="stylesheet" href="{{ url_for('static', filename=stylesheet_file) }}">
     {% endif %}
@@ -30,4 +31,16 @@
     <!-- Page-specific content will be injected here -->
     {% block content %}{% endblock %}
 </body>
+<footer>
+    <div class="footer_title_container">
+        <h2 class="footer_text">Developers</h2>
+        <h3 class="footer_text2">Website developed by UWA Students</h3>
+    </div>
+    <div class="footer_developers">
+        <h3 class="footer_numbers">23334544 Leo</h3>
+        <h3 class="footer_numbers">21988007 Dex</h3>
+        <h3 class="footer_numbers">23673779 Fubin</h3>
+        <h3 class="footer_numbers">23994507 Khai</h3>
+    </div>
+</footer>
 </html>
