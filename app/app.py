@@ -37,10 +37,14 @@ def login():
         else:
             flash('Invalid credentials.', 'danger')
             return redirect(url_for('home'))
-    return render_template("login.html")
+    return render_template("redirectSignUp.html")
 
-@app.route("/signup", methods=["POST"])
+@app.route("/signup", methods=["GET"])
 def signup():
+    return render_template("signUp.html")
+
+@app.route("/signup_account", methods=["POST"])
+def signup_account():
     username = request.form['username']
     password = request.form['password']
 
@@ -54,7 +58,7 @@ def signup():
     db.session.add(new_user)
     db.session.commit()
     flash('Account created successfully. You can now log in.', 'success')
-    return redirect(url_for('login'))
+    return redirect(url_for('home'))
 
 @app.route("/logout")
 @login_required
