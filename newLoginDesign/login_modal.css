@@ -102,7 +102,7 @@ body {
     border-bottom: none;
 }
 
-.center-login-page > form.center-login-page > button{
+.center-login-page>form.center-login-page>button {
     display: inline-block;
     width: calc(50% - 8px);
     height: 44px;
@@ -113,7 +113,7 @@ body {
     margin: 16px 0;
 }
 
-.center-login-page > form.center-login-page > button[type="button"]{
+.center-login-page>form.center-login-page>button[type="button"] {
     margin-right: 16px;
     background-color: #f4f4f4;
     border: 1px solid #e6e6e6;
@@ -121,13 +121,13 @@ body {
     color: #333;
 }
 
-.center-login-page > form.center-login-page > button[type="submit"]{
+.center-login-page>form.center-login-page>button[type="submit"] {
     background-color: #00AEEC;
     border: none;
     border-radius: 4px;
     color: #f4f4f4;
 }
 
-.form-item:nth-child(2) > button{
+.form-item:nth-child(2)>button {
     cursor: pointer;
 }
