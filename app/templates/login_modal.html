@@ -9,17 +9,21 @@
 </head>
 
 <body>
+    <!-- Outermost login pop-up container -->
     <div class="login-page">
-        <form action="" method="post">
-            <button type="button" class="closeButton">Close</button>
-        </form>
+        <!-- Close button: Hide pop-up window after clicking -->
+        <button type="button" class="closeButton">Close</button>
+        <!-- Centered container for pop-up content -->
         <div class="center-login-page">
             <form action="" class="center-login-page" method="post">
+                <!-- Input area: Username and Password -->
                 <div class="tab-form">
+                    <!-- Username input item -->
                     <div class="form-item">
                         <div class="form-info">Username</div>
                         <input type="text" id="username" name="username" placeholder="Please enter username" required>
                     </div>
+                    <!-- Password input item, including the "Forgot Password" button -->
                     <div class="form-item">
                         <div class="form-info">Password</div>
                         <input type="password" name="password" id="password" placeholder="Please enter password"
@@ -27,6 +31,7 @@
                         <button type="button">Forget password?</button>
                     </div>
                 </div>
+                <!-- Submit and Register Buttons -->
                 <button type="submit">Log In</button><button type="button">Sign Up</button>
 
             </form>
