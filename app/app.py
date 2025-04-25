@@ -41,7 +41,7 @@ def login():
 
 @app.route("/signup", methods=["GET"])
 def signup():
-    return render_template("signUp.html")
+    return render_template("signUp.html", underlined_tab_index=6)
 
 @app.route("/signup_account", methods=["POST"])
 def signup_account():
@@ -69,12 +69,12 @@ def logout():
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return render_template('index.html', underlined_tab_index=1)
     
 @app.route('/uploadData')
 @login_required
 def uploadData():
-    return render_template("uploadData.html", api_key=API_KEY)
+    return render_template("uploadData.html", api_key=API_KEY, underlined_tab_index=2)
 
 ### Methods to handle N/A responses from OMDB ###
 def safe_float(val, default=None):
@@ -170,12 +170,12 @@ def autocomplete_movie():
 @app.route('/shareData')
 @login_required
 def shareData():
-    return render_template("shareData.html")
+    return render_template("shareData.html", underlined_tab_index=4)
 
 @app.route('/visualiseData')
 @login_required
 def visualiseData():
-    return render_template("visualiseData.html")
+    return render_template("visualiseData.html", underlined_tab_index=3)
 
 
 if __name__ == '__main__':
