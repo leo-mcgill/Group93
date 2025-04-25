@@ -1,0 +1,141 @@
+/* --- General reset & basic settings --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    /* Page background color and font settings */
+    background: #f4f4f4;
+    font-family: sans-serif;
+}
+
+/* --- The outermost container of the login pop-up window --- */
+.signup-page {
+    position: relative;
+    /* For reference for absolute internal positioning */
+    width: 500px;
+    /* Pop-up window width, can be adjusted as needed  */
+    height: 320px;
+    /* Pop-up window height */
+    margin: 100px auto;
+    /* Center horizontally, leaving white space vertically */
+    border-radius: 10px 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+    background-color: #f4f4f4;
+}
+
+/* Close button style */
+.closeButton {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 2px;
+    padding: 1px 1px;
+    border-radius: 10px 10px;
+    cursor: pointer;
+    border: none;
+}
+
+/* --- Pop-up window content center container --- */
+.center-signup-page {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 410px;
+    height: 200px;
+    border-radius: 8px;
+    background-color: #f4f4f4;
+    font-family: sans-serif;
+}
+
+.center-signup-page>form.center-signup-page {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Overall layout of the form */
+.tab-form {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Each line of input items */
+.form-item {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    align-items: center;
+    column-gap: 1px;
+    padding: 6px;
+    border-bottom: 1px solid #e6e6e6;
+}
+
+/* The second line shows the "Forgot Password" button */
+.form-item:nth-child(2) {
+    grid-template-columns: 80px 1fr auto;
+}
+
+/* Tag text on the left */
+.form-info {
+    font-size: 16px;
+    color: #333;
+    text-align: left;
+}
+
+/* Input box style */
+.form-item input {
+    width: 100%;
+    height: 40px;
+    padding: 0 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 14px;
+    color: #333;
+}
+
+/* "Forgot Password" button */
+.form-item button:nth-of-type(1) {
+    background: none;
+    border: none;
+    font-size: 14px;
+    color: #00AEEC;
+    cursor: pointer;
+    padding: 0;
+}
+
+/* Remove the bottom border of the last line */
+.form-item:last-child {
+    border-bottom: none;
+}
+
+/* Submit and Register Button Layout */
+.center-signup-page>form.center-signup-page>button {
+    display: inline-block;
+    width: calc(50% - 8px);
+    height: 44px;
+    line-height: 44px;
+    font-size: 16px;
+    cursor: pointer;
+    box-sizing: border-box;
+    margin: 16px 0;
+}
+
+/* Login button (main operation) */
+.center-signup-page>form.center-signup-page>button[type="submit"] {
+    background-color: #00AEEC;
+    border: none;
+    border-radius: 4px;
+    color: #f4f4f4;
+
+}
+
+.center-signup-page>form.center-signup-page>button[type="button"] {
+    background-color: #f4f4f4;
+    border: 1px solid #e6e6e6;
+    border-radius: 4px;
+    color: #333;
+}

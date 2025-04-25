@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup modal</title>
+    <link rel="stylesheet" href="../static/css_styles/signup_modal.css">
+</head>
+<body>
+    <!-- Outermost login pop-up container -->
+    <div class="signup-page">
+        <!-- Close button: Hide pop-up window after clicking -->
+        <button type="button" class="closeButton">Close</button>
+        <!-- Centered container for pop-up content -->
+        <div class="center-signup-page">
+            <form action="" class="center-signup-page" method="post">
+                <!-- Input area: Username and Password -->
+                <div class="tab-form">
+                    <!-- Username input item -->
+                    <div class="form-item">
+                        <div class="form-info">Username</div>
+                        <input type="text" id="username" name="username" placeholder="Please enter username" required>
+                    </div>
+                    <!-- Password input item -->
+                    <div class="form-item">
+                        <div class="form-info">Password</div>
+                        <input type="password" name="password" id="password" placeholder="Please enter password"
+                            required>
+                    </div>
+                    <div class="form-item">
+                        <div class="form-info">Confirm password</div>
+                        <input type="password" name="password" id="password" placeholder="Please enter password again"
+                        required>
+                    </div>
+                </div>
+                <!-- Submit and Register Buttons -->
+                <button type="submit">Sign Up</button><button type="button">Already have an account?</button>
+            </form>
+        </div>
+
+    </div>
+</body>
+</html>
