@@ -124,7 +124,7 @@ body {
     margin: 16px 0;
 }
 
-/* Login button (main operation) */
+/* sign up button (main operation) */
 .center-signup-page>form.center-signup-page>button[type="submit"] {
     background-color: #00AEEC;
     border: none;
@@ -133,6 +133,7 @@ body {
 
 }
 
+/* return to log in button */
 .center-signup-page>form.center-signup-page>button[type="button"] {
     background-color: #f4f4f4;
     border: 1px solid #e6e6e6;
