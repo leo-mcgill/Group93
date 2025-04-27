@@ -176,7 +176,12 @@ def autocomplete_movie():
 def shareData():
     return render_template("shareData.html", underlined_tab_index=4)
 
-@app.route('/visualiseData')
+from flask import Flask, render_template, redirect, url_for, request, flash, jsonify
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from models import db, User, Movie
+from dotenv import load_dotenv
+import os
+import requests@app.route('/visualiseData')
 @login_required
 def visualiseData():
     return render_template("visualiseData.html", underlined_tab_index=3)
