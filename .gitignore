@@ -31,3 +31,6 @@ instance/
 
 # Migrations (optional — keep if you want to version them)
 migrations/
+
+# Emacs IDE temp files
+*~

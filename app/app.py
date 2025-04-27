@@ -70,6 +70,10 @@ def logout():
 @app.route('/')
 def home():
     return render_template('index.html', underlined_tab_index=1)
+
+@app.route('/loginModal')
+def login_modal():
+    return render_template('login_modal.html')
     
 @app.route('/uploadData')
 @login_required
