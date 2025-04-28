@@ -51,10 +51,14 @@ def login():
         else:
             flash('Invalid credentials.', 'danger')
             return redirect(url_for('home'))
-    return render_template("login.html")
+    return render_template("redirectSignUp.html")
 
-@app.route("/signup", methods=["POST"])
+@app.route("/signup", methods=["GET"])
 def signup():
+    return render_template("signUp.html", underlined_tab_index=6)
+
+@app.route("/signup_account", methods=["POST"])
+def signup_account():
     username = request.form['username']
     password = request.form['password']
 
@@ -68,7 +72,7 @@ def signup():
     db.session.add(new_user)
     db.session.commit()
     flash('Account created successfully. You can now log in.', 'success')
-    return redirect(url_for('login'))
+    return redirect(url_for('home'))
 
 @app.route("/logout")
 @login_required
@@ -79,12 +83,16 @@ def logout():
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return render_template('index.html', underlined_tab_index=1)
+
+@app.route('/loginModal')
+def login_modal():
+    return render_template('login_modal.html')
     
 @app.route('/uploadData')
 @login_required
 def uploadData():
-    return render_template("uploadData.html", api_key=API_KEY)
+    return render_template("uploadData.html", api_key=API_KEY, underlined_tab_index=2)
 
 ### Methods to handle N/A responses from OMDB ###
 def safe_float(val, default=None):
@@ -180,12 +188,12 @@ def autocomplete_movie():
 @app.route('/shareData')
 @login_required
 def shareData():
-    return render_template("shareData.html")
+    return render_template("shareData.html", underlined_tab_index=4)
 
 @app.route('/visualiseData')
 @login_required
 def visualiseData():
-    return render_template("visualiseData.html")
+    return render_template("visualiseData.html", underlined_tab_index=3)
 
 
 if __name__ == '__main__':

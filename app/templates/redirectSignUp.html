@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Login / Signup{% endblock %}
+
+{% set stylesheet_file = 'css_styles/redirectSignUp.css' %}
+
+{% block content %}
+<div class="body_container">
+    <div class="centered_container">
+        <div class="centered_div column_direction">
+            <div class="title_container">
+                <h1 class="title">Content Restricted</h1>
+            </div>
+            <div class="about_container">
+                <p class="styled_text"> You must be logged in to access this content. Login or create an account.
+                </p>
+            </div>
+            <div class="login_container">
+                <h2 class="subtitle white_font">Login</h2>
+                <a href="/"><button class="submit">Login</button></a>
+            </div>
+            <!--sign up button to redirect user to signup page-->
+            <div class="signup_container">
+                <h2 class="subtitle white_font">Sign up</h2>
+                <a href="signup"><button class="submit">Sign Up</button></a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

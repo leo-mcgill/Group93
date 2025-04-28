@@ -2,6 +2,9 @@
 {% extends "base.html" %}
 
 {% block title %}Introduction{% endblock %}
+
+{% set stylesheet_file = 'css_styles/loginButtonStyle.css' %}
+
 {% include 'loginButton.html'%}  <!-- This is the newly designed login button-->
 {% block content %}
 <div class="body_container">
@@ -27,7 +30,7 @@
                 this will be sent to the server-->
             <div class="signup_container">
                 <h2 class="subtitle white_font">Sign up</h2>
-                <a href="/login"><button class="submit">Sign Up</button></a>
+                <a href="/signup"><button class="submit">Sign Up</button></a>
             </div>
         </div>
             <!--this about container contains some text explaining what
