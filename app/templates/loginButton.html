@@ -5,7 +5,7 @@
     <!-- Login button with pop-up box container -->
     <div class="login-container">
         <!-- Round login button, triggering the pop-up box below when the mouse hovers -->
-        <div class="login-circle-btn">Log In</div>
+        <div class="login-circle-btn"onclick="window.location.href='{{ url_for('newlogin') }}'">Log In</div>
 
         <!-- The pop-up box that can be visible after logging in, hidden by default -->
         <div class="login-popout">
@@ -19,9 +19,9 @@
                 <li>Get movie recommendations just for you</li> <!-- or "See what your friends are watching"-->
             </ul>
             <!-- Login button in the pop-up box -->
-            <a href="/loginModal"><button class="popout-btn" type="button">Log In</button></a>
+            <a href="{{ url_for('newlogin')}}"><button class="popout-btn" type="button">Log In</button></a>
             <!-- Registration link -->
-            <p>Don't have an account?<a href="/signup" class="signup-link">Sign Up</a></p>
+            <p>Don't have an account?<a href="{{url_for('newsignup')}}" class="signup-link">Sign Up</a></p>
         </div>
     </div>
 

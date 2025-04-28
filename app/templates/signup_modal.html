@@ -4,18 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>login modal</title>
-    <link rel="stylesheet" href="../static/css_styles/login_modal.css">
+    <title>Signup modal</title>
+    <link rel="stylesheet" href="../static/css_styles/signup_modal.css">
 </head>
 
 <body>
     <!-- Outermost login pop-up container -->
-    <div class="login-page">
+    <div class="signup-page">
         <!-- Close button: Hide pop-up window after clicking -->
         <button type="button" class="closeButton"onclick="window.location.href='/'">Close</button>
         <!-- Centered container for pop-up content -->
-        <div class="center-login-page">
-            <form action="" class="center-login-page" method="post">
+        <div class="center-signup-page">
+            <form action="" class="center-signup-page" method="post">
                 <!-- Input area: Username and Password -->
                 <div class="tab-form">
                     <!-- Username input item -->
@@ -23,17 +23,20 @@
                         <div class="form-info">Username</div>
                         <input type="text" id="username" name="username" placeholder="Please enter username" required>
                     </div>
-                    <!-- Password input item, including the "Forgot Password" button -->
+                    <!-- Password input item -->
                     <div class="form-item">
                         <div class="form-info">Password</div>
                         <input type="password" name="password" id="password" placeholder="Please enter password"
                             required>
-                        <button type="button"onclick="window.location.href='{{ url_for('forgetPassword') }}'">Forget password?</button>
+                    </div>
+                    <div class="form-item">
+                        <div class="form-info">Confirm password</div>
+                        <input type="password" name="confirm_password" id="confirm_password" placeholder="Please enter password again"
+                            required>
                     </div>
                 </div>
                 <!-- Submit and Register Buttons -->
-                <button type="submit">Log In</button><button type="button"onclick="window.location.href='{{ url_for('newsignup') }}'">Sign Up</button>
-
+                <button type="submit">Sign Up</button><button type="button"onclick="window.location.href='{{ url_for('newlogin') }}'">Already have an account?</button>
             </form>
         </div>
 
