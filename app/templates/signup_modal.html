@@ -12,7 +12,7 @@
     <!-- Outermost login pop-up container -->
     <div class="signup-page">
         <!-- Close button: Hide pop-up window after clicking -->
-        <button type="button" class="closeButton">Close</button>
+        <button type="button" class="closeButton"onclick="window.location.href='/'">Close</button>
         <!-- Centered container for pop-up content -->
         <div class="center-signup-page">
             <form action="" class="center-signup-page" method="post">
@@ -36,7 +36,7 @@
                     </div>
                 </div>
                 <!-- Submit and Register Buttons -->
-                <button type="submit">Sign Up</button><button type="button">Already have an account?</button>
+                <button type="submit">Sign Up</button><button type="button"onclick="window.location.href='{{ url_for('newlogin') }}'">Already have an account?</button>
             </form>
         </div>
 

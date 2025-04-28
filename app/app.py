@@ -20,6 +20,20 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
+### The following code is a newly designed login/signup ###
+@app.route("/newlogin")
+def newlogin():
+    return render_template("login_modal.html")
+
+@app.route("/newsignup")
+def newsignup():
+    return render_template("signup_modal.html")
+
+@app.route("/forgetPassword")
+def forgetPassword():
+    return render_template("forgetPassword_modal.html")
+### The above code is a newly designed login/signup ###
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
