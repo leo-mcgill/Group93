@@ -67,3 +67,82 @@ Make sure to leave your virtual environment once you want to commit or pull/push
 $ deactivate  
 
 May need to cd into Group93 to activate venv depending on where you create it.s  
+
+
+## Database Schema ##
+---
+
+### User Model
+
+Represents a registered user of the website.
+
+**Fields:**
+- `id` — Unique identifier for each user.
+- `username` — Unique login name.
+- `password_hash` — Hashed password for secure login.
+
+**Relationships:**
+- `user_movies` — The movies this user has added to their list (via the `UserMovie` table).
+- `friends` — Other users this person has added as friends (see `Friendship` model below).
+
+---
+
+### Movie Model
+
+Represents a movie retrieved from the OMDB API. Each movie is only stored **once**, regardless of how many users add it.
+
+**Fields:**
+- `id` — Unique ID for each movie.
+- `title`
+- `year`
+- `rated`
+- `released`
+- `runtime`
+- `genre`
+- `director`
+- `writer`
+- `actors`
+- `language`
+- `country`
+- `imdb_rating`
+- `rt_rating`
+- `metascore`
+- `box_office`
+
+> These fields represent metadata from the OMDB API.
+
+**Relationships:**
+- `user_movies` — Users who have added this movie, along with their personal ratings (via the `UserMovie` table).
+
+---
+
+### UserMovie Association Table
+
+Represents a many-to-many relationship between `User` and `Movie`, with additional data.
+
+**Fields:**
+- `id` — Unique for each user-movie pair.
+- `user_id` — The user who added the movie.
+- `movie_id` — The movie that was added.
+- `user_rating` — The rating the user gave this movie.
+
+**Constraints:**
+- The combination of `user_id` and `movie_id` is **unique** to prevent duplicate entries.
+
+---
+
+### Friendship Model
+
+Represents one-way friendships — if User A adds User B, B doesn't need to accept or confirm.
+
+**Fields:**
+- `id` — Unique friendship record ID.
+- `user_id` — The user who adds a friend.
+- `friend_id` — The user who is added as a friend.
+
+**Constraints:**
+- The combination of `user_id` and `friend_id` is **unique**, so the same friend can't be added twice.
+
+---
+
+

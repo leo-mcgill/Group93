@@ -3,11 +3,34 @@ from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
 db = SQLAlchemy()
+
+user_friends = db.Table('user_friends',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+    db.Column('friend_id', db.Integer, db.ForeignKey('user.id'), primary_key=True)
+)
+class UserMovie(db.Model):
+    __tablename__ = 'user_movie'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    movie_id = db.Column(db.Integer, db.ForeignKey('movie.id'), nullable=False)
+    user_rating = db.Column(db.Float, nullable=True)
+
+    # Unique constraint to prevent duplicate (user, movie) entries
+    __table_args__ = (db.UniqueConstraint('user_id', 'movie_id', name='_user_movie_uc'),)
+
+    # Relationships
+    user = db.relationship("User", back_populates="user_movies")
+    movie = db.relationship("Movie", back_populates="user_movies")
+    
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
-    movies = db.relationship('Movie', backref='user', lazy=True)
+
+    user_movies = db.relationship("UserMovie", back_populates="user", cascade="all, delete-orphan")
+
+    def movies(self):
+        return [um.movie for um in self.user_movies]
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -18,19 +41,20 @@ class User(UserMixin, db.Model):
 class Movie(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(120), nullable=False)
-    year = db.Column(db.String(4), nullable=True)  # e.g., "1999"
-    rated = db.Column(db.String(10), nullable=True)  # e.g., "R"
-    released = db.Column(db.String(20), nullable=True)  # e.g., "31 Mar 1999"
-    runtime = db.Column(db.Integer, nullable=False)  # In minutes, e.g., 136
-    genre = db.Column(db.String(100), nullable=True)  # e.g., "Action, Sci-Fi"
-    director = db.Column(db.String(200), nullable=True)  # e.g., "Lana Wachowski, Lilly Wachowski"
-    writer = db.Column(db.String(200), nullable=True)  # e.g., "Lana Wachowski, Lilly Wachowski"
-    actors = db.Column(db.String(200), nullable=False)  # e.g., "Keanu Reeves, Laurence Fishburne, Carrie-Anne Moss"
-    language = db.Column(db.String(100), nullable=True)  # e.g., "English"
-    country = db.Column(db.String(100), nullable=True)  # e.g., "United States"
-    user_rating = db.Column(db.Float, nullable=True)  # User’s rating (0-10)
-    imdb_rating = db.Column(db.Float, nullable=True)  # e.g., 8.7
-    rt_rating = db.Column(db.String(10), nullable=True)  # e.g., "88%"
-    metascore = db.Column(db.Integer, nullable=True)  # e.g., 73
-    box_office = db.Column(db.String(20), nullable=True)  # e.g., "$171,479,930"
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    year = db.Column(db.String(4), nullable=True)
+    rated = db.Column(db.String(10), nullable=True)
+    released = db.Column(db.String(20), nullable=True)
+    runtime = db.Column(db.Integer, nullable=False)
+    genre = db.Column(db.String(100), nullable=True)
+    director = db.Column(db.String(200), nullable=True)
+    writer = db.Column(db.String(200), nullable=True)
+    actors = db.Column(db.String(200), nullable=False)
+    language = db.Column(db.String(100), nullable=True)
+    country = db.Column(db.String(100), nullable=True)
+    imdb_rating = db.Column(db.Float, nullable=True)
+    rt_rating = db.Column(db.String(10), nullable=True)
+    metascore = db.Column(db.Integer, nullable=True)
+    box_office = db.Column(db.String(20), nullable=True)
+
+    user_movies = db.relationship("UserMovie", back_populates="movie", cascade="all, delete-orphan")
+    
