@@ -1,6 +1,6 @@
 from flask import Flask, render_template, redirect, url_for, request, flash, jsonify
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
-from models import db, User, Movie
+from models import db, User, Movie, UserMovie
 from dotenv import load_dotenv
 import os
 import requests
@@ -115,7 +115,6 @@ def fetch_movie():
     try:
         data = request.get_json()
         title = data.get('movie_title')
-        print(title)
         user_rating = data.get('user_rating')
 
         api_key = os.getenv('API_KEY')
@@ -131,31 +130,52 @@ def fetch_movie():
 
         imdb_rating = safe_float(movie_data.get("imdbRating"))
         metascore = safe_int(movie_data.get("Metascore"))
-
-        new_movie = Movie(
-            title=movie_data.get("Title", "Unknown"),
-            year=movie_data.get("Year"),
-            rated=movie_data.get("Rated"),
-            released=movie_data.get("Released"),
-            runtime=runtime,
-            genre=movie_data.get("Genre"),
-            director=movie_data.get("Director"),
-            writer=movie_data.get("Writer"),
-            actors=movie_data.get("Actors", "Unknown"),
-            language=movie_data.get("Language"),
-            country=movie_data.get("Country"),
-            user_rating=safe_float(user_rating),
-            imdb_rating=imdb_rating,
-            rt_rating=movie_data.get("Ratings", [{}])[1].get("Value") if len(movie_data.get("Ratings", [])) > 1 else None,
-            metascore=metascore,
-            box_office=movie_data.get("BoxOffice"),
-            user_id=current_user.id
+        rt_rating = (
+            movie_data.get("Ratings", [{}])[1].get("Value")
+            if len(movie_data.get("Ratings", [])) > 1
+            else None
         )
+        
+        
+        movie = Movie.query.filter_by(
+            title=movie_data.get("Title", "Unknown"),
+            year=movie_data.get("Year")).first()
+        
+        
+        if not movie:
+            movie = Movie(
+                title=movie_data.get("Title", "Unknown"),
+                year=movie_data.get("Year"),
+                rated=movie_data.get("Rated"),
+                released=movie_data.get("Released"),
+                runtime=runtime,
+                genre=movie_data.get("Genre"),
+                director=movie_data.get("Director"),
+                writer=movie_data.get("Writer"),
+                actors=movie_data.get("Actors", "Unknown"),
+                language=movie_data.get("Language"),
+                country=movie_data.get("Country"),
+                imdb_rating=imdb_rating,
+                rt_rating=rt_rating,
+                metascore=metascore,
+                box_office=movie_data.get("BoxOffice")
+            )
+            db.session.add(movie)
+            db.session.commit()
+            
+        existing_link = UserMovie.query.filter_by(user_id=current_user.id, movie_id=movie.id).first()
 
-        db.session.add(new_movie)
+        if existing_link:
+            existing_link.user_rating = user_rating
+            message = "Movie rating updated!"
+        else:
+            user_movie = UserMovie(user_id=current_user.id, movie_id=movie.id, user_rating=user_rating)
+            db.session.add(user_movie)
+            message = "Movie added to your list!"
+        
+        
         db.session.commit()
-
-        return jsonify({"message": "Movie stored successfully!"}), 200
+        return jsonify({"message": message}), 200
 
     except Exception as e:
         import traceback
