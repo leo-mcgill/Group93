@@ -22,6 +22,10 @@ body {
     font-size: 25px;
 }
 
+.new_login{
+    display: flex;
+    flex-direction: row;
+}
 .underlined_tab{
     display: inline-block;
     border-bottom: 10px solid blue;
