@@ -5,14 +5,15 @@ from werkzeug.security import generate_password_hash, check_password_hash
 db = SQLAlchemy()
 
 user_friends = db.Table('user_friends',
-    db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
-    db.Column('friend_id', db.Integer, db.ForeignKey('user.id'), primary_key=True)
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id', name='fk_user_friends_user_id'), primary_key=True),
+    db.Column('friend_id', db.Integer, db.ForeignKey('user.id', name='fk_user_friends_friend_id'), primary_key=True)
 )
+
 class UserMovie(db.Model):
     __tablename__ = 'user_movie'
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    movie_id = db.Column(db.Integer, db.ForeignKey('movie.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id', name='fk_user_movie_user_id'), nullable=False)
+    movie_id = db.Column(db.Integer, db.ForeignKey('movie.id', name='fk_user_movie_movie_id'), nullable=False)
     user_rating = db.Column(db.Float, nullable=True)
 
     # Unique constraint to prevent duplicate (user, movie) entries

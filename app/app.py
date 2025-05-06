@@ -4,17 +4,14 @@ from models import db, User, Movie, UserMovie
 from dotenv import load_dotenv
 import os
 import requests
-
+from config import Config
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 
 app = Flask(__name__)
-
-load_dotenv()
-app.secret_key = os.getenv('SECRET_KEY')
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
-API_KEY = os.getenv("API_KEY")
-
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///yourdb.sqlite3'
-db.init_app(app)
+app.config.from_object(Config)
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -92,7 +89,7 @@ def login_modal():
 @app.route('/uploadData')
 @login_required
 def uploadData():
-    return render_template("uploadData.html", api_key=API_KEY, underlined_tab_index=2)
+    return render_template("uploadData.html", api_key=Config.API_KEY, underlined_tab_index=2)
 
 ### Methods to handle N/A responses from OMDB ###
 def safe_float(val, default=None):
@@ -117,7 +114,6 @@ def fetch_movie():
         title = data.get('movie_title')
         user_rating = data.get('user_rating')
 
-        api_key = os.getenv('API_KEY')
         response = requests.get(f"https://www.omdbapi.com/?t={title}&apikey={api_key}")
         movie_data = response.json()
 
@@ -191,7 +187,7 @@ def autocomplete_movie():
         return jsonify({'error': 'No query parameter provided'}), 400
 
     # Call the OMDB API or use another service to get movie suggestions
-    response = requests.get(f"http://www.omdbapi.com/?s={query}&apikey={API_KEY}")
+    response = requests.get(f"http://www.omdbapi.com/?s={query}&apikey={Config.API_KEY}")
     
     # Check if the response is valid and contains movie results
     if response.status_code == 200:
