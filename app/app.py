@@ -10,7 +10,7 @@ from flask_migrate import Migrate
 
 app = Flask(__name__)
 app.config.from_object(Config)
-db = SQLAlchemy(app)
+db.init_app(app)
 migrate = Migrate(app, db)
 
 login_manager = LoginManager()
@@ -114,7 +114,7 @@ def fetch_movie():
         title = data.get('movie_title')
         user_rating = data.get('user_rating')
 
-        response = requests.get(f"https://www.omdbapi.com/?t={title}&apikey={api_key}")
+        response = requests.get(f"https://www.omdbapi.com/?t={title}&apikey={Config.API_KEY}")
         movie_data = response.json()
 
         if movie_data.get("Response") == "False":
