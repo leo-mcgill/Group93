@@ -4,7 +4,7 @@
   /* Absolute positioning of child elements */
   width: 100px;
   /* Container width, set according to button size */
-  margin: 100px auto;
+  /* margin: 100px auto; */
   /* center the container */
   text-align: center;
   /* Internal text is centered horizontally */
