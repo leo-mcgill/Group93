@@ -4,6 +4,8 @@
 
 {% set stylesheet_file = 'css_styles/redirectSignUp.css' %}
 
+{% include 'loginButton.html'%} <!-- This is the newly designed login button-->
+
 {% block content %}
 <div class="body_container">
     <div class="centered_container">
@@ -17,12 +19,12 @@
             </div>
             <div class="login_container">
                 <h2 class="subtitle white_font">Login</h2>
-                <a href="/"><button class="submit">Login</button></a>
+                <a href="/newlogin"><button class="submit">Login</button></a>
             </div>
             <!--sign up button to redirect user to signup page-->
             <div class="signup_container">
                 <h2 class="subtitle white_font">Sign up</h2>
-                <a href="signup"><button class="submit">Sign Up</button></a>
+                <a href="/newsignup"><button class="submit">Sign Up</button></a>
             </div>
         </div>
     </div>

@@ -5,7 +5,8 @@
 
 {% set stylesheet_file = 'css_styles/loginButtonStyle.css' %}
 
-{% include 'loginButton.html'%}  <!-- This is the newly designed login button-->
+{% include 'loginButton.html'%} <!-- This is the newly designed login button-->
+
 {% block content %}
 <div class="body_container">
     <div class="centered_container">
@@ -17,20 +18,14 @@
                 this will be sent to the server-->
             <div class="login_container">
                 <h2 class="subtitle white_font">Login</h2>
-                <form action="{{ url_for('login') }}" method="POST">
-                    <input class="input" type="text" name="username" id="login_username"
-                           placeholder="Enter username"><br><br>
-                    <input class="input" type="password" name="password" id="login_password"
-                           placeholder="Enter password"><br><br>
-                    <input class="submit" type="submit" value="Login">
-                </form>
+                <a href="/newlogin"><button class="submit">Login</button></a>
             </div>
             <!--sign up container has a form for the user to enter login account
                 details and create an account.
                 this will be sent to the server-->
             <div class="signup_container">
                 <h2 class="subtitle white_font">Sign up</h2>
-                <a href="/signup"><button class="submit">Sign Up</button></a>
+                <a href="/newsignup"><button class="submit">Sign Up</button></a>
             </div>
         </div>
             <!--this about container contains some text explaining what

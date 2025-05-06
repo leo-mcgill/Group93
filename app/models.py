@@ -2,7 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
-db = SQLAlchemy()
+from app import db
 
 user_friends = db.Table('user_friends',
     db.Column('user_id', db.Integer, db.ForeignKey('user.id', name='fk_user_friends_user_id'), primary_key=True),
