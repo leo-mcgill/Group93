@@ -7,6 +7,7 @@
     <title>{% block title %}Website Name{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css_styles/common_styles.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css_styles/footer_styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css_styles/loginButtonStyle.css') }}">
     {% if stylesheet_file is defined %}
     <link rel="stylesheet" href="{{ url_for('static', filename=stylesheet_file) }}">
     {% endif %}
@@ -24,8 +25,11 @@
                 <li {% if underlined_tab_index == 5%}class="underlined_tab"{% endif %}><a href="/logout">Logout ({{ current_user.username }})</a></li>
             {% else %}
                 <li {% if underlined_tab_index == 6%}class="underlined_tab"{% endif %}><a href="/signup">Sign Up</a></li>
-            {% endif %}
-        </ul>
+            {% endif %}            
+        </ul>            
+            <li class="new_login">
+                {% include 'loginButton.html' %}
+            </li>
     </nav>
 
     <!-- Page-specific content will be injected here -->

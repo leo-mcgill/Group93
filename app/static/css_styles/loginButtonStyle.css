@@ -1,24 +1,10 @@
-/* ---General reset & basic settings ---- */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  /* Unified Box Model */
-}
-
-body {
-  /* Page background and global font */
-  background: #f4f4f4;
-  font-family: sans-serif;
-}
-
 /* --- The outermost container --- */
 .login-container {
   position: relative;
   /* Absolute positioning of child elements */
   width: 100px;
   /* Container width, set according to button size */
-  margin: 100px auto;
+  /* margin: 100px auto; */
   /* center the container */
   text-align: center;
   /* Internal text is centered horizontally */

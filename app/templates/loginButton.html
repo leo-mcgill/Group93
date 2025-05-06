@@ -1,30 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
+<div class="login-container">
+    <!-- Round login button, triggering the pop-up box below when the mouse hovers -->
+    <div class="login-circle-btn" onclick='window.location.href="{{ url_for("newlogin") }}"'>Log In</div>
 
-<body>
-    <!-- Login button with pop-up box container -->
-    <div class="login-container">
-        <!-- Round login button, triggering the pop-up box below when the mouse hovers -->
-        <div class="login-circle-btn"onclick="window.location.href='{{ url_for('newlogin') }}'">Log In</div>
-
-        <!-- The pop-up box that can be visible after logging in, hidden by default -->
-        <div class="login-popout">
-            <!-- Title -->
-            <h3>After logging in you can: </h3>
-            <!-- Function List -->
-            <ul>
-                <li>Keep track of your watched movies</li>
-                <li>Rate and review anytime</li>
-                <li>Share your watchlist with friends</li>
-                <li>Get movie recommendations just for you</li> <!-- or "See what your friends are watching"-->
-            </ul>
-            <!-- Login button in the pop-up box -->
-            <a href="{{ url_for('newlogin')}}"><button class="popout-btn" type="button">Log In</button></a>
-            <!-- Registration link -->
-            <p>Don't have an account?<a href="{{url_for('newsignup')}}" class="signup-link">Sign Up</a></p>
-        </div>
+    <!-- The pop-up box that can be visible after logging in, hidden by default -->
+    <div class="login-popout">
+        <!-- Title -->
+        <h3>After logging in you can: </h3>
+        <!-- Function List -->
+        <ul>
+            <li>Keep track of your watched movies</li>
+            <li>Rate and review anytime</li>
+            <li>Share your watchlist with friends</li>
+            <li>Get movie recommendations just for you</li> <!-- or "See what your friends are watching"-->
+        </ul>
+        <!-- Login button in the pop-up box -->
+        <a href="{{ url_for('newlogin')}}"><button class="popout-btn" type="button">Log In</button></a>
+        <!-- Registration link -->
+        <p>Don't have an account?<a href="{{url_for('newsignup')}}" class="signup-link">Sign Up</a></p>
     </div>
-
-</body>
-
-</html>
+</div>

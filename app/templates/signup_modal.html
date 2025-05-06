@@ -12,35 +12,85 @@
     <!-- Outermost login pop-up container -->
     <div class="signup-page">
         <!-- Close button: Hide pop-up window after clicking -->
-        <button type="button" class="closeButton"onclick="window.location.href='/'">Close</button>
+        <button type="button" class="closeButton" onclick="window.location.href='/'">Close</button>
         <!-- Centered container for pop-up content -->
         <div class="center-signup-page">
-            <form action="" class="center-signup-page" method="post">
+            <form action="" class="center-signup-page" method="post"
+                onsubmit="if(this.password.value != this.confirm_password.value) {alert('Passwords do not match! Please try again'); return false;}">
                 <!-- Input area: Username and Password -->
                 <div class="tab-form">
                     <!-- Username input item -->
                     <div class="form-item">
                         <div class="form-info">Username</div>
-                        <input type="text" id="username" name="username" placeholder="Please enter username" required>
+                        <input type="text" id="username" name="username" placeholder="Please enter username" required
+                            maxlength="21" pattern="^\S{3,20}$"
+                            title="The username must consist of 3-20 non-whitespace characters and spaces are not allowed."
+                            oninvalid="
+                            if (this.validity.valueMissing) {
+                              this.setCustomValidity('Username cannot be empty');
+                            } else if (this.validity.patternMismatch) {
+                              this.setCustomValidity(this.title);
+                            }
+                          " oninput="this.setCustomValidity('')">
                     </div>
                     <!-- Password input item -->
                     <div class="form-item">
                         <div class="form-info">Password</div>
                         <input type="password" name="password" id="password" placeholder="Please enter password"
-                            required>
+                            required maxlength="21" pattern="^\S{8,20}$"
+                            title="The password must consist of 8-20 non-whitespace characters and spaces are not allowed."
+                            oninvalid="
+                            if (this.validity.valueMissing) {
+                                this.setCustomValidity('Password cannot be empty');
+                              } else if (this.validity.patternMismatch) {
+                                this.setCustomValidity(this.title);
+                              }
+                            " oninput="this.setCustomValidity('')">
                     </div>
                     <div class="form-item">
                         <div class="form-info">Confirm password</div>
-                        <input type="password" name="confirm_password" id="confirm_password" placeholder="Please enter password again"
-                            required>
+                        <input type="password" name="confirm_password" id="confirm_password"
+                            placeholder="Please enter password again" required maxlength="21" pattern="^\S{8,20}$"
+                            title="The password must consist of 8-20 non-whitespace characters and spaces are not allowed."
+                            oninvalid="if (this.validity.valueMissing) {
+                                this.setCustomValidity('Confirm password cannot be empty');
+                              } else if (this.validity.patternMismatch) {
+                                this.setCustomValidity(this.title);
+                              }
+                              " oninput="this.setCustomValidity('')">
                     </div>
                 </div>
                 <!-- Submit and Register Buttons -->
-                <button type="submit">Sign Up</button><button type="button"onclick="window.location.href='{{ url_for('newlogin') }}'">Already have an account?</button>
+                <button type="submit">Sign Up</button><button type="button"
+                    onclick="window.location.href='{{ url_for('newlogin') }}'">Already have an account?</button>
             </form>
         </div>
 
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const MAX = 20;
+            const fields = [
+                { id: 'username', label: 'Username' },
+                { id: 'password', label: 'Password' },
+                { id: 'confirm_password', label: 'Password' }
+            ];
+
+            fields.forEach(f => {
+                const inp = document.getElementById(f.id);
+
+                inp.addEventListener('input', () => {
+                    if (inp.value.length > MAX) {
+                        inp.setCustomValidity(`${f.label} exceeds maximum length of ${MAX} characters`);
+                        inp.reportValidity();
+                    } else {
+                        inp.setCustomValidity('');
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>
