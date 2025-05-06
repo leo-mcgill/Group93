@@ -29,6 +29,12 @@ body {
     font-size: 25px;
 }
 
+.new_login{
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    top: -15px;
+}
 .underlined_tab{
     display: inline-block;
     border-bottom: 10px solid blue;
