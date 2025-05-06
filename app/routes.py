@@ -102,7 +102,13 @@ def safe_int(val, default=None):
 @login_required
 def get_movies():
     try:
-        movies = Movie.query.all()
+        movies = (
+            db.session.query(Movie)
+            .join(UserMovie)
+            .filter(UserMovie.user_id == current_user.id)
+            .all()
+        )
+        
         movies_data = []
         for movie in movies:
             movies_data.append({
@@ -117,7 +123,7 @@ def get_movies():
         return jsonify("Could not get movies")
     
 ### ROUTE TO MAKE THE OMDB REQUEST, AND STORE THE RESPONSE IN THE DB ###
-@application.route('/submit_movie', methods=['POST'])
+@application.route('/upload_movie', methods=['POST'])
 @login_required
 def submit_movie():
     try:
