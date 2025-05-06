@@ -15,18 +15,18 @@
         <button type="button" class="closeButton"onclick="window.location.href='/'">Close</button>
         <!-- Centered container for pop-up content -->
         <div class="center-signup-page">
-            <form action="" class="center-signup-page" method="post">
+            <form action="{{ url_for('signup_account') }}" class="center-signup-page" method="POST">
                 <!-- Input area: Username and Password -->
                 <div class="tab-form">
                     <!-- Username input item -->
                     <div class="form-item">
                         <div class="form-info">Username</div>
-                        <input type="text" id="username" name="username" placeholder="Please enter username" required>
+                        <input type="text" id="signup_username" name="username" placeholder="Please enter username" required>
                     </div>
                     <!-- Password input item -->
                     <div class="form-item">
                         <div class="form-info">Password</div>
-                        <input type="password" name="password" id="password" placeholder="Please enter password"
+                        <input type="password" name="password" id="signup_password" placeholder="Please enter password"
                             required>
                     </div>
                     <div class="form-item">

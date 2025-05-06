@@ -30,7 +30,7 @@ instance/
 *.pid
 
 # Migrations (optional — keep if you want to version them)
-migrations/
+#migrations/
 
 # Emacs IDE temp files
 *~

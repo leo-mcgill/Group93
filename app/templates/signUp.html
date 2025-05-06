@@ -4,6 +4,8 @@
 
 {% set stylesheet_file = 'css_styles/signUp.css' %}
 
+{% include 'loginButton.html'%} <!-- This is the newly designed login button-->
+
 {% block content %}
 <div class="body_container">
     <div class="centered_container">
@@ -13,7 +15,7 @@
             </div>
             <div class="login_container">
                 <h2 class="subtitle white_font">Login</h2>
-                <a href="/"><button class="submit">Login</button></a>
+                <a href="/newlogin"><button class="submit">Login</button></a>
             </div>
             <!--sign up container has a form for the user to enter login account
                 details and create an account.

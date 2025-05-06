@@ -67,7 +67,12 @@ Make sure to leave your virtual environment once you want to commit or pull/push
 $ deactivate  
 
 May need to cd into Group93 to activate venv depending on where you create it.s  
-
+## Migrations  
+###Create a migration using:  
+flask db migrate  
+###upgrade or downgrade the database:  
+flask db upgrade  
+flask db downgrade  
 
 ## Database Schema ##
 ---
