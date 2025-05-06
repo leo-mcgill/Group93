@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const userRating = form.elements["user_rating"].value;
 
         try {
-            const response = await fetch("/fetch_movie", {
+            const response = await fetch("/upload_movie", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -26,10 +26,12 @@ document.addEventListener("DOMContentLoaded", () => {
             const resultDiv = document.getElementById("movieResult");
             if (response.ok) {
                 resultDiv.textContent = result.message;
-                resultDiv.style.color = "lightgreen";
+                resultDiv.classList.add("result_text")
+                resultDiv.classList.add("styled_text")
             } else {
                 resultDiv.textContent = result.error || "Error occurred";
-                resultDiv.style.color = "red";
+                resultDiv.classList.add("result_text")
+                resultDiv.classList.add("styled_text")
             }
         } catch (error) {
             console.error("Error submitting movie:", error);

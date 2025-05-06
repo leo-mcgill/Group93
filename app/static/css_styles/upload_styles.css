@@ -14,18 +14,17 @@
 }
 
 .autocomplete-results {
-    position: absolute;
+    //position: absolute;
     z-index: 1000;
     width: 100%;  /* Match the input width */
     max-height: 200px; /* Limit the height */
     overflow-y: auto;  /* Scrollable if there are too many results */
     background-color: white;
-    border: 1px solid #ccc;
+    //border: 1px solid #ccc;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     margin-top: 5px;
     padding: 0;
     list-style-type: none;
-    box-sizing: border-box;
 }
 
 .autocomplete-results li {
