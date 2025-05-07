@@ -13,7 +13,7 @@
     padding-right: 15px;
 }
 
-.autocomplete-results {
+.autocomplete-results{
     //position: absolute;
     z-index: 1000;
     width: 100%;  /* Match the input width */
