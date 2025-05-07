@@ -227,3 +227,12 @@ def shareData():
 @login_required
 def visualiseData():
     return render_template("visualiseData.html", underlined_tab_index=3)
+
+### The following code is profile ###
+
+@application.route("/profile")
+@login_required
+def profile():
+    return render_template("profile.html")
+
+### The above code is a profile ###

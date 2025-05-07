@@ -29,7 +29,7 @@ body {
     font-size: 25px;
 }
 
-.new_login {
+.button-container {
     display: flex;
     flex-direction: row;
     position: relative;
