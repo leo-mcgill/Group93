@@ -1,11 +1,136 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>profile</title>
-</head>
-<body>
-    <h3>这是个人界面</h3>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}个人资料 - {{ current_user.username }}{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <!-- 左侧栏 -->
+    <div class="profile-left-column">
+        <!-- 模块①：用户信息 -->
+        <div class="profile-section user-info-section">
+            <div id="user-info-content">
+                {% include "profile/_user_info.html" ignore missing %}
+            </div>
+        </div>
+        
+        <!-- 模块②：好友列表 -->
+        <div class="profile-section friends-list-section">
+            <div id="friends-list-content">
+                {% include "profile/_friends_list.html" ignore missing %}
+            </div>
+        </div>
+        
+        <!-- 模块③：用户搜索 -->
+        <div class="profile-section user-search-section">
+            <div id="user-search-content">
+                {% include "profile/_user_search.html" ignore missing %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- 右侧栏 -->
+    <div class="profile-right-column">
+        <!-- 模块④：电影列表 -->
+        <div class="profile-section movie-list-section">
+            <div id="movie-list-content">
+                {% include "profile/_movie_list.html" ignore missing %}
+            </div>
+        </div>
+        
+        <!-- 模块⑤：留言板 -->
+        <div class="profile-section message-board-section">
+            <div id="message-board-content">
+                {% include "profile/_message_board.html" ignore missing %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CSS -->
+<style>
+    .navbar .button-container {
+        display: none !important;
+    }
+    .profile-container {
+        display: flex;
+        width: 100%;
+        max-width: 1200px;
+        margin: 20px auto;
+        gap: 20px;
+    }
+    
+    .profile-left-column {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        max-width: 350px;
+    }
+    
+    .profile-right-column {
+        flex: 2;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .profile-section {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+    }
+    
+    .user-info-section {
+        /* 左上角用户信息模块样式 */
+    }
+    
+    .friends-list-section {
+        /* 左下角好友列表模块样式 */
+    }
+    
+    .user-search-section {
+        /* 左下角搜索框模块样式 */
+    }
+    
+    .movie-list-section {
+        /* 右上角电影列表模块样式 */
+    }
+    
+    .message-board-section {
+        /* 右下角留言板模块样式 */
+    }
+    
+    /* 响应式设计 */
+    @media (max-width: 768px) {
+        .profile-container {
+            flex-direction: column;
+        }
+        
+        .profile-left-column {
+            max-width: 100%;
+        }
+    }
+</style>
+
+<!-- 添加一些占位符内容，以便在子模板缺失时仍能看到基本布局 -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 如果模块内容为空，添加占位符内容
+    const sections = [
+        { id: 'user-info-content', title: '用户信息' },
+        { id: 'friends-list-content', title: '好友列表' },
+        { id: 'user-search-content', title: '搜索用户' },
+        { id: 'movie-list-content', title: '电影列表' },
+        { id: 'message-board-content', title: '留言板' }
+    ];
+    
+    sections.forEach(section => {
+        const element = document.getElementById(section.id);
+        if (element && element.children.length === 0) {
+            element.innerHTML = `<h3>${section.title}</h3><p>此模块尚未实现...</p>`;
+        }
+    });
+});
+</script>
+{% endblock %}
