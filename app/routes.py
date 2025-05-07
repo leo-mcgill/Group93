@@ -98,21 +98,44 @@ def safe_int(val, default=None):
     except:
         return default
 
-### ROUTE TO MAKE THE OMDB REQUEST, AND STORE THE RESPONSE IN THE DB ###
-
-@application.route('/fetch_movie', methods=['POST'])
+@application.route('/get_movies', methods=['GET'])
 @login_required
-def fetch_movie():
+def get_movies():
+    try:
+        movies = (
+            db.session.query(Movie)
+            .join(UserMovie)
+            .filter(UserMovie.user_id == current_user.id)
+            .all()
+        )
+        
+        movies_data = []
+        for movie in movies:
+            movies_data.append({
+                "id": movie.id,
+                "title": movie.title,
+                "genre": movie.genre,
+                "year": movie.year
+            })
+        return jsonify({"movies": movies_data})
+    except Exception as e:
+        print("Could not get movies" + str(e))
+        return jsonify("Could not get movies")
+    
+### ROUTE TO MAKE THE OMDB REQUEST, AND STORE THE RESPONSE IN THE DB ###
+@application.route('/upload_movie', methods=['POST'])
+@login_required
+def submit_movie():
     try:
         data = request.get_json()
         title = data.get('movie_title')
         user_rating = data.get('user_rating')
 
-        response = requests.get(f"https://www.omdbapi.com/?t={title}&apikey={api_key}")
+        response = requests.get(f"https://www.omdbapi.com/?t={title}&apikey={Config.API_KEY}")
         movie_data = response.json()
 
         if movie_data.get("Response") == "False":
-            return jsonify({"error": "Movie not found"}), 404
+            return jsonify({"error": f"Movie: {title} not found"}), 404
 
         # Safely extract fields
         runtime_str = movie_data.get("Runtime", "0").replace(" min", "")
@@ -157,11 +180,11 @@ def fetch_movie():
 
         if existing_link:
             existing_link.user_rating = user_rating
-            message = "Movie rating updated!"
+            message = f"Movie: {title} rating updated!"
         else:
             user_movie = UserMovie(user_id=current_user.id, movie_id=movie.id, user_rating=user_rating)
             db.session.add(user_movie)
-            message = "Movie added to your list!"
+            message = f"Movie: {title} added to your list!"
         
         
         db.session.commit()
@@ -171,10 +194,10 @@ def fetch_movie():
         import traceback
         traceback.print_exc()
         return jsonify({"error": f"Failed to store movie: {str(e)}"}), 500
-
+    
 ### ROUTE FOR TO SEND API REQUEST TO AUTOCOMPLETE ###
-
 @application.route("/autocomplete_movie")
+@login_required
 def autocomplete_movie():
     query = request.args.get('q', '')  # Get the query string from the request
     if not query:
