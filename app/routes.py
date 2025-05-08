@@ -278,9 +278,9 @@ def update_avatar_color():
         color = data.get('color')
         
         if not color:
-            return jsonify({'success': False, 'error': '颜色不能为空'}), 400
+            return jsonify({'success': False, 'error': 'The color cannot be empty'}), 400
             
-        # 更新用户头像颜色
+        # Update user avatar color
         current_user.avatar_color = color
         db.session.commit()
         
@@ -296,11 +296,11 @@ def update_bio():
         data = request.get_json()
         bio = data.get('bio', '')
         
-        # 限制长度
+        # Limit length
         if len(bio) > 500:
             bio = bio[:500]
             
-        # 更新用户简介
+        # Update user profile
         current_user.bio = bio
         db.session.commit()
         
