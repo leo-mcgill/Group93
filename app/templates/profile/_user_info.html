@@ -15,10 +15,10 @@
         </div>
     </div>
     
-    <!-- 用户名 -->
+    <!-- username -->
     <h2 class="username">{{ current_user.username }}</h2>
     
-    <!-- 用户简介 -->
+    <!-- user bio -->
     <div class="bio-container">
         <div id="bio-display" class="bio-text">{{ current_user.bio }}</div>
         <div id="bio-edit-container" class="bio-edit-container" style="display: none;">
@@ -211,11 +211,11 @@ document.addEventListener('DOMContentLoaded', function() {
             if (data.success) {
                 colorPickerContainer.style.display = 'none';
             } else {
-                alert('更新头像颜色失败: ' + data.error);
+                alert('Failed to update the avatar color:' + data.error);
             }
         })
         .catch(error => {
-            alert('发生错误: ' + error);
+            alert('An error occurred: ' + error);
         });
     });
     
@@ -246,15 +246,15 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                bioDisplay.textContent = newBio || '此用户很神秘，没有添加介绍';
+                bioDisplay.textContent = newBio || 'A mysterious figure lurks here... No bio provided.';
                 bioDisplay.style.display = 'block';
                 bioEditContainer.style.display = 'none';
             } else {
-                alert('更新个人简介失败: ' + data.error);
+                alert('Failed to update the profile:' + data.error);
             }
         })
         .catch(error => {
-            alert('发生错误: ' + error);
+            alert('An error occurred: ' + error);
         });
     });
     
