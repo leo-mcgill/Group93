@@ -2,10 +2,10 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from app import app, db
+from app import application, db
 from models import User, Movie
 
-with app.app_context():
+with application.app_context():
     #Just creating user for now
     user = User(username="testuser")
     user.set_password("password123")

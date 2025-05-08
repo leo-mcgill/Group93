@@ -42,7 +42,7 @@ def login():
             return redirect(url_for('home'))
         else:
             flash('Invalid credentials.', 'danger')
-            return redirect(url_for('home'))
+            return redirect(url_for('newlogin'))
     return render_template("redirectSignUp.html")
 
 @application.route("/signup", methods=["GET"])
@@ -51,20 +51,23 @@ def signup():
 
 @application.route("/signup_account", methods=["POST"])
 def signup_account():
-    username = request.form['username']
-    password = request.form['password']
 
-    existing_user = User.query.filter_by(username=username).first()
-    if existing_user:
-        flash('Username already exists.', 'warning')
-        return redirect(url_for('login'))
+    if request.is_json or request.form:
+        username = request.form.get('username')
+        password = request.form.get('password')
+        
+        existing_user = User.query.filter_by(username=username).first()
+        if existing_user:
+            flash('Username already exists.', 'warning')
+            return jsonify({'message': 'Username taken'}), 400
 
-    new_user = User(username=username)
-    new_user.set_password(password)
-    db.session.add(new_user)
-    db.session.commit()
-    flash('Account created successfully. You can now log in.', 'success')
-    return redirect(url_for('home'))
+        new_user = User(username=username)
+        new_user.set_password(password)
+        db.session.add(new_user)
+        db.session.commit()
+        flash('Account created successfully. You can now log in.', 'success')
+
+    return jsonify({'message': 'Signup successful'}), 200
 
 @application.route("/logout")
 @login_required
@@ -99,29 +102,141 @@ def safe_int(val, default=None):
     except:
         return default
 
+@application.route('/get_friends', methods=['GET'])
+@login_required
+def get_friends():
+    try:
+        user = User.query.get(current_user.id)
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+
+        friends_list = [
+            {"id": friend.id, "username": friend.username}
+            for friend in user.friends
+        ]
+
+        return jsonify({"friends": friends_list}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@application.route('/get_friended_users', methods=['GET'])
+@login_required
+def get_friended_users():
+    try:
+        user = User.query.get(current_user.id)
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+        
+        # Get all users who have added the current user as a friend
+        friended_by_list = [
+            {"id": u.id, "username": u.username}
+            for u in user.friends_of.all()
+        ]
+        return jsonify({"friends": friended_by_list}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@application.route('/get_movies_friend', methods=['GET'])
+@login_required
+def get_movies_friend():
+    try:
+        # Get the friend's username from query parameters (passed from frontend)
+        friend_username = request.args.get('friend_username', type=str)
+
+        # Find the friend object from the database by username
+        friend = User.query.filter_by(username=friend_username).first()
+
+        # Check if friend exists and if the current user is friends with the friend
+        if not friend or not current_user.is_friends_with(friend):
+            return jsonify({"error": "User is not friends with the specified friend"}), 403
+
+        # Alias for UserMovie table
+        user_movie_alias = aliased(UserMovie)
+
+        # Query to get the movies where the friend has rated the movie (user_rating is not None)
+        query = (
+            db.session.query(
+                Movie,
+                user_movie_alias.user_rating  # friend's rating on the movie
+            )
+            .outerjoin(
+                user_movie_alias,
+                (Movie.id == user_movie_alias.movie_id) & (user_movie_alias.user_id == friend.id)
+            )
+            .filter(user_movie_alias.user_rating.isnot(None))  # Only movies the friend has rated
+        )
+
+        movies = query.all()
+
+        # Prepare the movies data
+        movies_data = []
+        for movie, user_rating in movies:
+            movies_data.append({
+                "title": movie.title,
+                "year": movie.year,
+                "rated": movie.rated,
+                "released": movie.released,
+                "genre": movie.genre,
+                "director": movie.director,
+                "writer": movie.writer,
+                "actors": movie.actors,
+                "imdb_rating": movie.imdb_rating,
+                "metascore": movie.metascore,
+                "box_office": movie.box_office,
+                "poster_url": movie.poster_url,
+                "user_rating": user_rating
+            })
+
+        return jsonify({"movies": movies_data})
+
+    except Exception as e:
+        print("Could not get movies: " + str(e))
+        return jsonify({"error": "Could not get movies"}), 500
+
+    
 @application.route('/get_movies', methods=['GET'])
 @login_required
 def get_movies():
     try:
-        movies = (
-            db.session.query(Movie)
-            .join(UserMovie)
-            .filter(UserMovie.user_id == current_user.id)
-            .all()
+        user_movie_alias = aliased(UserMovie)
+
+        query = (
+            db.session.query(
+                Movie,
+                user_movie_alias.user_rating  # pulls the current user's rating if exists
+            )
+            .join(  # Changed from outerjoin to innerjoin to only get rated movies
+                user_movie_alias,
+                (Movie.id == user_movie_alias.movie_id) & (user_movie_alias.user_id == current_user.id)
+            )
+            .filter(user_movie_alias.user_rating.isnot(None))  # Only movies with a rating
         )
         
+        movies = query.all()
+        
         movies_data = []
-        for movie in movies:
+        for movie, user_rating in movies:
             movies_data.append({
-                "id": movie.id,
                 "title": movie.title,
+                "year": movie.year,
+                "rated": movie.rated,
+                "released": movie.released,
                 "genre": movie.genre,
-                "year": movie.year
+                "director": movie.director,
+                "writer": movie.writer,
+                "actors": movie.actors,
+                "imdb_rating": movie.imdb_rating,
+                "metascore": movie.metascore,
+                "box_office": movie.box_office,
+                "poster_url": movie.poster_url,
+                "user_rating": user_rating
             })
         return jsonify({"movies": movies_data})
     except Exception as e:
-        print("Could not get movies" + str(e))
-        return jsonify("Could not get movies")
+        print("Could not get movies: " + str(e))
+        return jsonify({"error": "Could not get movies", "details": str(e)}), 500
+
     
 ### ROUTE TO MAKE THE OMDB REQUEST, AND STORE THE RESPONSE IN THE DB ###
 @application.route('/upload_movie', methods=['POST'])
@@ -162,17 +277,18 @@ def submit_movie():
                 year=movie_data.get("Year"),
                 rated=movie_data.get("Rated"),
                 released=movie_data.get("Released"),
-                runtime=runtime,
+                runtime=movie_data.get("Runtime"),
                 genre=movie_data.get("Genre"),
                 director=movie_data.get("Director"),
                 writer=movie_data.get("Writer"),
                 actors=movie_data.get("Actors", "Unknown"),
                 language=movie_data.get("Language"),
                 country=movie_data.get("Country"),
-                imdb_rating=imdb_rating,
+                imdb_rating=movie_data.get("imdbRating"),
                 rt_rating=rt_rating,
-                metascore=metascore,
-                box_office=movie_data.get("BoxOffice")
+                metascore=movie_data.get("Metascore"),
+                box_office=movie_data.get("BoxOffice"),
+                poster_url=movie_data.get("Poster")
             )
             db.session.add(movie)
             db.session.commit()
@@ -247,14 +363,14 @@ def add_friend():
     # Check if the user exists in the database
     friend = User.query.filter_by(username=friend_username).first()
     
-    if friend:
-        # Add this user to the friend list
-        if friend.id != current_user.id and not current_user.is_friends_with(friend):
-            current_user.friends.append(friend)
+    if current_user:
+        if current_user.id != friend.id and not current_user.is_friends_with(friend):
+            # Add the current user to the friend's friend list
+            friend.friends.append(current_user)
             db.session.commit()
-            return jsonify({"message": "Friend added!"}), 200
+            return jsonify({"message": f"You were added as a friend to {friend.username}!"}), 200
         else:
-            return jsonify({"error": "Cannot add yourself or already friends!"}), 400
+            return jsonify({"error": "Cannot add yourself or already in their friend list!"}), 400
     else:
         return jsonify({"error": "User not found!"}), 404
 
@@ -262,3 +378,8 @@ def add_friend():
 @login_required
 def visualiseData():
     return render_template("visualiseData.html", underlined_tab_index=3)
+
+@application.route('/visualiseDataShared')
+@login_required
+def visualiseDataShared():
+    return render_template("visualiseDataShared.html", underlined_tab_index=3)

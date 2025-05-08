@@ -11,7 +11,14 @@
     <div class="centered_container column_direction">
         <div class="centered_div">
             <div class="title_container">
-                <h1 class="title">Visualise Data</h1>
+                <a href="/visualiseData">
+                    <h1 class="selected_subtitle">Your Movies</h1>
+                </a>
+            </div>
+            <div class="title_container">
+                <a href="/visualiseDataShared">
+                    <h1 class="not_selected_subtitle">Shared User Movies</h1>
+                </a>
             </div>
         </div>
         <div id="movie_list_container"></div>
@@ -19,50 +26,13 @@
 </div>
 
 <script type="module">
-    const module = await import("{{ url_for('static', filename='get_movies.js') }}");
-    const result = await module.get_movies();
-    console.log(result);
+    const module = await import("{{ url_for('static', filename='get_movie_details.js') }}");
+    const result = await module.get_movie_details();
     const movie_list = document.getElementById("movie_list_container")
-    for (let i = 0; i < result.movies.length; i++) {
-        const movie_element = document.createElement('div');
-        movie_element.classList.add('centered_div');
-        movie_element.classList.add('row_direction');
-        movie_element.classList.add('movie');
-        
-        const movie_title = document.createElement('h2');
-        movie_title.classList.add('movie_list_font');
-        movie_title.classList.add('white_font');
-        movie_title.textContent = result.movies[i].title;
 
-        const movie_title_container = document.createElement('div')
-        movie_title_container.classList.add('movie_container')
-        movie_title_container.appendChild(movie_title)
+    const display_movies = await import("{{ url_for('static', filename='display_movies.js') }}");
 
-        const movie_image = document.createElement('h2');
-        movie_image.classList.add('movie_list_font');
-        movie_image.classList.add('white_font');
-
-        const movie_image_container = document.createElement('div')
-        movie_image_container.classList.add('movie_image_container')
-        movie_image_container.appendChild(movie_image)
-        
-        const movie_details = document.createElement('h2');
-        movie_details.classList.add('movie_list_font');
-        movie_details.classList.add('white_font');
-        movie_details.textContent = result.movies[i].genre;
-        
-        const movie_details_container = document.createElement('div')
-        movie_details_container.classList.add('grey_container')
-        movie_details_container.appendChild(movie_details)
-        
-        movie_element.appendChild(movie_title_container);
-        movie_element.appendChild(movie_image_container);
-        movie_element.appendChild(movie_details_container);
-        
-        movie_list.appendChild(movie_element);
-        console.log(result.movies[i].title)
-    }
-    console.log(result.movies)
+    display_movies.display_movies(result.movies, movie_list);
 </script>
 
 
