@@ -16,3 +16,24 @@
 .movie_list_font {
     font-size: 15px;
 }
+
+.movie_section_font {
+    font-size: 25px;
+}
+
+.not_selected_subtitle {
+    font-size: 50px;
+    display: inline-block;
+    padding-bottom: 0px;
+}
+
+.selected_subtitle {
+    font-size: 50px;
+    display: inline-block;
+    border-bottom: 10px solid blue;
+    padding-bottom: 0px;
+}
+
+.friend_element {
+    font-size: 35px;
+}

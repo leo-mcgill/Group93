@@ -14,10 +14,10 @@
     <div class="centered_container">
         <div class="centered_div column_direction">
             <div class="title_container">
-                <h1 class="title">Share Data</h1>
+                <h1 class="title">Share Movies</h1>
             </div>
             <div class="share_user_container">
-                <h2 class="subtitle white_font">Share Data</h2>
+                <h2 class="subtitle white_font">Share Movies</h2>
                 <form id="shareForm" action="" method="POST">
                     <input class="input" type="text" name="login" id="login_username"
                            placeholder="Enter username"><br><br>
@@ -28,16 +28,27 @@
         </div>
         <div class="centered_div column_direction">
             <div class="title_container">
-                <h1 class="title">Shared Users</h1>
+                <h1 class="title">Shared With</h1>
             </div>
-            <div class="about_container">
-                <p class="styled_text">user1</p>
-                <p class="styled_text">user2</p>
-                <p class="styled_text">user3</p>
+            <div id="friended_container" class="about_container">
             </div>
         </div>
     </div>
 </div>
+
+<script type="module">
+    const module_friended_users = await import("{{ url_for('static', filename='get_friended_users.js') }}");
+    const friended_result = await module_friended_users.get_friended_users();
+    const friended_list = document.getElementById("friended_container");
+    for (let i = 0; i < friended_result.friends.length; i++) {
+        const friended_element = document.createElement('h2');
+        friended_element.classList.add('friend_element');
+        friended_element.textContent = friended_result.friends[i].username;
+
+        friended_list.appendChild(friended_element);
+    }
+    
+</script>
 
 <script src="{{ url_for('static', filename='shareData.js') }}"></script>
 

@@ -69,6 +69,7 @@ class Movie(db.Model):
     rt_rating = db.Column(db.String(10), nullable=True)
     metascore = db.Column(db.Integer, nullable=True)
     box_office = db.Column(db.String(20), nullable=True)
+    poster_url = db.Column(db.String(200), nullable=True)
 
     user_movies = db.relationship("UserMovie", back_populates="movie", cascade="all, delete-orphan")
     

@@ -15,8 +15,7 @@
         <button type="button" class="closeButton" onclick="window.location.href='/'">Close</button>
         <!-- Centered container for pop-up content -->
         <div class="center-signup-page">
-            <form action="{{ url_for('signup_account') }}" class="center-signup-page" method="post"
-                onsubmit="if(this.password.value != this.confirm_password.value) {alert('Passwords do not match! Please try again'); return false;}">
+            <form action="{{ url_for('signup_account') }}" class="center-signup-page" method="post">
                 <!-- Input area: Username and Password -->
                 <div class="tab-form">
                     <!-- Username input item -->
@@ -69,6 +68,46 @@
     </div>
 
     <script>
+
+        const form = document.querySelector('form.center-signup-page');
+
+        form.addEventListener('submit', async function(event) {
+            event.preventDefault(); // stop the default navigation
+
+            // Validate passwords match
+            const password = form.password.value;
+            const confirmPassword = form.confirm_password.value;
+            if (password !== confirmPassword) {
+                alert('Passwords do not match! Please try again');
+                return;
+            }
+
+            // Collect form data
+            const formData = new FormData(form);
+
+            try {
+                // Send POST request using fetch
+                const response = await fetch("{{ url_for('signup_account') }}", {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                const result = await response.json(); // assuming server returns JSON
+
+                if (response.ok) {
+                    alert('Signup successful!');
+                    // optionally reset the form or update the UI
+                    form.reset();
+                } else {
+                    alert(`Error: ${result.error || 'Unknown error'}`);
+                }
+            } catch (error) {
+                console.error('Error submitting form:', error);
+                alert('An unexpected error occurred.');
+            }
+        });
+
+        
         document.addEventListener('DOMContentLoaded', () => {
             const MAX = 20;
             const fields = [
