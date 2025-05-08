@@ -10,8 +10,6 @@
 **6:** run the flask application  
 **7:** add .env file
 
-
-
 **1:**  Create python virtual environment (Only need to do this once):  
 $ python -m venv venv  
 
@@ -30,15 +28,15 @@ To verify if the change was successful, run:
 $ get-executionpolicy  
 If the output is 'RemoteSigned', the policy has been updated successfully.  
 
-**3.** Upgrade pip to the latest version  
+**3.** Upgrade pip to the latest version:  
 $ python.exe -m pip install --upgrade pip  
 
---- Before continuing, make sure your terminal is in the app directory (cd app) ---  
+Before continuing, make sure your terminal is in the app directory (cd app)  
 
 **4:** Install requirements on Venv (only need to do this once):  
 $ pip install -r requirements.txt  
 
-## --- DATABASE ---  
+## DATABASE
 
 There are three scripts to handle your local DB.  
 
@@ -67,10 +65,11 @@ Make sure to leave your virtual environment once you want to commit or pull/push
 $ deactivate  
 
 May need to cd into Group93 to activate venv depending on where you create it.s  
+
 ## Migrations  
-###Create a migration using:  
+### Create a migration using:  
 flask db migrate  
-###upgrade or downgrade the database:  
+### upgrade or downgrade the database:  
 flask db upgrade  
 flask db downgrade  
 

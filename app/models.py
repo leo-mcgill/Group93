@@ -41,6 +41,16 @@ class User(UserMixin, db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+    
+    friends = db.relationship('User', 
+                              secondary=user_friends, 
+                              primaryjoin=(user_friends.c.user_id == id), 
+                              secondaryjoin=(user_friends.c.friend_id == id),
+                              backref=db.backref('friends_of', lazy='dynamic'))
+    
+    def is_friends_with(self, other_user):
+        return other_user in self.friends
+    
 
 class Movie(db.Model):
     id = db.Column(db.Integer, primary_key=True)

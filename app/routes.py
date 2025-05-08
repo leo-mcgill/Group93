@@ -1,6 +1,7 @@
 from flask import Flask, render_template, redirect, url_for, request, flash, jsonify
 from flask_login import login_user, logout_user, login_required, current_user
 from models import db, User, Movie, UserMovie
+from sqlalchemy.orm import aliased
 from dotenv import load_dotenv
 import os
 import requests
@@ -222,6 +223,40 @@ def autocomplete_movie():
 @login_required
 def shareData():
     return render_template("shareData.html", underlined_tab_index=4)
+
+### Route to search for users/autcomplete in shareData.
+
+@application.route('/search_users', methods=['GET'])
+def search_users():
+    search_query = request.args.get('q', '')
+    
+    # Query the database for users whose username contains the search query
+    matching_users = User.query.filter(User.username.ilike(f'%{search_query}%')).all()
+    
+    # Return a list of matching usernames
+    return jsonify([user.username for user in matching_users])
+
+### Route to add friends username to DB.
+
+@application.route('/add_friend', methods=['POST'])
+@login_required
+def add_friend():
+    data = request.get_json()
+    friend_username = data.get('username')
+
+    # Check if the user exists in the database
+    friend = User.query.filter_by(username=friend_username).first()
+    
+    if friend:
+        # Add this user to the friend list
+        if friend.id != current_user.id and not current_user.is_friends_with(friend):
+            current_user.friends.append(friend)
+            db.session.commit()
+            return jsonify({"message": "Friend added!"}), 200
+        else:
+            return jsonify({"error": "Cannot add yourself or already friends!"}), 400
+    else:
+        return jsonify({"error": "User not found!"}), 404
 
 @application.route('/visualiseData')
 @login_required
