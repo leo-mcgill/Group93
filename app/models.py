@@ -27,6 +27,9 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
+    # user profile new addition
+    avatar_color = db.Column(db.String(20), default='#6495ED')  # default color for user avatar
+    bio = db.Column(db.String(500), default='A mysterious figure lurks here... No bio provided.')   # default bio for user
 
     user_movies = db.relationship("UserMovie", back_populates="user", cascade="all, delete-orphan")
 

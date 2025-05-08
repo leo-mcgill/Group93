@@ -4,23 +4,23 @@
 
 {% block content %}
 <div class="profile-container">
-    <!-- 左侧栏 -->
+    <!-- Left sidebar -->
     <div class="profile-left-column">
-        <!-- 模块①：用户信息 -->
+        <!-- Module ①: User information -->
         <div class="profile-section user-info-section">
             <div id="user-info-content">
                 {% include "profile/_user_info.html" ignore missing %}
             </div>
         </div>
         
-        <!-- 模块②：好友列表 -->
+        <!-- Module ②: Friends list -->
         <div class="profile-section friends-list-section">
             <div id="friends-list-content">
                 {% include "profile/_friends_list.html" ignore missing %}
             </div>
         </div>
         
-        <!-- 模块③：用户搜索 -->
+        <!-- Module ③: User search -->
         <div class="profile-section user-search-section">
             <div id="user-search-content">
                 {% include "profile/_user_search.html" ignore missing %}
@@ -28,16 +28,16 @@
         </div>
     </div>
     
-    <!-- 右侧栏 -->
+    <!-- Right sidebar -->
     <div class="profile-right-column">
-        <!-- 模块④：电影列表 -->
+        <!-- Module ④: Movie List -->
         <div class="profile-section movie-list-section">
             <div id="movie-list-content">
                 {% include "profile/_movie_list.html" ignore missing %}
             </div>
         </div>
         
-        <!-- 模块⑤：留言板 -->
+        <!-- Module ⑤: Message board -->
         <div class="profile-section message-board-section">
             <div id="message-board-content">
                 {% include "profile/_message_board.html" ignore missing %}
@@ -82,26 +82,26 @@
     }
     
     .user-info-section {
-        /* 左上角用户信息模块样式 */
+        /*User information module style in the upper left corner */
     }
     
     .friends-list-section {
-        /* 左下角好友列表模块样式 */
+        /*Friend list module style in the lower left corner */
     }
     
     .user-search-section {
-        /* 左下角搜索框模块样式 */
+        /*Search box module style in the lower left corner */
     }
     
     .movie-list-section {
-        /* 右上角电影列表模块样式 */
+        /*Movie List Module Style in the upper right corner */
     }
     
     .message-board-section {
-        /* 右下角留言板模块样式 */
+        /*The message board module style in the lower right corner */
     }
     
-    /* 响应式设计 */
+    /*Responsive design */
     @media (max-width: 768px) {
         .profile-container {
             flex-direction: column;
@@ -113,22 +113,22 @@
     }
 </style>
 
-<!-- 添加一些占位符内容，以便在子模板缺失时仍能看到基本布局 -->
+<!--Add some placeholder content so that the basic layout can still be seen when the sub-template is missing -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // 如果模块内容为空，添加占位符内容
+    //If the module content is empty, add placeholder content
     const sections = [
-        { id: 'user-info-content', title: '用户信息' },
-        { id: 'friends-list-content', title: '好友列表' },
-        { id: 'user-search-content', title: '搜索用户' },
-        { id: 'movie-list-content', title: '电影列表' },
-        { id: 'message-board-content', title: '留言板' }
+        { id: 'user-info-content', title: 'User Information' },
+        { id: 'friends-list-content', title: 'Friends list' },
+        { id: 'user-search-content', title: 'Search for users' },
+        { id: 'movie-list-content', title: 'Movie List' },
+        { id: 'message-board-content', title: 'Message board' }
     ];
     
     sections.forEach(section => {
         const element = document.getElementById(section.id);
         if (element && element.children.length === 0) {
-            element.innerHTML = `<h3>${section.title}</h3><p>此模块尚未实现...</p>`;
+            element.innerHTML = `<h3>${section.title}</h3><p>This module has not been implemented yet...</p>`;
         }
     });
 });
