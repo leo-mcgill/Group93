@@ -1,4 +1,4 @@
-export async function get_movies() {
+export async function get_user_rating() {
     const response = await fetch("/get_movies", {
         method: "GET",
         headers: {

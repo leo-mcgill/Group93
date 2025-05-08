@@ -98,25 +98,49 @@ def safe_int(val, default=None):
         return int(val) if val not in [None, "N/A"] else default
     except:
         return default
-
+    
 @application.route('/get_movies', methods=['GET'])
 @login_required
 def get_movies():
     try:
+        """
         movies = (
             db.session.query(Movie)
             .join(UserMovie)
             .filter(UserMovie.user_id == current_user.id)
             .all()
+        )"""
+
+        user_movie_alias = aliased(UserMovie)
+
+        query = (
+            db.session.query(
+                Movie,
+                user_movie_alias.user_rating  # pulls the current user's rating if exists
+            )
+            .outerjoin(
+                user_movie_alias,
+                (Movie.id == user_movie_alias.movie_id) & (user_movie_alias.user_id == current_user.id)
+            )
         )
+        movies = query.all()
         
         movies_data = []
-        for movie in movies:
+        for movie, user_rating in movies:
             movies_data.append({
-                "id": movie.id,
                 "title": movie.title,
+                "year": movie.year,
+                "rated": movie.rated,
+                "released": movie.released,
                 "genre": movie.genre,
-                "year": movie.year
+                "director": movie.director,
+                "writer" : movie.writer,
+                "actors" : movie.actors,
+                "imdb_rating" : movie.imdb_rating,
+                "metascore" : movie.metascore,
+                "box_office" : movie.box_office,
+                "poster_url" : movie.poster_url,
+                "user_rating" : user_rating
             })
         return jsonify({"movies": movies_data})
     except Exception as e:
@@ -162,17 +186,18 @@ def submit_movie():
                 year=movie_data.get("Year"),
                 rated=movie_data.get("Rated"),
                 released=movie_data.get("Released"),
-                runtime=runtime,
+                runtime=movie_data.get("Runtime"),
                 genre=movie_data.get("Genre"),
                 director=movie_data.get("Director"),
                 writer=movie_data.get("Writer"),
                 actors=movie_data.get("Actors", "Unknown"),
                 language=movie_data.get("Language"),
                 country=movie_data.get("Country"),
-                imdb_rating=imdb_rating,
+                imdb_rating=movie_data.get("imdbRating"),
                 rt_rating=rt_rating,
-                metascore=metascore,
-                box_office=movie_data.get("BoxOffice")
+                metascore=movie_data.get("Metascore"),
+                box_office=movie_data.get("BoxOffice"),
+                poster_url=movie_data.get("Poster")
             )
             db.session.add(movie)
             db.session.commit()
