@@ -1,5 +1,5 @@
-export async function get_movie_details() {
-    const response = await fetch("/get_movies", {
+export async function get_movies_of_friend(friendUsername) {
+    const response = await fetch(`/get_movies_friend?friend_username=${friendUsername}`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json"

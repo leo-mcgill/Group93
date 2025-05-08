@@ -1,5 +1,5 @@
-export async function get_movie_details() {
-    const response = await fetch("/get_movies", {
+export async function get_user_friends() {
+    const response = await fetch("/get_friends", {
         method: "GET",
         headers: {
             "Content-Type": "application/json"
@@ -7,7 +7,7 @@ export async function get_movie_details() {
     });
 
     if (!response.ok) {
-        throw new Error("Failed to fetch movies");
+        throw new Error("Failed to fetch friends");
     }
 
     const data = await response.json();

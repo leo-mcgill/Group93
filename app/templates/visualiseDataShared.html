@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% block title %}Visualise Data{% endblock %}
+
+{% set stylesheet_file = 'css_styles/visualise_styles.css' %}
+
+
+{% block content %}
+<!--Visualise Data section-->
+<div class="body_container">
+    <div class="centered_container column_direction">
+        <div class="centered_div">
+            <div class="title_container">
+                <a href="/visualiseData">
+                    <h1 class="not_selected_subtitle">Your Movies</h1>
+                </a>
+            </div>
+            <div class="title_container">
+                <a href="/visualiseDataShared">
+                    <h1 class="selected_subtitle">Shared User Movies</h1>
+                </a>
+            </div>
+        </div>
+        <div id="friends_list_container"></div>
+        <div id="movie_list_container"></div>
+    </div>
+</div>
+
+<script type="module">
+    const module_user_friends = await import("{{ url_for('static', filename='get_user_friends.js') }}");
+    const friends_result = await module_user_friends.get_user_friends();
+    const friends_list = document.getElementById("friends_list_container");
+    let selected_friend = null;
+    for (let i = 0; i < friends_result.friends.length; i++) {
+        const friend_element = document.createElement('h2');
+        friend_element.classList.add('friend_element');
+        friend_element.textContent = friends_result.friends[i].username;
+        
+        const clickable_element = document.createElement('a');
+        clickable_element.href = "";
+        clickable_element.appendChild(friend_element);
+
+        clickable_element.addEventListener('click', (event) => {
+            event.preventDefault();
+            set_selected_friend(i);
+            get_movies_of_selected_friend();
+        });
+        
+        friends_list.appendChild(clickable_element);
+    }
+    
+    function set_selected_friend(index) {
+        selected_friend = friends_result.friends[index].username;
+    }
+
+    // Function to fetch movies for the selected friend
+    async function get_movies_of_selected_friend() {
+        if (!selected_friend) {
+            console.log("No friend selected!");
+            return;
+        }
+
+        // Import the module to get the movies for the selected friend
+        const module_movies = await import("{{ url_for('static', filename='get_movies_of_friend.js') }}");
+        const result_movies = await module_movies.get_movies_of_friend(selected_friend);
+
+        const movie_list = document.getElementById('movie_list_container');
+        movie_list.innerHTML = '';  // Clear previous movies, if any
+
+        // Display the movies of the selected friend
+        for (let i = 0; i < result_movies.movies.length; i++) {
+            const movie_element = document.createElement('div');
+            movie_element.classList.add('centered_div', 'row_direction', 'movie');
+
+            const movie_image = document.createElement('img');
+            movie_image.src = result_movies.movies[i].poster_url;
+
+            const movie_image_container = document.createElement('div');
+            movie_image_container.classList.add('movie_image_container');
+            movie_image_container.appendChild(movie_image);
+
+            const movie_details_title = document.createElement('p');
+            movie_details_title.classList.add('movie_section_font', 'white_font');
+            movie_details_title.textContent = "Movie Details";
+            
+            const movie_title = document.createElement('p');
+            movie_title.classList.add('movie_list_font', 'white_font');
+            movie_title.textContent = "Title: " + result_movies.movies[i].title;
+
+            const movie_year = document.createElement('p');
+            movie_year.classList.add('movie_list_font', 'white_font');
+            movie_year.textContent = "Year: " + result_movies.movies[i].year;
+
+            const movie_rated = document.createElement('p');
+            movie_rated.classList.add('movie_list_font', 'white_font');
+            movie_rated.textContent = "Rated: " + result_movies.movies[i].rated;
+
+            const movie_released = document.createElement('p');
+            movie_released.classList.add('movie_list_font', 'white_font');
+            movie_released.textContent = "Released: " + result_movies.movies[i].released;
+
+            const movie_genre = document.createElement('p');
+            movie_genre.classList.add('movie_list_font', 'white_font');
+            movie_genre.textContent = "Genre: " + result_movies.movies[i].genre;
+
+            const movie_imdb_rating = document.createElement('p');
+            movie_imdb_rating.classList.add('movie_list_font', 'white_font');
+            movie_imdb_rating.textContent = "IMDB Rating: " + result_movies.movies[i].imdb_rating;
+
+            const movie_metascore = document.createElement('p');
+            movie_metascore.classList.add('movie_list_font', 'white_font');
+            movie_metascore.textContent = "Metascore: " + result_movies.movies[i].metascore;
+
+            const user_ratings_title = document.createElement('p');
+            user_ratings_title.classList.add('movie_section_font', 'white_font');
+            user_ratings_title.textContent = "Their Rating";
+
+            const user_rating = document.createElement('p');
+            user_rating.classList.add('movie_list_font', 'white_font');
+            user_rating.textContent = "Rating: " + result_movies.movies[i].user_rating;
+            
+            const movie_details_container = document.createElement('div');
+            movie_details_container.classList.add('movie_container');
+            movie_details_container.appendChild(movie_details_title);
+            movie_details_container.appendChild(movie_title);
+            movie_details_container.appendChild(movie_year);
+            movie_details_container.appendChild(movie_rated);
+            movie_details_container.appendChild(movie_released);
+            movie_details_container.appendChild(movie_genre);
+            movie_details_container.appendChild(movie_imdb_rating);
+            movie_details_container.appendChild(movie_metascore);
+            movie_details_container.appendChild(user_ratings_title);
+            movie_details_container.appendChild(user_rating);
+
+            movie_element.appendChild(movie_image_container);
+            movie_element.appendChild(movie_details_container);
+            
+            movie_list.appendChild(movie_element);
+        }
+    }
+</script>
+
+
+
+{% endblock %}
