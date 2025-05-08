@@ -29,95 +29,10 @@
     const module = await import("{{ url_for('static', filename='get_movie_details.js') }}");
     const result = await module.get_movie_details();
     const movie_list = document.getElementById("movie_list_container")
-    for (let i = 0; i < result.movies.length; i++) {
-        const movie_element = document.createElement('div');
-        movie_element.classList.add('centered_div');
-        movie_element.classList.add('row_direction');
-        movie_element.classList.add('movie');
 
-        const movie_image = document.createElement('img');
-        movie_image.src = result.movies[i].poster_url
+    const display_movies = await import("{{ url_for('static', filename='display_movies.js') }}");
 
-        const movie_image_container = document.createElement('div')
-        movie_image_container.classList.add('movie_image_container')
-        movie_image_container.appendChild(movie_image)
-
-        const movie_details_title = document.createElement('p');
-        movie_details_title.classList.add('movie_section_font');
-        movie_details_title.classList.add('white_font');
-        movie_details_title.textContent = "Movie Details";
-        
-        const movie_title = document.createElement('p');
-        movie_title.classList.add('movie_list_font');
-        movie_title.classList.add('white_font');
-        movie_title.textContent = "Title: ";
-        movie_title.textContent += result.movies[i].title;
-
-        const movie_year = document.createElement('p');
-        movie_year.classList.add('movie_list_font');
-        movie_year.classList.add('white_font');
-        movie_year.textContent = "Year: ";
-        movie_year.textContent += result.movies[i].year;
-
-        const movie_rated = document.createElement('p');
-        movie_rated.classList.add('movie_list_font');
-        movie_rated.classList.add('white_font');
-        movie_rated.textContent = "Rated: ";
-        movie_rated.textContent += result.movies[i].rated;
-
-        const movie_released = document.createElement('p');
-        movie_released.classList.add('movie_list_font');
-        movie_released.classList.add('white_font');
-        movie_released.textContent = "Released: ";
-        movie_released.textContent += result.movies[i].released;
-
-        const movie_genre = document.createElement('p');
-        movie_genre.classList.add('movie_list_font');
-        movie_genre.classList.add('white_font');
-        movie_genre.textContent = "Genre: "
-        movie_genre.textContent += result.movies[i].genre;
-
-        const movie_imdb_rating = document.createElement('p');
-        movie_imdb_rating.classList.add('movie_list_font');
-        movie_imdb_rating.classList.add('white_font');
-        movie_imdb_rating.textContent = "IMDB Rating: "
-        movie_imdb_rating.textContent += result.movies[i].imdb_rating;
-
-        const movie_metascore = document.createElement('p');
-        movie_metascore.classList.add('movie_list_font');
-        movie_metascore.classList.add('white_font');
-        movie_metascore.textContent = "Metascore: "
-        movie_metascore.textContent += result.movies[i].metascore;
-
-        const user_ratings_title = document.createElement('p');
-        user_ratings_title.classList.add('movie_section_font');
-        user_ratings_title.classList.add('white_font');
-        user_ratings_title.textContent = "Your Rating";
-
-        const user_rating = document.createElement('p');
-        user_rating.classList.add('movie_list_font');
-        user_rating.classList.add('white_font');
-        user_rating.textContent = "Rating: "
-        user_rating.textContent += result.movies[i].user_rating;
-        
-        const movie_details_container = document.createElement('div')
-        movie_details_container.classList.add('movie_container')
-        movie_details_container.appendChild(movie_details_title)
-        movie_details_container.appendChild(movie_title)
-        movie_details_container.appendChild(movie_year)
-        movie_details_container.appendChild(movie_rated)
-        movie_details_container.appendChild(movie_released)
-        movie_details_container.appendChild(movie_genre)
-        movie_details_container.appendChild(movie_imdb_rating)
-        movie_details_container.appendChild(movie_metascore)
-        movie_details_container.appendChild(user_ratings_title)
-        movie_details_container.appendChild(user_rating)
-
-        movie_element.appendChild(movie_image_container);
-        movie_element.appendChild(movie_details_container);
-        
-        movie_list.appendChild(movie_element);
-    }
+    display_movies.display_movies(result.movies, movie_list);
 </script>
 
 

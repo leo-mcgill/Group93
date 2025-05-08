@@ -42,7 +42,7 @@ def login():
             return redirect(url_for('home'))
         else:
             flash('Invalid credentials.', 'danger')
-            return redirect(url_for('home'))
+            return redirect(url_for('newlogin'))
     return render_template("redirectSignUp.html")
 
 @application.route("/signup", methods=["GET"])
@@ -51,20 +51,23 @@ def signup():
 
 @application.route("/signup_account", methods=["POST"])
 def signup_account():
-    username = request.form['username']
-    password = request.form['password']
 
-    existing_user = User.query.filter_by(username=username).first()
-    if existing_user:
-        flash('Username already exists.', 'warning')
-        return redirect(url_for('login'))
+    if request.is_json or request.form:
+        username = request.form.get('username')
+        password = request.form.get('password')
+        
+        existing_user = User.query.filter_by(username=username).first()
+        if existing_user:
+            flash('Username already exists.', 'warning')
+            return jsonify({'message': 'Username taken'}), 400
 
-    new_user = User(username=username)
-    new_user.set_password(password)
-    db.session.add(new_user)
-    db.session.commit()
-    flash('Account created successfully. You can now log in.', 'success')
-    return redirect(url_for('home'))
+        new_user = User(username=username)
+        new_user.set_password(password)
+        db.session.add(new_user)
+        db.session.commit()
+        flash('Account created successfully. You can now log in.', 'success')
+
+    return jsonify({'message': 'Signup successful'}), 200
 
 @application.route("/logout")
 @login_required
@@ -114,6 +117,23 @@ def get_friends():
 
         return jsonify({"friends": friends_list}), 200
 
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@application.route('/get_friended_users', methods=['GET'])
+@login_required
+def get_friended_users():
+    try:
+        user = User.query.get(current_user.id)
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+        
+        # Get all users who have added the current user as a friend
+        friended_by_list = [
+            {"id": u.id, "username": u.username}
+            for u in user.friends_of.all()
+        ]
+        return jsonify({"friends": friended_by_list}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -343,8 +363,8 @@ def add_friend():
     # Check if the user exists in the database
     friend = User.query.filter_by(username=friend_username).first()
     
-    if friend:
-        if friend.id != current_user.id and not friend.is_friends_with(current_user):
+    if current_user:
+        if current_user.id != friend.id and not current_user.is_friends_with(friend):
             # Add the current user to the friend's friend list
             friend.friends.append(current_user)
             db.session.commit()
