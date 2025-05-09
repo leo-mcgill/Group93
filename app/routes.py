@@ -383,3 +383,49 @@ def visualiseData():
 @login_required
 def visualiseDataShared():
     return render_template("visualiseDataShared.html", underlined_tab_index=3)
+
+### The following code is profile ###
+
+@application.route("/profile")
+@login_required
+def profile():
+    return render_template("profile.html")
+
+@application.route('/update_avatar_color', methods=['POST'])
+@login_required
+def update_avatar_color():
+    try:
+        data = request.get_json()
+        color = data.get('color')
+        
+        if not color:
+            return jsonify({'success': False, 'error': 'The color cannot be empty'}), 400
+            
+        # Update user avatar color
+        current_user.avatar_color = color
+        db.session.commit()
+        
+        return jsonify({'success': True}), 200
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+@application.route('/update_bio', methods=['POST'])
+@login_required
+def update_bio():
+    try:
+        data = request.get_json()
+        bio = data.get('bio', '')
+        
+        # Limit length
+        if len(bio) > 500:
+            bio = bio[:500]
+            
+        # Update user profile
+        current_user.bio = bio
+        db.session.commit()
+        
+        return jsonify({'success': True}), 200
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+### The above code is a profile ###
