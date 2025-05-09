@@ -50,6 +50,9 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
+        //This code uses the API key to auto complete the movie title.
+        //Uncomment this when you want to add movies to the database and have an OMDB API Key.
+        /*
         debounceTimeout = setTimeout(() => {
             fetch(`/autocomplete_movie?q=${encodeURIComponent(query)}`)
                 .then(res => res.json())
@@ -66,6 +69,27 @@ document.addEventListener("DOMContentLoaded", () => {
                     });
                 });
         }, 300);  // Debounce delay
+        */
+       
+        //This code autocompletes movie titles based on the current titles in movie table. Comment this out when you want to add movies to the database and have an OMDB API Key.
+        
+        debounceTimeout = setTimeout(() => {
+            fetch(`/search_movies?q=${query}`)
+                .then(res => res.json())
+                .then(data => {
+                    resultBox.innerHTML = "";
+                    data.results.forEach(title => {
+                        const li = document.createElement("li");
+                        li.textContent = title;
+                        li.addEventListener("click", () => {
+                            input.value = title;
+                            resultBox.innerHTML = "";
+                        });
+                        resultBox.appendChild(li);
+                    });
+                });
+        }, 300);  // Debounce delay
+        
     });
 
     // Click outside to clear results
