@@ -21,58 +21,33 @@
                 </a>
             </div>
         </div>
-        <div id="friends_list_container"></div>
-        <div id="movie_list_container"></div>
+        <div>
+            {% for friend in friends %}
+                <a href="/visualiseDataShared?friend_username={{ friend.username }}"><h2 class="friend_element">{{ friend.username }}</h2></a>
+            {% endfor %}
+        </div>
+        <div>
+            {% for movie in movies %}
+            <div class="centered_div row_direction movie">
+                <div class="movie_image_container">
+                    <img src={{ movie.poster_url }}></img>
+                </div>
+                <div class="movie_container">
+                    <p class="movie_section_font white_font">Movie Details</p>
+                    <p class="movie_list_font white_font">Title: {{ movie.title }}</p>
+                    <p class="movie_list_font white_font">Year: {{ movie.year }}</p>
+                    <p class="movie_list_font white_font">Rated: {{ movie.rated }}</p>
+                    <p class="movie_list_font white_font">Released: {{ movie.released }}</p>
+                    <p class="movie_list_font white_font">Genre: {{ movie.title }}</p>
+                    <p class="movie_list_font white_font">IMDB Rating: {{ movie.genre }}</p>
+                    <p class="movie_list_font white_font">Metascore: {{ movie.imdb_rating }}</p>
+                    <p class="movie_section_font white_font">Their Rating: </p>
+                    <p class="movie_list_font white_font">Rating: {{ movie.user_rating }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
     </div>
 </div>
-
-<script type="module">
-    const module_user_friends = await import("{{ url_for('static', filename='get_user_friends.js') }}");
-    const friends_result = await module_user_friends.get_user_friends();
-    const friends_list = document.getElementById("friends_list_container");
-    let selected_friend = null;
-    for (let i = 0; i < friends_result.friends.length; i++) {
-        const friend_element = document.createElement('h2');
-        friend_element.classList.add('friend_element');
-        friend_element.textContent = friends_result.friends[i].username;
-        
-        const clickable_element = document.createElement('a');
-        clickable_element.href = "";
-        clickable_element.appendChild(friend_element);
-
-        clickable_element.addEventListener('click', (event) => {
-            event.preventDefault();
-            set_selected_friend(i);
-            get_movies_of_selected_friend();
-        });
-        
-        friends_list.appendChild(clickable_element);
-    }
-    
-    function set_selected_friend(index) {
-        selected_friend = friends_result.friends[index].username;
-    }
-
-    // Function to fetch movies for the selected friend
-    async function get_movies_of_selected_friend() {
-        if (!selected_friend) {
-            console.log("No friend selected!");
-            return;
-        }
-
-        // Import the module to get the movies for the selected friend
-        const module_movies = await import("{{ url_for('static', filename='get_movies_of_friend.js') }}");
-        const result_movies = await module_movies.get_movies_of_friend(selected_friend);
-
-        const movie_list = document.getElementById('movie_list_container');
-        movie_list.innerHTML = '';  // Clear previous movies, if any
-
-        const display_movies = await import("{{ url_for('static', filename='display_movies.js') }}");
-        
-        display_movies.display_movies(result_movies.movies, movie_list);
-    }
-</script>
-
-
 
 {% endblock %}
