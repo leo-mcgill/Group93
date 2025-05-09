@@ -58,8 +58,20 @@ $ python app.py
 **6:** open your browser and go to:  
 http://127.0.0.1:5000/  
 
-**7:** create a .env file in /app    
-add to .env file: SECRET_KEY = "example_secret_key"  
+## ENV FILE
+
+**7:** create a .env file  
+create a .env file in /app    
+append to .env file:  
+SECRET_KEY = "example_secret_key"  
+
+append to .env file:  
+DATABASE_URL=sqlite:///yourdb.sqlite3  
+
+append to .env file:  
+API_KEY=OMDB_API_KEY (This is required for upload data to work)  
+
+---
 
 To quit:  
 ctrl + c in terminal  
