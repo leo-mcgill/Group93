@@ -4,7 +4,6 @@
 
 {% set stylesheet_file = 'css_styles/visualise_styles.css' %}
 
-
 {% block content %}
 <!--Visualise Data section-->
 <div class="body_container">
@@ -21,20 +20,28 @@
                 </a>
             </div>
         </div>
-        <div id="movie_list_container"></div>
+        <div>
+            {% for movie in movies %}
+            <div class="centered_div row_direction movie">
+                <div class="movie_image_container">
+                    <img src={{ movie.poster_url }}></img>
+                </div>
+                <div class="movie_container">
+                    <p class="movie_section_font white_font">Movie Details</p>
+                    <p class="movie_list_font white_font">Title: {{ movie.title }}</p>
+                    <p class="movie_list_font white_font">Year: {{ movie.year }}</p>
+                    <p class="movie_list_font white_font">Rated: {{ movie.rated }}</p>
+                    <p class="movie_list_font white_font">Released: {{ movie.released }}</p>
+                    <p class="movie_list_font white_font">Genre: {{ movie.title }}</p>
+                    <p class="movie_list_font white_font">IMDB Rating: {{ movie.genre }}</p>
+                    <p class="movie_list_font white_font">Metascore: {{ movie.imdb_rating }}</p>
+                    <p class="movie_section_font white_font">Your Rating: </p>
+                    <p class="movie_list_font white_font">Rating: {{ movie.user_rating }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
     </div>
 </div>
-
-<script type="module">
-    const module = await import("{{ url_for('static', filename='get_movie_details.js') }}");
-    const result = await module.get_movie_details();
-    const movie_list = document.getElementById("movie_list_container")
-
-    const display_movies = await import("{{ url_for('static', filename='display_movies.js') }}");
-
-    display_movies.display_movies(result.movies, movie_list);
-</script>
-
-
 
 {% endblock %}
