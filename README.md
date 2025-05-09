@@ -1,5 +1,8 @@
 # Group93  
 ## Agile Web Development project created by Group 93  
+The purpose of this application is to record your ratings, etc of the movies that you have watched.  
+The server then pulls data from the OMDB database and gives information about the recorded movies.  
+Users can share their recorded movies with other users.  
 
 ## Instructions to run Flask application  
 **1:** create a python virtual environment (Only need to do this once)  
@@ -9,8 +12,6 @@
 **5:** initialise your local DB  
 **6:** run the flask application  
 **7:** add .env file
-
-
 
 **1:**  Create python virtual environment (Only need to do this once):  
 $ python -m venv venv  
@@ -30,15 +31,15 @@ To verify if the change was successful, run:
 $ get-executionpolicy  
 If the output is 'RemoteSigned', the policy has been updated successfully.  
 
-**3.** Upgrade pip to the latest version  
+**3.** Upgrade pip to the latest version:  
 $ python.exe -m pip install --upgrade pip  
 
---- Before continuing, make sure your terminal is in the app directory (cd app) ---  
+Before continuing, make sure your terminal is in the app directory (cd app)  
 
 **4:** Install requirements on Venv (only need to do this once):  
 $ pip install -r requirements.txt  
 
-## --- DATABASE ---  
+## DATABASE
 
 There are three scripts to handle your local DB.  
 
@@ -57,8 +58,20 @@ $ python app.py
 **6:** open your browser and go to:  
 http://127.0.0.1:5000/  
 
-**7:** create a .env file in /app    
-add to .env file: SECRET_KEY = "example_secret_key"  
+## ENV FILE
+
+**7:** create a .env file  
+create a .env file in /app    
+append to .env file:  
+SECRET_KEY = "example_secret_key"  
+
+append to .env file:  
+DATABASE_URL=sqlite:///yourdb.sqlite3  
+
+append to .env file:  
+API_KEY=OMDB_API_KEY (This is required for upload data to work)  
+
+---
 
 To quit:  
 ctrl + c in terminal  
@@ -67,10 +80,11 @@ Make sure to leave your virtual environment once you want to commit or pull/push
 $ deactivate  
 
 May need to cd into Group93 to activate venv depending on where you create it.s  
+
 ## Migrations  
-###Create a migration using:  
+### Create a migration using:  
 flask db migrate  
-###upgrade or downgrade the database:  
+### upgrade or downgrade the database:  
 flask db upgrade  
 flask db downgrade  
 

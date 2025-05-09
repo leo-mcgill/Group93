@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block title %}个人资料 - {{ current_user.username }}{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <!-- Left sidebar -->
+    <div class="profile-left-column">
+        <!-- Module ①: User information -->
+        <div class="profile-section user-info-section">
+            <div id="user-info-content">
+                {% include "profile/_user_info.html" ignore missing %}
+            </div>
+        </div>
+        
+        <!-- Module ②: Friends list -->
+        <div class="profile-section friends-list-section">
+            <div id="friends-list-content">
+                {% include "profile/_friends_list.html" ignore missing %}
+            </div>
+        </div>
+        
+        <!-- Module ③: User search -->
+        <div class="profile-section user-search-section">
+            <div id="user-search-content">
+                {% include "profile/_user_search.html" ignore missing %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Right sidebar -->
+    <div class="profile-right-column">
+        <!-- Module ④: Movie List -->
+        <div class="profile-section movie-list-section">
+            <div id="movie-list-content">
+                {% include "profile/_movie_list.html" ignore missing %}
+            </div>
+        </div>
+        
+        <!-- Module ⑤: Message board -->
+        <div class="profile-section message-board-section">
+            <div id="message-board-content">
+                {% include "profile/_message_board.html" ignore missing %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CSS -->
+<style>
+    .navbar .button-container {
+        display: none !important;
+    }
+    .profile-container {
+        display: flex;
+        width: 100%;
+        max-width: 1200px;
+        margin: 20px auto;
+        gap: 20px;
+    }
+    
+    .profile-left-column {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        max-width: 350px;
+    }
+    
+    .profile-right-column {
+        flex: 2;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .profile-section {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+    }
+    
+    .user-info-section {
+        /*User information module style in the upper left corner */
+    }
+    
+    .friends-list-section {
+        /*Friend list module style in the lower left corner */
+    }
+    
+    .user-search-section {
+        /*Search box module style in the lower left corner */
+    }
+    
+    .movie-list-section {
+        /*Movie List Module Style in the upper right corner */
+    }
+    
+    .message-board-section {
+        /*The message board module style in the lower right corner */
+    }
+    
+    /*Responsive design */
+    @media (max-width: 768px) {
+        .profile-container {
+            flex-direction: column;
+        }
+        
+        .profile-left-column {
+            max-width: 100%;
+        }
+    }
+</style>
+
+<!--Add some placeholder content so that the basic layout can still be seen when the sub-template is missing -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    //If the module content is empty, add placeholder content
+    const sections = [
+        { id: 'user-info-content', title: 'User Information' },
+        { id: 'friends-list-content', title: 'Friends list' },
+        { id: 'user-search-content', title: 'Search for users' },
+        { id: 'movie-list-content', title: 'Movie List' },
+        { id: 'message-board-content', title: 'Message board' }
+    ];
+    
+    sections.forEach(section => {
+        const element = document.getElementById(section.id);
+        if (element && element.children.length === 0) {
+            element.innerHTML = `<h3>${section.title}</h3><p>This module has not been implemented yet...</p>`;
+        }
+    });
+});
+</script>
+{% endblock %}
