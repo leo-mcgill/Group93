@@ -1,5 +1,8 @@
 # Group93  
 ## Agile Web Development project created by Group 93  
+The purpose of this application is to record your ratings, etc of the movies that you have watched.  
+The server then pulls data from the OMDB database and gives information about the recorded movies.  
+Users can share their recorded movies with other users.  
 
 ## Instructions to run Flask application  
 **1:** create a python virtual environment (Only need to do this once)  
