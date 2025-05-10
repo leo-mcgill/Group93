@@ -9,7 +9,7 @@
     <div class="centered_container">
         <div class="centered_div column_direction">
             <div class="title_container">
-                <h1 class="title">Add a Movie</h1>
+                <h1 class="title">Rate a Movie</h1>
             </div>
             <div class="upload_container">
                 <form id="movieForm" onsubmit="return false;">
@@ -23,6 +23,16 @@
                 </form>
             </div>
             <div id="movieResult" class="white_font" style="margin-top: 20px;"></div>
+            <div class="title_container">
+                <h1 class="title">Movies</h1>
+            </div>
+            {% for movie in movies %}
+            <div class="centered_div row_direction">
+                <div class="movie_container">
+                    <h2 class="friend_element white_font">{{ movie.title }}</h2>
+                </div>
+            </div>
+            {% endfor %}
         </div>
     </div>
 </div>

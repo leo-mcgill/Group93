@@ -1,16 +1,14 @@
 from flask import Flask, render_template, redirect, url_for, request, flash, jsonify
 from flask_login import login_user, logout_user, login_required, current_user
-from models import db, User, Movie, UserMovie
+from models import User, Movie, UserMovie
 from sqlalchemy.orm import aliased
-from dotenv import load_dotenv
-import os
 import requests
 from config import Config
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
 
 from app import application
 from app import login_manager
+from app import db
+from forms import LoginForm, RegisterForm
 
 ### The following code is a newly designed login/signup ###
 @application.route("/newlogin")
@@ -32,9 +30,14 @@ def load_user(user_id):
 
 @application.route("/login", methods=["GET", "POST"])
 def login():
+    form = LoginForm()
+    
     if request.method == "POST":
-        username = request.form['username']
-        password = request.form['password']
+        username = form.username.data
+        password = form.password.data
+        
+        #username = request.form['username']
+        #password = request.form['password']
         user = User.query.filter_by(username=username).first()
         if user and user.check_password(password):
             login_user(user)
@@ -51,10 +54,11 @@ def signup():
 
 @application.route("/signup_account", methods=["POST"])
 def signup_account():
-
-    if request.is_json or request.form:
-        username = request.form.get('username')
-        password = request.form.get('password')
+    form = RegisterForm()
+    
+    if request.method == 'POST':
+        username = form.username.data
+        password = form.password.data
         
         existing_user = User.query.filter_by(username=username).first()
         if existing_user:
@@ -87,7 +91,10 @@ def login_modal():
 @application.route('/uploadData')
 @login_required
 def uploadData():
-    return render_template("uploadData.html", api_key=Config.API_KEY, underlined_tab_index=2)
+
+    movies = Movie.query.all()
+    
+    return render_template("uploadData.html", api_key=Config.API_KEY, underlined_tab_index=2, movies = movies)
 
 ### Methods to handle N/A responses from OMDB ###
 def safe_float(val, default=None):
@@ -101,32 +108,25 @@ def safe_int(val, default=None):
         return int(val) if val not in [None, "N/A"] else default
     except:
         return default
-
-@application.route('/get_friended_users', methods=['GET'])
-@login_required
-def get_friended_users():
-    try:
-        user = User.query.get(current_user.id)
-        if not user:
-            return jsonify({"error": "User not found"}), 404
-        
-        # Get all users who have added the current user as a friend
-        friended_by_list = [
-            {"id": u.id, "username": u.username}
-            for u in user.friends_of.all()
-        ]
-        return jsonify({"friends": friended_by_list}), 200
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
     
 ### ROUTE TO MAKE THE OMDB REQUEST, AND STORE THE RESPONSE IN THE DB ###
 @application.route('/upload_movie', methods=['POST'])
 @login_required
-def submit_movie():
+def upload_movie():
     try:
         data = request.get_json()
         title = data.get('movie_title')
         user_rating = data.get('user_rating')
+
+        # Comment this lines of code when you want to add new movies to the database.
+        ###
+        
+        existing = Movie.query.filter_by(title=data.get('movie_title')).first()
+        if not existing:
+            print("Movie title doesnt exist. exiting submission")
+            return jsonify({"error": f"Movie: {title} doesnt exist in database."}), 400
+        
+        ###
 
         response = requests.get(f"https://www.omdbapi.com/?t={title}&apikey={Config.API_KEY}")
         movie_data = response.json()
@@ -215,6 +215,15 @@ def autocomplete_movie():
     else:
         return jsonify({'error': 'Failed to fetch data from OMDB API'}), 500
 
+@application.route('/search_movies', methods=['GET'])
+def search_movies():
+    search_query = request.args.get('q', '')
+    
+    # Query the database for users whose username contains the search query
+    matching_movies = Movie.query.filter(Movie.title.ilike(f'%{search_query}%')).all()
+    
+    # Return a list of matching usernames
+    return jsonify({"results": [movie.title for movie in matching_movies]})
 
 @application.route('/shareData')
 @login_required

@@ -137,3 +137,12 @@ body {
 .result_text {
     color: black
 }
+
+.friend_element {
+    font-size: 35px;
+}
+
+.movie_container {
+    background-color: darkgreen;
+    padding: 30px;
+}
