@@ -4,6 +4,13 @@ The purpose of this application is to record your ratings, etc of the movies tha
 from a sample set of movies.  The sample set of movies information was pulled from the OMDB  
 (Open movie database). Users can share their recorded movies with other users.  
 
+## Relevant licensing of data used from OMDB  
+https://www.omdbapi.com/legal.htm    (Section 4.1 is relevant)  
+https://www.omdbapi.com/    (OMDB Website)  
+
+APA Referencing:  
+OMDb API - The Open Movie Database. (2000). Omdbapi.com. https://www.omdbapi.com/  
+
 ## Instructions to run Flask application  
 **1:** create a python virtual environment (Only need to do this once)  
 **2:** activate your virtual environment  
