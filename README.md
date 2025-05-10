@@ -4,6 +4,13 @@ The purpose of this application is to record your ratings, etc of the movies tha
 from a sample set of movies.  The sample set of movies information was pulled from the OMDB  
 (Open movie database). Users can share their recorded movies with other users.  
 
+## Relevant licensing of data used from OMDB  
+https://www.omdbapi.com/legal.htm    (Section 4.1 is relevant)  
+https://www.omdbapi.com/    (OMDB Website)  
+
+APA Referencing:  
+OMDb API - The Open Movie Database. (2000). Omdbapi.com. https://www.omdbapi.com/  
+
 ## Instructions to run Flask application  
 **1:** create a python virtual environment (Only need to do this once)  
 **2:** activate your virtual environment  
@@ -46,9 +53,9 @@ There are scripts in /scripts to manage the database
 **5:** Initialise the DB:  
 $ python scripts/init_db.py  
 
-### IMPORTANT
-Add sample_movies to db so that you can select and upload data about them
-$ python scripts/add_sample_movies.py
+### IMPORTANT  
+Add sample_movies to db so that you can select and upload data about them:  
+$ python scripts/add_sample_movies.py  
 
 **5:** run the app:  
 $ python app.py  
@@ -67,7 +74,8 @@ append to .env file:
 DATABASE_URL=sqlite:///yourdb.sqlite3  
 
 append to .env file:  
-API_KEY=OMDB_API_KEY (This is required for upload data to work)  
+API_KEY=OMDB_API_KEY (This is used to pull movie details from OMDB.  
+it is not required as we can add a test sample of movies from a json file in instruction 5.  
 
 ---
 
