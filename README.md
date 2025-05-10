@@ -67,7 +67,8 @@ append to .env file:
 DATABASE_URL=sqlite:///yourdb.sqlite3  
 
 append to .env file:  
-API_KEY=OMDB_API_KEY (This is required for upload data to work)  
+API_KEY=OMDB_API_KEY (This is used to pull movie details from OMDB.  
+it is not required as we can add a test sample of movies from a json file in instruction 5.  
 
 ---
 
