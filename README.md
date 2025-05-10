@@ -47,7 +47,7 @@ There are scripts in /scripts to manage the database
 $ python scripts/init_db.py  
 
 ### IMPORTANT  
-Add sample_movies to db so that you can select and upload data about them  
+Add sample_movies to db so that you can select and upload data about them:  
 $ python scripts/add_sample_movies.py  
 
 **5:** run the app:  
