@@ -1,8 +1,8 @@
 # Group93  
 ## Agile Web Development project created by Group 93  
-The purpose of this application is to record your ratings, etc of the movies that you have watched.  
-The server then pulls data from the OMDB database and gives information about the recorded movies.  
-Users can share their recorded movies with other users.  
+The purpose of this application is to record your ratings, etc of the movies that you have watched  
+from a sample set of movies.  The sample set of movies information was pulled from the OMDB  
+(Open movie database). Users can share their recorded movies with other users.  
 
 ## Instructions to run Flask application  
 **1:** create a python virtual environment (Only need to do this once)  
@@ -41,16 +41,14 @@ $ pip install -r requirements.txt
 
 ## DATABASE
 
-There are three scripts to handle your local DB.  
+There are scripts in /scripts to manage the database
 
 **5:** Initialise the DB:  
 $ python scripts/init_db.py  
 
-Populate the DB for testing:  
-$ python scripts/populate_db.py  
-
-Clear all entries from the DB:  
-$ python scripts/clear_db.py  
+### IMPORTANT
+Add sample_movies to db so that you can select and upload data about them
+$ python scripts/add_sample_movies.py
 
 **5:** run the app:  
 $ python app.py  
