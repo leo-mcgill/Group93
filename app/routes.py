@@ -118,7 +118,7 @@ def upload_movie():
         title = data.get('movie_title')
         user_rating = data.get('user_rating')
 
-        # Comment this lines of code when you want to add new movies to the database.
+        # Comment this lines of code when you want to add new movies to the database using the OMDB API Key.
         ###
         
         existing = Movie.query.filter_by(title=data.get('movie_title')).first()
@@ -127,7 +127,9 @@ def upload_movie():
             return jsonify({"error": f"Movie: {title} doesnt exist in database."}), 400
         
         ###
-
+        # Uncomment this lines of code when you want to add new movies to the database using the OMDB API Key.
+        ###
+        """
         response = requests.get(f"https://www.omdbapi.com/?t={title}&apikey={Config.API_KEY}")
         movie_data = response.json()
 
@@ -173,14 +175,15 @@ def upload_movie():
             )
             db.session.add(movie)
             db.session.commit()
+        """
             
-        existing_link = UserMovie.query.filter_by(user_id=current_user.id, movie_id=movie.id).first()
+        existing_link = UserMovie.query.filter_by(user_id=current_user.id, movie_id=existing.id).first()
 
         if existing_link:
             existing_link.user_rating = user_rating
             message = f"Movie: {title} rating updated!"
         else:
-            user_movie = UserMovie(user_id=current_user.id, movie_id=movie.id, user_rating=user_rating)
+            user_movie = UserMovie(user_id=current_user.id, movie_id=existing.id, user_rating=user_rating)
             db.session.add(user_movie)
             message = f"Movie: {title} added to your list!"
         
