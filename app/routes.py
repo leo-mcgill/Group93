@@ -272,12 +272,13 @@ def add_friend():
     friend = User.query.filter_by(username=friend_username).first()
     
     if current_user:
-        if current_user.id != friend.id and not current_user.is_friends_with(friend):
+        if current_user.id != friend.id and not friend.is_friends_with(current_user):
             # Add the current user to the friend's friend list
             friend.friends.append(current_user)
             db.session.commit()
             return jsonify({"message": f"You were added as a friend to {friend.username}!"}), 200
         else:
+            flash('Error, incorrect friend', 'warning')
             return jsonify({"error": "Cannot add yourself or already in their friend list!"}), 400
     else:
         return jsonify({"error": "User not found!"}), 404

@@ -40,6 +40,8 @@ document.addEventListener("DOMContentLoaded", function () {
         }).then(response => {
             if (response.ok) {
                 alert("Friend added successfully!");
+            } else {
+                alert("Invalid friend");
             }
         });
     });
