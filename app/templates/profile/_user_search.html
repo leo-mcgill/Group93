@@ -1,0 +1,305 @@
+<div class="user-search-wrapper">
+    <h3 class="search-title">Add friends</h3>
+
+    <!-- Search input box -->
+    <div class="search-input-container">
+        <input type="text" id="user-search-input" class="user-search-input" placeholder="Please enter the username..." autocomplete="off">
+        <button id="search-button" class="search-button">
+            <i class="search-icon">&#128269;</i>
+        </button>
+    </div>
+
+    <!-- Search result container -->
+    <div id="search-results-container" class="search-results-container">
+        <!-- Search results will be loaded here dynamically -->
+        <div id="search-message" class="search-message"></div>
+        <div id="search-results" class="search-results"></div>
+    </div>
+</div>
+
+<style>
+    .user-search-wrapper {
+        padding: 15px 0;
+    }
+
+    .search-title {
+        font-size: 18px;
+        margin-bottom: 15px;
+        color: #333;
+        text-align: center;
+    }
+
+    .search-input-container {
+        display: flex;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        border-radius: 20px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .search-input-container:focus-within {
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    .user-search-input {
+        flex: 1;
+        padding: 10px 15px;
+        border: none;
+        outline: none;
+        font-size: 14px;
+        border-radius: 20px 0 0 20px;
+    }
+
+    .search-button {
+        background-color: #0d6efd;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .search-button:hover {
+        background-color: #0b5ed7;
+    }
+
+    .search-icon {
+        font-style: normal;
+    }
+
+    .search-results-container {
+        margin-top: 10px;
+    }
+
+    .search-message {
+        color: #6c757d;
+        font-size: 14px;
+        text-align: center;
+        padding: 10px;
+    }
+
+    .search-results {
+        max-height: 300px;
+        overflow-y: auto;
+    }
+
+    .user-result-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 8px;
+        background-color: #f8f9fa;
+        transition: transform 0.2s, box-shadow 0.2s;
+        animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .user-result-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .user-result-info {
+        display: flex;
+        align-items: center;
+    }
+
+    .user-result-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-right: 10px;
+        font-weight: bold;
+        color: white;
+    }
+
+    .user-result-name {
+        font-weight: 600;
+    }
+
+    .add-friend-btn {
+        background-color: #0d6efd;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 6px 12px;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .add-friend-btn:hover {
+        background-color: #0b5ed7;
+    }
+
+    .add-friend-btn.added {
+        background-color: #28a745;
+    }
+
+    /* Animation effect */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .pulse {
+        animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.05);
+        }
+
+        100% {
+            transform: scale(1);
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchInput = document.getElementById('user-search-input');
+        const searchButton = document.getElementById('search-button');
+        const searchMessage = document.getElementById('search-message');
+        const searchResults = document.getElementById('search-results');
+
+        // Search for user functions
+        function searchUser() {
+            const username = searchInput.value.trim();
+
+            // Clear previous search results
+            searchResults.innerHTML = '';
+
+            if (!username) {
+                searchMessage.textContent = 'Please enter username';
+                return;
+            }
+
+            // Display loading
+            searchMessage.textContent = 'Searching...';
+
+            // Send API request
+            fetch(`/search_user?username=${encodeURIComponent(username)}`)
+                .then(response => response.json())
+                .then(data => {
+                    searchMessage.textContent = '';
+
+                    if (data.error) {
+                        searchMessage.textContent = data.error;
+                        return;
+                    }
+
+                    if (data.user) {
+                        const user = data.user;
+                        const isFriend = data.is_friend;
+
+                        // Create user result elements
+                        const userElement = document.createElement('div');
+                        userElement.className = 'user-result-item';
+
+                        // Username initial letter (for avatar)
+                        const initial = user.username.charAt(0).toUpperCase();
+
+                        userElement.innerHTML = `
+                        <div class="user-result-info">
+                            <div class="user-result-avatar" style="background-color: ${user.avatar_color || '#6495ED'}">
+                                ${initial}
+                            </div>
+                            <span class="user-result-name">${user.username}</span>
+                        </div>
+                        <button class="add-friend-btn ${isFriend ? 'added' : ''}" 
+                                data-username="${user.username}" 
+                                ${isFriend ? 'disabled' : ''}>
+                            ${isFriend ? 'Added successfully' : 'Add friends'}
+                        </button>
+                    `;
+
+                        searchResults.appendChild(userElement);
+
+                        // Add button click event
+                        const addButton = userElement.querySelector('.add-friend-btn');
+                        if (!isFriend) {
+                            addButton.addEventListener('click', function () {
+                                addFriend(user.username, addButton);
+                            });
+                        }
+                    } else {
+                        searchMessage.textContent = 'This user was not found';
+                    }
+                })
+                .catch(error => {
+                    searchMessage.textContent = 'Search failed, please try again later';
+                    console.error('Search error:', error);
+                });
+        }
+
+        // Add friend function
+        function addFriend(username, button) {
+            button.textContent = 'Adding...';
+            button.disabled = true;
+
+            fetch('/add_friend', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username: username })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message) {  // Successful response contains message fields
+                        button.textContent = 'Added successfully';
+                        button.classList.add('added');
+                        // Add impulse animation effect
+                        button.classList.add('pulse');
+                        setTimeout(() => {
+                            button.classList.remove('pulse');
+                        }, 2000);
+                    } else if (data.error) {  // The error response contains an error field
+                        button.textContent = data.error;
+                        button.disabled = false;
+                        setTimeout(() => {
+                            button.textContent = 'Add friend';
+                        }, 2000);
+                    }
+                })
+                .catch(error => {
+                    button.textContent = 'Add friend failed';
+                    button.disabled = false;
+                    setTimeout(() => {
+                        button.textContent = 'Add friend';
+                    }, 2000);
+                    console.error('Add friend error:', error);
+                });
+        }
+
+        // Add search button click event
+        searchButton.addEventListener('click', searchUser);
+
+        // Add input box input event
+        searchInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                searchUser();
+            }
+        });
+    });
+</script>
