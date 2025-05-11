@@ -105,6 +105,8 @@ Represents a registered user of the website.
 - `id` — Unique identifier for each user.
 - `username` — Unique login name.
 - `password_hash` — Hashed password for secure login.
+- `avatar_color` — User profile avatar color.
+- `bio` — User profile bio.
 
 **Relationships:**
 - `user_movies` — The movies this user has added to their list (via the `UserMovie` table).
