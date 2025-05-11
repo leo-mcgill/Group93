@@ -10,6 +10,8 @@ from app import login_manager
 from app import db
 from forms import LoginForm, RegisterForm
 
+from functions_for_routes import *
+
 ### The following code is a newly designed login/signup ###
 @application.route("/newlogin")
 def newlogin():
@@ -36,8 +38,6 @@ def login():
         username = form.username.data
         password = form.password.data
         
-        #username = request.form['username']
-        #password = request.form['password']
         user = User.query.filter_by(username=username).first()
         if user and user.check_password(password):
             login_user(user)
@@ -88,13 +88,13 @@ def home():
 def login_modal():
     return render_template('login_modal.html')
     
-@application.route('/uploadData')
+@application.route('/uploadReview')
 @login_required
-def uploadData():
+def uploadReview():
 
     movies = Movie.query.all()
     
-    return render_template("uploadData.html", api_key=Config.API_KEY, underlined_tab_index=2, movies = movies)
+    return render_template("uploadReview.html", api_key=Config.API_KEY, underlined_tab_index=2, movies = movies)
 
 ### Methods to handle N/A responses from OMDB ###
 def safe_float(val, default=None):
@@ -183,6 +183,7 @@ def upload_movie():
             existing_link.user_rating = user_rating
             message = f"Movie: {title} rating updated!"
         else:
+            # Change existing to movie when you want to add movies to db using OMDB API Key
             user_movie = UserMovie(user_id=current_user.id, movie_id=existing.id, user_rating=user_rating)
             db.session.add(user_movie)
             message = f"Movie: {title} added to your list!"
@@ -196,7 +197,7 @@ def upload_movie():
         traceback.print_exc()
         return jsonify({"error": f"Failed to store movie: {str(e)}"}), 500
     
-### ROUTE FOR TO SEND API REQUEST TO AUTOCOMPLETE ###
+### ROUTE TO SEND API REQUEST TO AUTOCOMPLETE ###
 @application.route("/autocomplete_movie")
 @login_required
 def autocomplete_movie():
@@ -283,9 +284,9 @@ def add_friend():
     else:
         return jsonify({"error": "User not found!"}), 404
 
-@application.route('/visualiseData')
+@application.route('/visualiseMovies')
 @login_required
-def visualiseData():
+def visualiseMovies():
     try:
         user_movie_alias = aliased(UserMovie)
 
@@ -294,7 +295,7 @@ def visualiseData():
                 Movie,
                 user_movie_alias.user_rating  # pulls the current user's rating if exists
             )
-            .join(  # Changed from outerjoin to innerjoin to only get rated movies
+            .join(  # innerjoin to only get rated movies
                 user_movie_alias,
                 (Movie.id == user_movie_alias.movie_id) & (user_movie_alias.user_id == current_user.id)
             )
@@ -303,31 +304,40 @@ def visualiseData():
         
         movies = query.all()
         
-        movies_data = []
-        for movie, user_rating in movies:
-            movies_data.append({
-                "title": movie.title,
-                "year": movie.year,
-                "rated": movie.rated,
-                "released": movie.released,
-                "genre": movie.genre,
-                "director": movie.director,
-                "writer": movie.writer,
-                "actors": movie.actors,
-                "imdb_rating": movie.imdb_rating,
-                "metascore": movie.metascore,
-                "box_office": movie.box_office,
-                "poster_url": movie.poster_url,
-                "user_rating": user_rating
-            })
-        return render_template("visualiseData.html", underlined_tab_index=3, movies = movies_data)
+        movies_data = pack_movie_data_tuple(movies)
+
+        return render_template("visualiseMovies.html", underlined_tab_index=3, movies = movies_data)
     except Exception as e:
         print("Could not get movies: " + str(e))
         return jsonify({"error": "Could not get movies", "details": str(e)}), 500
-    
-@application.route('/visualiseDataShared')
+
+@application.route('/visualiseMoviesSuggested')
 @login_required
-def visualiseDataShared():
+def visualiseMoviesSuggested():
+    try:
+        user_movie_alias = aliased(UserMovie)
+
+        movies = query_for_movies_rated(current_user).all()
+        
+        top_genre = calculate_top_genre(movies)
+
+        all_movies = Movie.query.all()
+        
+        movies_of_genre = []
+        movies_of_genre = get_movies_of_genre(all_movies, top_genre)
+
+        movies_data = pack_movie_data_list(movies_of_genre)
+            
+        return render_template("visualiseMoviesSuggested.html", underlined_tab_index=3, movies=movies_data, top_genre=top_genre)
+    except Exception as e:
+        print("Could not get movies: " + str(e))
+        return jsonify({"error": "Could not get movies", "details": str(e)}), 500
+
+
+    
+@application.route('/visualiseMoviesShared')
+@login_required
+def visualiseMoviesShared():
 
     movies_data = []
     friends_list = []
@@ -346,59 +356,69 @@ def visualiseDataShared():
         return jsonify({"error": str(e)}), 500
 
     try:
-        # Get the friend's username from query parameters (passed from frontend)
         friend_username = request.args.get('friend_username', type=str)
 
-        if friend_username == None:
-            return render_template("visualiseDataShared.html", underlined_tab_index=3, movies=movies_data, friends=friends_list)
-
-        # Find the friend object from the database by username
         friend = User.query.filter_by(username=friend_username).first()
+
+        movies = get_friend_movies(friend_username)
+        
+        # False means no friend is selected. And then renders the template with an empty friends list.
+        if movies == False:
+            return render_template("visualiseMoviesShared.html", underlined_tab_index=3, movies=movies_data, friends=friends_list)
 
         # Check if friend exists and if the current user is friends with the friend
         if not friend or not current_user.is_friends_with(friend):
             return jsonify({"error": "User is not friends with the specified friend"}), 403
 
-        # Alias for UserMovie table
-        user_movie_alias = aliased(UserMovie)
-
-        # Query to get the movies where the friend has rated the movie (user_rating is not None)
-        query = (
-            db.session.query(
-                Movie,
-                user_movie_alias.user_rating  # friend's rating on the movie
-            )
-            .outerjoin(
-                user_movie_alias,
-                (Movie.id == user_movie_alias.movie_id) & (user_movie_alias.user_id == friend.id)
-            )
-            .filter(user_movie_alias.user_rating.isnot(None))  # Only movies the friend has rated
-        )
-
-        movies = query.all()
-        
-        for movie, user_rating in movies:
-            movies_data.append({
-                "title": movie.title,
-                "year": movie.year,
-                "rated": movie.rated,
-                "released": movie.released,
-                "genre": movie.genre,
-                "director": movie.director,
-                "writer": movie.writer,
-                "actors": movie.actors,
-                "imdb_rating": movie.imdb_rating,
-                "metascore": movie.metascore,
-                "box_office": movie.box_office,
-                "poster_url": movie.poster_url,
-                "user_rating": user_rating
-            })
+        movies_data = pack_movie_data_tuple(movies)
 
     except Exception as e:
         print("Could not get movies: " + str(e))
         return jsonify({"error": "Could not get movies"}), 500
     
-    return render_template("visualiseDataShared.html", underlined_tab_index=3, movies=movies_data, friends=friends_list)
+    return render_template("visualiseMoviesShared.html", underlined_tab_index=3, movies=movies_data, friends=friends_list)
+
+@application.route('/visualiseMoviesSharedSuggested')
+@login_required
+def visualiseMoviesSharedSuggested():
+
+    movies_data = []
+    friends_list = []
+
+    try:
+        user = User.query.get(current_user.id)
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+
+        friends_list = [
+            {"id": friend.id, "username": friend.username}
+            for friend in user.friends
+        ]
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+    try:
+        friend_username = request.args.get('friend_username', type=str)
+
+        movies = get_friend_movies(friend_username)
+        if movies == False:
+            return render_template("visualiseMoviesSharedSuggested.html", underlined_tab_index=3, movies=movies_data, friends=friends_list)
+        
+        top_genre = calculate_top_genre(movies)
+
+        all_movies = Movie.query.all()
+        
+        movies_of_genre = []
+        movies_of_genre = get_movies_of_genre(all_movies, top_genre)
+
+        movies_of_genre = pack_movie_data_tuple(movies)
+
+    except Exception as e:
+        print("Could not get movies: " + str(e))
+        return jsonify({"error": "Could not get movies"}), 500
+    
+    return render_template("visualiseMoviesSharedSuggested.html", underlined_tab_index=3, movies=movies_of_genre, friends=friends_list, top_genre=top_genre)
 
 ### The following code is profile ###
 

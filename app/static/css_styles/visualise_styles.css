@@ -29,3 +29,16 @@
     padding-bottom: 0px;
 }
 
+.not_selected_view_section {
+    font-size: 30px;
+    display: inline-block;
+    padding-bottom: 0px;
+}
+
+.selected_view_section {
+    font-size: 30px;
+    display: inline-block;
+    border-bottom: 10px solid blue;
+    padding-bottom: 0px;
+}
+

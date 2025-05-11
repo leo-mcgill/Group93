@@ -24,8 +24,8 @@
     <nav class="navbar">
         <ul class="nav_links">
             <li {% if underlined_tab_index == 1%}class="underlined_tab"{% endif %}><a  href="/">Introduction</a></li>
-            <li {% if underlined_tab_index == 2%}class="underlined_tab"{% endif %}><a href="/uploadData">Upload Data</a></li>
-            <li {% if underlined_tab_index == 3%}class="underlined_tab"{% endif %}><a href="/visualiseData">Visualise Data</a></li>
+            <li {% if underlined_tab_index == 2%}class="underlined_tab"{% endif %}><a href="/uploadReview">Upload Review</a></li>
+            <li {% if underlined_tab_index == 3%}class="underlined_tab"{% endif %}><a href="/visualiseMovies">Visualise Movies</a></li>
             <li {% if underlined_tab_index == 4%}class="underlined_tab"{% endif %}><a href="/shareData">Share Data</a></li>
             {% if current_user.is_authenticated %}
             <li {% if underlined_tab_index == 5%}class="underlined_tab"{% endif %}><a href="/logout">Logout ({{ current_user.username }})</a></li>
