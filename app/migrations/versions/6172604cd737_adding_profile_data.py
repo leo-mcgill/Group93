@@ -1,4 +1,4 @@
-"""empty message
+"""adding profile data
 
 Revision ID: 6172604cd737
 Revises: 61035a638697
