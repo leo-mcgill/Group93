@@ -17,8 +17,8 @@ OMDb API - The Open Movie Database. (2000). Omdbapi.com. https://www.omdbapi.com
 **3:** upgrade pip to the latest version  
 **4:** install requirements on your virtual environments  
 **5:** initialise your local DB  
-**6:** run the flask application  
-**7:** add .env file
+**6:** add .env file  
+**7:** run the flask application  
 
 **1:**  Create python virtual environment (Only need to do this once):  
 $ python -m venv venv  
@@ -60,13 +60,10 @@ $ python scripts/add_sample_movies.py
 **5:** run the app:  
 $ python app.py  
 
-**6:** open your browser and go to:  
-http://127.0.0.1:5000/  
+## ENV FILE  
 
-## ENV FILE
-
-**7:** create a .env file  
-create a .env file in /app    
+**6:** create a .env file  
+create a .env file in /app  
 append to .env file:  
 SECRET_KEY = "example_secret_key"  
 
@@ -76,6 +73,9 @@ DATABASE_URL=sqlite:///yourdb.sqlite3
 append to .env file:  
 API_KEY=OMDB_API_KEY (This is used to pull movie details from OMDB.  
 it is not required as we can add a test sample of movies from a json file in instruction 5.  
+
+**7:** open your browser and go to:  
+http://127.0.0.1:5000/  
 
 ---
 
