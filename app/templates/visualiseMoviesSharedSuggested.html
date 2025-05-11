@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Visualise Data{% endblock %}
+
+{% set stylesheet_file = 'css_styles/visualise_styles.css' %}
+
+
+{% block content %}
+<!--Visualise Data section-->
+<div class="body_container">
+    <div class="centered_container column_direction">
+        <div class="centered_div">
+            <div class="title_container">
+                <a href="/visualiseMovies">
+                    <h1 class="not_selected_subtitle">Your Movies</h1>
+                </a>
+            </div>
+            <div class="title_container">
+                <a href="/visualiseMoviesShared">
+                    <h1 class="selected_subtitle">Shared User Movies</h1>
+                </a>
+            </div>
+        </div>
+        <div class="centered_div">
+            <div class="title_container">
+                <a href="/visualiseMoviesShared">
+                    <h1 class="not_selected_view_section">Movie List</h1>
+                </a>
+            </div>
+            <div class="title_container">
+                <a href="/visualiseMoviesSharedSuggested">
+                    <h1 class="selected_view_section">Suggested Movies</h1>
+                </a>
+            </div>
+        </div>
+        <div>
+            {% for friend in friends %}
+                <a href="/visualiseMoviesSharedSuggested?friend_username={{ friend.username }}"><h2 class="friend_element">{{ friend.username }}</h2></a>
+            {% endfor %}
+        </div>
+        <div>
+            <h1 class="not_selected_view_section">Their Top Genre: {{ top_genre }}</h1>
+            {% for movie in movies %}
+            <div class="centered_div row_direction movie">
+                <div class="movie_image_container">
+                    <img src={{ movie.poster_url }}></img>
+                </div>
+                <div class="movie_container">
+                    <p class="movie_section_font white_font">Movie Details</p>
+                    <p class="movie_list_font white_font">Title: {{ movie.title }}</p>
+                    <p class="movie_list_font white_font">Year: {{ movie.year }}</p>
+                    <p class="movie_list_font white_font">Rated: {{ movie.rated }}</p>
+                    <p class="movie_list_font white_font">Released: {{ movie.released }}</p>
+                    <p class="movie_list_font white_font">Genre: {{ movie.genre }}</p>
+                    <p class="movie_list_font white_font">IMDB Rating: {{ movie.imdb_rating }}</p>
+                    <p class="movie_list_font white_font">Metascore: {{ movie.metascore }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
