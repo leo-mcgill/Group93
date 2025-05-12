@@ -13,27 +13,31 @@
             </div>
             <div class="upload_container">
                 <form id="movieForm" onsubmit="return false;">
-                    <label for="movie_title"><h2 class="white_font">Movie Title:</h2></label>
-                    <input class="input" type="text" id="movie_title" name="movie_title" placeholder="Enter a movie title" autocomplete="off" required>
-                    <ul id="autocomplete-results" class="autocomplete-results"></ul>
-                    <label class="white_font" for="user_rating"><h2 class="white_font">Your Rating (0-10):</h2></label>
-                    <input class="input" type="number" name="user_rating" min="0" max="10"
-                           step="0.1" placeholder="e.g., 8.5" required><br><br>
+                    <div class="movieform-input">
+                        <label for="movie_title"><h2 class="white_font">Movie Title</h2></label>
+                        <input class="input" type="text" id="movie_title" name="movie_title" placeholder="Enter movie name" autocomplete="off" required>
+                        <ul id="autocomplete-results" class="autocomplete-results"></ul>
+                    </div>
+                    <div class="movieform-input">
+                        <label class="white_font" for="user_rating"><h2 class="white_font">Your Rating (0-10)</h2></label>
+                        <input class="input" type="number" name="user_rating" min="0" max="10"
+                           step="0.1" placeholder="e.g., 8.5" required>
+                    </div>
                     <button class="upload_submit" type="submit">Add Movie</button>
                 </form>
             </div>
             <div id="movieResult" class="white_font" style="margin-top: 20px;"></div>
+
             <div class="title_container">
                 <h1 class="title">Movies</h1>
             </div>
+            <div class="movie-items-box">
             {% for movie in movies %}
-            <div class="centered_div row_direction">
-                <div class="movie_container">
-                    <h2 class="friend_element white_font">{{ movie.title }}</h2>
-                </div>
-            </div>
+                <div class="friend_element white_font movie-item">{{ movie.title }}</div>
             {% endfor %}
+            </div>
         </div>
+    
     </div>
 </div>
 <script src="{{ url_for('static', filename='uploadData.js') }}"></script>
