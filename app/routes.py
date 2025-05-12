@@ -284,11 +284,11 @@ def add_friend():
             return jsonify({"error": "Cannot add yourself as a friend"}), 400
         
         # Check if already friends
-        if friend.is_friends_with(current_user):
+        if current_user.is_friends_with(friend):
             return jsonify({"error": "Already in their friend list"}), 400
         
         # Add the current user to the friend's friend list
-        friend.friends.append(current_user)
+        current_user.friends.append(current_user)
         db.session.commit()
 
         return jsonify({"message": f"You were added as a friend to {friend.username}!"}), 200
@@ -314,11 +314,11 @@ def remove_friend():
             return jsonify({"error": "The user does not exist"}), 404
         
         # Check if are a friend
-        if not friend.is_friends_with(current_user):
+        if not current_user.is_friends_with(friend):
             return jsonify({"error": "This user is not in your friend list"}), 400
         
         # Remove from the friend list
-        friend.friends.remove(current_user)
+        current_user.friends.remove(friend)
         db.session.commit()
 
         return jsonify({"message": f"You have been removed from the friend list of {friend.username}"}), 200
