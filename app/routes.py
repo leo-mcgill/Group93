@@ -466,24 +466,24 @@ def visualiseMoviesSharedSuggested():
 @application.route("/profile")
 @login_required
 def profile():
-    # 获取查询参数中的用户名
+    # Get the username in the query parameters
     username = request.args.get('username')
 
-    # 如果没有提供用户名或用户名是当前登录用户，则显示当前用户的个人资料
+    # If the username is not provided or the username is currently logged in, the current user's profile will be displayed
     if not username or username == current_user.username:
         return render_template("profile.html", 
                                profile_user=current_user, 
                                friends=current_user.friends,
                                is_own_profile=True)
     
-    # 查找请求的用户
+    # Find the requested user
     profile_user = User.query.filter_by(username=username).first()
-    # 如果用户不存在，重定向到当前用户的个人资料
+    # If the user does not exist, redirect to the current user's profile
     if not profile_user:
         flash("User not found", "error")
         return redirect(url_for('profile'))
     
-    # 显示请求的用户的个人资料
+    # Show the requested user's profile
     return render_template("profile.html", 
                            profile_user=profile_user, 
                            friends=profile_user.friends,
