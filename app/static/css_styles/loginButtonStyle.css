@@ -1,50 +1,40 @@
 /* --- The outermost container --- */
 .login-container {
   position: relative;
-  /* Absolute positioning of child elements */
-  width: 100px;
-  /* Container width, set according to button size */
-  margin: 50px auto;
-  /* center the container */
+  min-width: 100px;
   text-align: center;
-  /* Internal text is centered horizontally */
 }
 
 /* --- Round Button --- */
-.login-circle-btn{
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  background-color: #00AEEC;
+.login-circle-btn {
+  border-radius: 1rem;
+  background-color: #ffd437;
+  font-size: 1.2rem;
+  padding: 0.5rem 1rem;
   /* Button background color */
-  color: #fff;
-  /* Font color */
-  line-height: 60px;
+  color: #202020;
+  text-transform: uppercase;
   text-align: center;
   cursor: pointer;
   /* Display hand cursor when hovering */
   margin: 0 auto;
-  transition: background-color 0.3s ease;
-  /* Background color gradient */
+  transition: background-color 0.3s ease-in-out;
 }
 
 .login-circle-btn:hover {
-  background-color: #2d80b6;
-  /* The button changes color when hovering */
+  color: #ffd437;
+  background-color: #202020;
 }
 
 /* --- Pop-up box --- */
 .login-popout {
   position: absolute;
-  top: 80px;
-  /* 80px below the distance butto */
-  left: 50%;
-  /* Horizontal center alignment */
-  transform: translateX(-50%) translateY(-20px);
-  /* Adjust micro offset */
+  top: 100%;
+  right: 0;
   width: 450px;
   /* Pop-up frame width */
   padding: 20px;
+  color: #202020;
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
@@ -53,16 +43,13 @@
   /* Hidden by default */
   opacity: 0;
   visibility: hidden;
-  transition: all 0.3s ease;
-
-  /* Transition animation */
+  transition: all 0.3s ease-in-out;
 }
 
 /* Pop-up box is displayed when the mouse is hovered */
 .login-container:hover .login-popout {
   opacity: 1;
   visibility: visible;
-  transform: translateX(-50%) translateY(0);
 }
 
 /* Margin under the pop-up box title */
@@ -84,18 +71,20 @@
 /* --- The button in the pop-up box --- */
 .popout-btn {
   display: inline-block;
-  background: #00AEEC;
+  background: #ffd437;
   color: #fff;
   border: none;
   padding: 12px 90px;
   cursor: pointer;
   margin-bottom: 20px;
   border-radius: 4px;
+  transition: all 0.3 ease-in-out;
 }
 
 /* Button hover changes color */
 .popout-btn:hover {
-  background: #2d80b6;
+  color: #ffd437;
+  background-color: #202020;
 }
 
 /* Register link paragraph style */
@@ -106,6 +95,6 @@
 
 /* Register link style */
 .signup-link {
-  color: #00AEEC;
+  color: #ffd437;
   text-decoration: none;
 }
