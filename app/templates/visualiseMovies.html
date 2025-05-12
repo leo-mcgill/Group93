@@ -6,54 +6,52 @@
 
 {% block content %}
 <!--Visualise Data section-->
-<div class="body_container">
-    <div class="centered_container column_direction">
-        <div class="centered_div">
-            <div class="title_container">
-                <a href="/visualiseMovies">
-                    <h1 class="selected_subtitle">Your Movies</h1>
-                </a>
-            </div>
-            <div class="title_container">
-                <a href="/visualiseMoviesShared">
-                    <h1 class="not_selected_subtitle">Shared User Movies</h1>
-                </a>
-            </div>
+<div class="body_container column_direction">
+   <div class="centered_div">
+        <div class="title_container">
+            <a href="/visualiseMovies">
+                <div class="selected_subtitle">Your Movie List</div>
+            </a>
         </div>
-        <div class="centered_div">
-            <div class="title_container">
-                <a href="/visualiseMovies">
-                    <h1 class="selected_view_section">Movie List</h1>
-                </a>
-            </div>
-            <div class="title_container">
-                <a href="/visualiseMoviesSuggested">
-                    <h1 class="not_selected_view_section">Suggested Movies</h1>
-                </a>
-            </div>
+        <div class="title_container">
+            <a href="/visualiseMoviesSuggested">
+                <div class="not_selected_subtitle">Your Suggested Movies</div>
+            </a>
         </div>
-        <div>
-            {% for movie in movies %}
-            <div class="centered_div row_direction movie">
-                <div class="movie_image_container">
-                    <img src={{ movie.poster_url }}></img>
-                </div>
-                <div class="movie_container">
-                    <p class="movie_section_font white_font">Movie Details</p>
-                    <p class="movie_list_font white_font">Title: {{ movie.title }}</p>
-                    <p class="movie_list_font white_font">Year: {{ movie.year }}</p>
-                    <p class="movie_list_font white_font">Rated: {{ movie.rated }}</p>
-                    <p class="movie_list_font white_font">Released: {{ movie.released }}</p>
-                    <p class="movie_list_font white_font">Genre: {{ movie.genre }}</p>
-                    <p class="movie_list_font white_font">IMDB Rating: {{ movie.imdb_rating }}</p>
-                    <p class="movie_list_font white_font">Metascore: {{ movie.metascore }}</p>
-                    <p class="movie_section_font white_font">Your Rating: </p>
-                    <p class="movie_list_font white_font">Rating: {{ movie.user_rating }}</p>
-                </div>
-            </div>
-            {% endfor %}
+        <div class="title_container">
+            <a href="/visualiseMoviesShared">
+                <div class="not_selected_subtitle">Shared Movies</div>
+            </a>
+        </div>
+        <div class="title_container">
+            <a href="/visualiseMoviesSharedSuggested">
+                <div class="not_selected_view_section">Suggested Shared Movies</div>
+            </a>
         </div>
     </div>
+     <div  class="movies-container-box">   
+
+        {% for movie in movies %}
+        <div class="centered_div row_direction movie-item ">
+            <div class="movie_image_container">
+                <img src={{ movie.poster_url }}></img>
+            </div>
+            <div class="movie-item-overlay">
+                <h3 class="">Movie Details</h3>
+                <p class="">Title: {{ movie.title }}</p>
+                <p class="">Year: {{ movie.year }}</p>
+                <p class="">Rated: {{ movie.rated }}</p>
+                <p class="">Released: {{ movie.released }}</p>
+                <p class="">Genre: {{ movie.genre }}</p>
+                <p class="">IMDB Rating: {{ movie.imdb_rating }}</p>
+                <p class="">Metascore: {{ movie.metascore }}</p>
+                <h3 class="movie_section_font white_font">Your Rating </h3>
+                <p class="movie_list_font white_font">Rating: {{ movie.user_rating }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
 </div>
 
 {% endblock %}

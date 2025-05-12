@@ -1,44 +1,96 @@
-.movie_image_container {
-    background-color: darkblue;
-    padding: 30px;
+.movies-container-box {
+  display: flex;
+  margin: 3rem 0;
+  align-items: center;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+}
+
+.movie-item {
+  position: relative;
+  max-width: 300px;
+width: 100%;;
+}
+
+.movie-item-overlay {
+  bottom: 0;
+  right: 0;
+  background-color: #222222c0;
+  height: 0;
+  overflow: hidden;
+  opacity: 0;
+  z-index: 10;
+  width: 100%;
+  position: absolute;
+  transition: all 0.15s ease-out;
+
+  display: flex;
+  align-items: start;
+  padding: 0 2rem;
+  gap: 0.5rem;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.movie-item:hover .movie-item-overlay {
+  height: 100%;
+  opacity: 1;
 }
 
 .grey_container {
-    background-color: grey;
-    padding: 30px;
+  background-color: grey;
+  padding: 30px;
 }
 
-.movie_list_font {
-    font-size: 15px;
-}
-
-.movie_section_font {
-    font-size: 25px;
+.title_container a {
+  text-decoration: none;
+  color: #fafafa;
+  font-size: 1rem;
+  text-transform: uppercase;
+  margin-bottom: 2rem;
 }
 
 .not_selected_subtitle {
-    font-size: 50px;
-    display: inline-block;
-    padding-bottom: 0px;
+  display: inline-block;
 }
 
 .selected_subtitle {
-    font-size: 50px;
-    display: inline-block;
-    border-bottom: 10px solid blue;
-    padding-bottom: 0px;
+  display: inline-block;
+  color: #14fe5a;
+  border-bottom: 2px solid #14fe5a;
 }
 
 .not_selected_view_section {
-    font-size: 30px;
-    display: inline-block;
-    padding-bottom: 0px;
+  display: inline-block;
+  padding-bottom: 0px;
 }
 
 .selected_view_section {
-    font-size: 30px;
-    display: inline-block;
-    border-bottom: 10px solid blue;
-    padding-bottom: 0px;
+  display: inline-block;
+  color: #14fe5a;
+  border-bottom: 2px solid #14fe5a;
+  padding-bottom: 0px;
 }
 
+
+
+.user-items-box {
+    display: flex;
+    gap: 0.5rem;
+    margin: 2rem 0;
+}
+
+.user-items-box .user-item {
+    font-size: 1rem;
+    text-decoration: none;
+    color: #fafafa;
+    background-color: #fafafa3e;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.5rem;
+}
+
+.heading-top-genre {
+    margin-top: 2rem;
+}
