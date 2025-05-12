@@ -17,12 +17,14 @@
                 <h1 class="title">Share Movies</h1>
             </div>
             <div class="share_user_container">
-                <h2 class="subtitle white_font">Share Movies</h2>
                 <form id="shareForm" action="" method="POST">
-                    <input class="input" type="text" name="login" id="login_username"
-                           placeholder="Enter username"><br><br>
-                    <ul id="autocomplete-results" class="autocomplete-results"></ul>
-                    <input class="share_submit" type="submit" value="Share Data">
+                    <div class="shareform-input">
+                        <label class="subtitle white_font">Share Movies</label>
+                        <input class="input" type="text" name="login" id="login_username"
+                           placeholder="Enter username">
+                        <ul id="autocomplete-results" class="autocomplete-results"></ul>
+                    </div>
+                    <button class="share_submit" type="submit"> Share Data </button>
                 </form>
             </div>
         </div>
