@@ -266,23 +266,35 @@ def search_users():
 @application.route('/add_friend', methods=['POST'])
 @login_required
 def add_friend():
-    data = request.get_json()
-    friend_username = data.get('username')
+    try:
+        data = request.get_json()
+        friend_username = data.get('username')
 
-    # Check if the user exists in the database
-    friend = User.query.filter_by(username=friend_username).first()
-    
-    if current_user:
-        if current_user.id != friend.id and not friend.is_friends_with(current_user):
-            # Add the current user to the friend's friend list
-            friend.friends.append(current_user)
-            db.session.commit()
-            return jsonify({"message": f"You were added as a friend to {friend.username}!"}), 200
-        else:
-            flash('Error, incorrect friend', 'warning')
-            return jsonify({"error": "Cannot add yourself or already in their friend list!"}), 400
-    else:
-        return jsonify({"error": "User not found!"}), 404
+        if not friend_username:
+            return jsonify({"error": "Username cannot be empty"}), 400
+        
+        # Check if the user exists in the database
+        friend = User.query.filter_by(username=friend_username).first()
+        
+        if not friend:
+            return jsonify({"error": "User not found"}), 404
+        
+        # Cannot add yourself as a friend
+        if current_user.id == friend.id:
+            return jsonify({"error": "Cannot add yourself as a friend"}), 400
+        
+        # Check if already friends
+        if friend.is_friends_with(current_user):
+            return jsonify({"error": "Already in their friend list"}), 400
+        
+        # Add the current user to the friend's friend list
+        friend.friends.append(current_user)
+        db.session.commit()
+
+        return jsonify({"message": f"You were added as a friend to {friend.username}!"}), 200
+    except Exception as e:
+        db.session.rollback()  # Roll back the database transaction in case of an exception.
+        return jsonify({"error": f"An error occurred: {str(e)}"}), 500
 
 @application.route('/visualiseMovies')
 @login_required
@@ -425,7 +437,8 @@ def visualiseMoviesSharedSuggested():
 @application.route("/profile")
 @login_required
 def profile():
-    return render_template("profile.html")
+    friends = current_user.friends
+    return render_template("profile.html",friends=friends)
 
 @application.route('/update_avatar_color', methods=['POST'])
 @login_required
@@ -464,4 +477,36 @@ def update_bio():
         return jsonify({'success': True}), 200
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)}), 500
+    
+# User search route
+@application.route('/search_user')
+@login_required
+def search_user():
+    username = request.args.get('username', '').strip()
+    
+    if not username:
+        return jsonify({'error': 'Please enter username'}), 400
+        
+    # Can't search for yourself
+    if username == current_user.username:
+        return jsonify({'error': 'Can\'t add yourself as a friend'}), 400
+        
+    # Query the user
+    user = User.query.filter_by(username=username).first()
+    
+    if not user:
+        return jsonify({'error': 'The user does not exist'}), 404
+        
+    # Check if you are already a friend
+    is_friend = current_user.is_friends_with(user)
+    
+    # Return to user information
+    return jsonify({
+        'user': {
+            'username': user.username,
+            'avatar_color': user.avatar_color
+        },
+        'is_friend': is_friend
+    })
+
 ### The above code is a profile ###
