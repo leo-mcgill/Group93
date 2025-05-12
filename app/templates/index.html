@@ -1,43 +1,44 @@
 <!-- templates/index.html -->
-{% extends "base.html" %}
-
-{% block title %}Introduction{% endblock %}
-
-{% block content %}
+{% extends "base.html" %} {% block title %}Introduction{% endblock %} {% block
+content %}
 <div class="body_container">
-    <div class="centered_container">
-        <div class="centered_div column_direction">
-            <div class="title_container">
-                <h1 class="title">Login</h1>
-            </div>
-            <!--login container has a form for the user to enter login details
+  <div class="centered_container">
+    {% if current_user.is_authenticated == False %}
+
+    <div class="centered_div column_direction">
+      <div class="title_container">
+        <h1 class="title">Login/Sign Up</h1>
+      </div>
+      <!--login container has a form for the user to enter login details
                 this will be sent to the server-->
-            <div class="login_container">
-                <h2 class="subtitle white_font">Login</h2>
-                <a href="/newlogin"><button class="submit">Login</button></a>
-            </div>
-            <!--sign up container has a form for the user to enter login account
-                details and create an account.
-                this will be sent to the server-->
-            <div class="signup_container">
-                <h2 class="subtitle white_font">Sign up</h2>
-                <a href="/newsignup"><button class="submit">Sign Up</button></a>
-            </div>
-        </div>
-            <!--this about container contains some text explaining what
-                the website is and what it does.-->   
-        <div class="centered_div column_direction">
-            <div class="title_container">
-                <h1 class="title">About</h1>
-            </div>
-            <div class="about_container">
-                <p class="styled_text">This website allows you to record movies that you have watched and your ratings
-                for them. The movie stats are recorded on a server database. You can share this data with other users.</p>
-            </div>
-            <div class="about_container">
-                <p class="styled_text">This Movie Tracker website was developed by group 93 for the UWA CITS3403 Assignment 2025</p>
-            </div>
-        </div>
+      <div class="login_container">
+        <a href="/newlogin"><button class="submit">Login</button></a>
+
+        <a href="/newsignup"><button class="submit">Sign Up</button></a>
+      </div>
     </div>
+
+    {% endif %}
+    <!--this about container contains some text explaining what
+                the website is and what it does.-->
+    <div class="centered_div column_direction">
+      <div class="title_container">
+        <h1 class="title">Welcome to our Movie Tracker Platform</h1>
+      </div>
+      <div class="about_container">
+        <p class="styled_text">
+          This website allows you to record movies that you have watched and
+          your ratings for them. The movie stats are recorded on a server
+          database. You can share this data with other users.
+        </p>
+      </div>
+      <div class="about_container">
+        <p class="styled_text">
+          This Movie Tracker website was developed by group 93 for the UWA
+          CITS3403 Assignment 2025
+        </p>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}

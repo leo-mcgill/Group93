@@ -8,10 +8,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css_styles/common_styles.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css_styles/footer_styles.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css_styles/profileButtonStyle.css') }}">
-    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css_styles/loginButtonStyle.css') }}"> -->
     {% if stylesheet_file is defined %}
     <link rel="stylesheet" href="{{ url_for('static', filename=stylesheet_file) }}">
-    {% else %}
     {% endif %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css_styles/loginButtonStyle.css') }}">
 </head>
@@ -19,9 +17,9 @@
 
 
   
-    <div class="website_title"><h1>Movie Tracker</h1></div>
-
+    
     <nav class="navbar">
+        <div class="website_title">Movie Tracker</div>
         <ul class="nav_links">
             <li {% if underlined_tab_index == 1%}class="underlined_tab"{% endif %}><a  href="/">Introduction</a></li>
             <li {% if underlined_tab_index == 2%}class="underlined_tab"{% endif %}><a href="/uploadReview">Upload Review</a></li>
@@ -33,13 +31,13 @@
                <!-- <li {% if underlined_tab_index == 6%}class="underlined_tab"{% endif %}><a href="/signup">Sign Up</a></li>--> 
             {% endif %}
         </ul>
-            <div class="button-container">
-                {% if current_user.is_authenticated %}
-                    {% include 'profileButton.html' %}
+        <div class="button-container">
+            {% if current_user.is_authenticated %}
+                {% include 'profileButton.html' %}
             {% else %}
                 {% include 'loginButton.html' %}
             {% endif %}
-            </div>
+        </div>
     </nav>
 
     <!-- Page-specific content will be injected here -->
