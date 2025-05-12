@@ -1,8 +1,9 @@
 .footer_title_container {
-    background-color: green;
+    background-color: #14fe5a;
+    color: #202020;
     text-align: center;
     padding: 5px;
-    margin-top: 20px;
+    margin-top: 120px;
 }
 
 .footer_developers {
@@ -13,12 +14,10 @@
 
 .footer_text {
     font-size: 25px;
-    color: white;
 }
 
 .footer_text2 {
     font-size: 20px;
-    color: white;
 }
 
 .footer_numbers {
