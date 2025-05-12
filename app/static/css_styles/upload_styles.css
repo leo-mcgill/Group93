@@ -1,26 +1,55 @@
+.title_container {
+    margin: 0 auto;
+}
+
 .upload_container {
-    background-color: darkgreen;
-    padding: 30px;
+    background-color: #fafafa3e;
+    border-radius: 1rem;
+    padding: 50px;
     position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.upload_container form {
+    gap: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.movieform-input {
+    width: 100%;
+}
+
+.movieform-input input {
+    border: none;
+    outline: none;
+    padding: 0.5rem 1rem;
+    margin-top: 0.5rem;
+    font-size: 1.25rem;
+    box-shadow: 2px #f1f1f1;
+    border-radius: 0.5rem;
+    width: 100%;
 }
 
 .upload_submit{
-    font-size: 30px;
+    font-size: 1.25rem;
     border: none;
-    background-color: lightgreen;
-    border-radius: 4px;
-    padding-left: 15px;
-    padding-right: 15px;
+    background-color: #ffd437;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+
 }
 
 .autocomplete-results{
-    //position: absolute;
+    
     z-index: 1000;
     width: 100%;  /* Match the input width */
     max-height: 200px; /* Limit the height */
     overflow-y: auto;  /* Scrollable if there are too many results */
-    background-color: white;
-    //border: 1px solid #ccc;
+
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     margin-top: 5px;
     padding: 0;
@@ -33,5 +62,21 @@
 }
 
 .autocomplete-results li:hover {
-    background-color: #f1f1f1;
+    background-color: #202020;
+}
+
+
+.movie-items-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.movie-items-box .movie-item {
+    font-size: 1rem;
+    background-color: #fafafa3e;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.5rem;
 }
