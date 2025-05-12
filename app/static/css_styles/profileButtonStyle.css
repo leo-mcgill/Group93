@@ -1,34 +1,26 @@
 /* --- The outermost container --- */
 .profile-container {
-    position: relative;
-    /* Absolute positioning of child elements */
-    width: 100px;
-    /* Container width, set according to button size */
-    margin: 50px auto;
-    /* center the container */
-    text-align: center;
-    /* Internal text is centered horizontally */
-  }
-  
-  /* --- Round Button --- */
-  .profile-circle-btn{
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background-color: #00AEEC;
-    /* Button background color */
-    color: #fff;
-    /* Font color */
-    line-height: 60px;
-    text-align: center;
-    cursor: pointer;
-    /* Display hand cursor when hovering */
-    margin: 0 auto;
-    transition: background-color 0.3s ease;
-    /* Background color gradient */
-  }
-  
-  .profile-circle-btn:hover {
-    background-color: #2d80b6;
-    /* The button changes color when hovering */
-  }
+  min-width: 100px;
+  text-align: center;
+}
+
+.profile-circle-btn {
+  border-radius: 1rem;
+  background-color: #ffd437 ;
+  font-size: 1.2rem;
+  padding: 0.5rem 1rem;
+  /* Button background color */
+  color: #202020;
+  text-transform: uppercase;
+  text-align: center;
+  cursor: pointer;
+  /* Display hand cursor when hovering */
+  margin: 0 auto;
+  transition: background-color 0.3s ease-in-out;
+  /* Background color gradient */
+}
+
+.profile-circle-btn:hover {
+  color: #ffd437;
+  background-color: #202020;
+}
