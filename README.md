@@ -4,7 +4,7 @@ The purpose of this application is to record your ratings, etc of the movies tha
 from a sample set of movies.  The sample set of movies information was pulled from the OMDB  
 (Open movie database). Users can share their recorded movies with other users.  
 
-# Agile Web Development Project (Group 93) – Team Member Information
+## Agile Web Development Project (Group 93) – Team Member Information
 
 | UWA ID   | Name           | GitHub Username |
 |---------:|----------------|-----------------|
