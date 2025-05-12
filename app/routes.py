@@ -296,6 +296,35 @@ def add_friend():
         db.session.rollback()  # Roll back the database transaction in case of an exception.
         return jsonify({"error": f"An error occurred: {str(e)}"}), 500
 
+
+@application.route('/remove_friend', methods=['POST'])
+@login_required
+def remove_friend():
+    try:
+        data = request.get_json()
+        friend_username = data.get('username')
+
+        if not friend_username:
+            return jsonify({"error": "Username cannot be empty"}), 400
+        
+        # Check if the user exists
+        friend = User.query.filter_by(username=friend_username).first()
+        
+        if not friend:
+            return jsonify({"error": "The user does not exist"}), 404
+        
+        # Check if are a friend
+        if not friend.is_friends_with(current_user):
+            return jsonify({"error": "This user is not in your friend list"}), 400
+        
+        # Remove from the friend list
+        friend.friends.remove(current_user)
+        db.session.commit()
+
+        return jsonify({"message": f"You have been removed from the friend list of {friend.username}"}), 200
+    except Exception as e:
+        db.session.rollback()  # Roll back the database transaction when an exception occurs
+        return jsonify({"error": f"An error occurred: {str(e)}"}), 500
 @application.route('/visualiseMovies')
 @login_required
 def visualiseMovies():

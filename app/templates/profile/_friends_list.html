@@ -1,0 +1,309 @@
+<div class="friends-list-wrapper">
+    <h3 class="friends-title">Friends List</h3>
+    
+    <!-- Friend List Container -->
+    <div id="friends-container" class="friends-container">
+        {% if friends %}
+            {% for friend in friends|sort(attribute='id') %}
+                <div class="friend-item" data-username="{{ friend.username }}">
+                    <div class="friend-info">
+                        <div class="friend-avatar" style="background-color: {{ friend.avatar_color or '#6495ED' }}">
+                            {{ friend.username[0]|upper }}
+                        </div>
+                        <span class="friend-name">{{ friend.username }}</span>
+                    </div>
+                    <button class="remove-friend-btn" title="Delete friend">×</button>
+                    <a href="{{ url_for('profile', username=friend.username) }}" class="view-profile-link" title="查看资料">
+                        <span class="profile-icon">👤</span>
+                    </a>
+                </div>
+                {% if not loop.last %}<div class="friend-divider"></div>{% endif %}
+            {% endfor %}
+        {% else %}
+            <div class="no-friends-message">Don't have friends yet, go and add it!</div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    .friends-list-wrapper {
+        padding: 15px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    
+    .friends-title {
+        font-size: 18px;
+        color: #333;
+        margin-bottom: 15px;
+        text-align: center;
+        font-weight: 600;
+    }
+    
+    .friends-container {
+        max-height: 350px;
+        overflow-y: auto;
+        padding-right: 5px;
+    }
+    
+    .friends-container::-webkit-scrollbar {
+        width: 5px;
+    }
+    
+    .friends-container::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+    
+    .friends-container::-webkit-scrollbar-thumb {
+        background: #c1c1c1;
+        border-radius: 10px;
+    }
+    
+    .friends-container::-webkit-scrollbar-thumb:hover {
+        background: #a1a1a1;
+    }
+    
+    .friend-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 10px;
+        border-radius: 6px;
+        transition: all 0.2s ease;
+        position: relative;
+    }
+    
+    .friend-item:hover {
+        background-color: #f8f9fa;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    }
+    
+    .friend-info {
+        display: flex;
+        align-items: center;
+        flex: 1;
+    }
+    
+    .friend-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-right: 12px;
+        font-weight: bold;
+        color: white;
+        font-size: 18px;
+    }
+    
+    .friend-name {
+        font-weight: 500;
+        color: #333;
+    }
+    
+    .friend-divider {
+        height: 1px;
+        background: linear-gradient(to right, transparent, rgba(0,0,0,0.1), transparent);
+        margin: 2px 10px;
+    }
+    
+    .remove-friend-btn {
+        background: none;
+        border: none;
+        color: #dc3545;
+        font-size: 20px;
+        cursor: pointer;
+        opacity: 0;
+        transition: opacity 0.3s, transform 0.2s;
+        padding: 4px 8px;
+        border-radius: 50%;
+        margin-right: 5px;
+    }
+    
+    .friend-item:hover .remove-friend-btn {
+        opacity: 0.7;
+    }
+    
+    .remove-friend-btn:hover {
+        opacity: 1 !important;
+        background-color: rgba(220, 53, 69, 0.1);
+        transform: scale(1.1);
+    }
+    
+    .view-profile-link {
+        text-decoration: none;
+        color: #0d6efd;
+        opacity: 0;
+        transition: opacity 0.3s, transform 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+    }
+    
+    .friend-item:hover .view-profile-link {
+        opacity: 0.7;
+    }
+    
+    .view-profile-link:hover {
+        opacity: 1 !important;
+        transform: scale(1.1);
+    }
+    
+    .profile-icon {
+        font-size: 16px;
+    }
+    
+    .no-friends-message {
+        color: #6c757d;
+        text-align: center;
+        padding: 20px;
+        font-style: italic;
+    }
+    
+    /* Animation effect when deleting friends */
+    @keyframes fadeOutLeft {
+        from { opacity: 1; transform: translateX(0); }
+        to { opacity: 0; transform: translateX(-100%); height: 0; margin: 0; padding: 0; }
+    }
+    
+    .friend-removing {
+        animation: fadeOutLeft 0.5s forwards;
+        overflow: hidden;
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const friendsContainer = document.getElementById('friends-container');
+    
+    // Add events for all delete buttons
+    friendsContainer.addEventListener('click', function(e) {
+        // If click the delete button
+        if (e.target.classList.contains('remove-friend-btn')) {
+            const friendItem = e.target.closest('.friend-item');
+            const username = friendItem.dataset.username;
+            const nextDivider = friendItem.nextElementSibling;
+            
+            // Confirm deletion
+            if (confirm(`Are you sure you want to unfriend ${username} ?`)) {
+                removeFriend(username, friendItem, nextDivider);
+            }
+        }
+    });
+    
+    //  Delete a friend function
+    function removeFriend(username, friendElement, dividerElement) {
+        fetch('/remove_friend', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username: username })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message) {
+                // Add animation effects
+                friendElement.classList.add('friend-removing');
+                
+                // If there are dividing lines, also add remove animations
+                if (dividerElement && dividerElement.classList.contains('friend-divider')) {
+                    dividerElement.classList.add('friend-removing');
+                }
+                
+                // Remove elements after the animation is over
+                setTimeout(() => {
+                    if (friendElement.parentNode) {
+                        friendElement.parentNode.removeChild(friendElement);
+                    }
+                    
+                    if (dividerElement && dividerElement.parentNode) {
+                        dividerElement.parentNode.removeChild(dividerElement);
+                    }
+                    
+                    // Check if there are any friends
+                    checkEmptyFriendsList();
+                }, 500);
+            } else if (data.error) {
+                alert(data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Error deleting friends:', error);
+            alert('Deletion failed, please try again later');
+        });
+    }
+    
+    // Check whether the list is empty, if it is empty, a prompt message is displayed
+    function checkEmptyFriendsList() {
+        const friendItems = friendsContainer.querySelectorAll('.friend-item');
+        
+        if (friendItems.length === 0) {
+            const noFriendsMessage = document.createElement('div');
+            noFriendsMessage.className = 'no-friends-message';
+            noFriendsMessage.textContent = 'Don\'t have friends yet, go and add it!';
+            friendsContainer.appendChild(noFriendsMessage);
+        }
+    }
+    
+    // Add communication with search module
+    function addFriendToList(user) {
+        // Check if it is already in the list
+        const existingFriend = document.querySelector(`.friend-item[data-username="${user.username}"]`);
+        if (existingFriend) return;
+        
+        // Remove no friend prompt (if it exists)
+        const noFriendsMessage = friendsContainer.querySelector('.no-friends-message');
+        if (noFriendsMessage) {
+            noFriendsMessage.remove();
+        }
+        
+        // Create a new friend
+        const friendItem = document.createElement('div');
+        friendItem.className = 'friend-item';
+        friendItem.dataset.username = user.username;
+        
+        // Username initial letter (for avatar)
+        const initial = user.username.charAt(0).toUpperCase();
+        
+        friendItem.innerHTML = `
+            <div class="friend-info">
+                <div class="friend-avatar" style="background-color: ${user.avatar_color || '#6495ED'}">
+                    ${initial}
+                </div>
+                <span class="friend-name">${user.username}</span>
+            </div>
+            <button class="remove-friend-btn" title="Delete friends">×</button>
+            <a href="/profile?username=${user.username}" class="view-profile-link" title="View friend's profile">
+                <span class="profile-icon">👤</span>
+            </a>
+        `;
+        
+        // Add new friends to the list
+        friendsContainer.appendChild(friendItem);
+        
+        // Add divider
+        const divider = document.createElement('div');
+        divider.className = 'friend-divider';
+        friendsContainer.appendChild(divider);
+        
+        // Add fade in animation effect
+        friendItem.style.opacity = '0';
+        friendItem.style.transform = 'translateY(20px)';
+        
+        setTimeout(() => {
+            friendItem.style.transition = 'opacity 0.5s, transform 0.5s';
+            friendItem.style.opacity = '1';
+            friendItem.style.transform = 'translateY(0)';
+        }, 10);
+    }
+    
+    // Expose the function to the global scope so that the search module can be called
+    window.addFriendToList = addFriendToList;
+});
+</script>
