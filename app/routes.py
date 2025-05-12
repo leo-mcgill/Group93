@@ -4,6 +4,7 @@ from models import User, Movie, UserMovie
 from sqlalchemy.orm import aliased
 import requests
 from config import Config
+from collections import Counter
 
 from app import application
 from app import login_manager
@@ -460,6 +461,62 @@ def visualiseMoviesSharedSuggested():
         return jsonify({"error": "Could not get movies"}), 500
     
     return render_template("visualiseMoviesSharedSuggested.html", underlined_tab_index=3, movies=movies_of_genre, friends=friends_list, top_genre=top_genre)
+
+### Route to show user movie stats ###
+@application.route('/visualiseMoviesStatistics')
+@login_required
+def visualiseMoviesStatistics():
+    # Query total runtime of all movies watched by the user
+    total_runtime = db.session.query(db.func.sum(Movie.runtime)).join(UserMovie).filter(UserMovie.user_id == current_user.id).scalar() or 0
+    user_movies = db.session.query(Movie.actors, Movie.genre).join(UserMovie).filter(UserMovie.user_id == current_user.id).all()
+    actor_list = []
+    genre_list = []  # Create a list to store genres
+    for movie in user_movies:
+        actors = [actor.strip() for actor in movie.actors.split(',')]
+        actor_list.extend(actors)
+        genres = [genre.strip() for genre in movie.genre.split(',')]
+        genre_list.extend(genres)
+
+    # Count the most common actors and genres
+    actor_counts = Counter(actor_list)
+    top_actors = actor_counts.most_common(3)
+    genre_counts = Counter(genre_list)
+    top_genres = genre_counts.most_common(3)
+    
+    # Query the most watched genres
+    genres_count = db.session.query(Movie.genre, db.func.count(Movie.id).label('count')).join(UserMovie).filter(UserMovie.user_id == current_user.id).group_by(Movie.genre).order_by(db.desc('count')).limit(5).all()
+    
+    # Calculate the genre diversity score
+    # a higher diversity score shows that the user watches a higher variety of genres.
+    total_movies = Movie.query.join(UserMovie).filter(UserMovie.user_id == current_user.id).count()
+    unique_genres = db.session.query(db.func.count(db.distinct(Movie.genre))).join(UserMovie).filter(UserMovie.user_id == current_user.id).scalar() or 0
+    genre_diversity_score = (unique_genres / total_movies) * 100 if total_movies > 0 else 0
+    genre_diversity_score = round(genre_diversity_score,1)
+    
+    # Query the user's 3 highest rated movies
+    top_rated_movies = db.session.query(Movie.title, UserMovie.user_rating).join(UserMovie).filter(UserMovie.user_id == current_user.id).order_by(db.desc(UserMovie.user_rating)).limit(3).all()
+    
+    # Calculate top-genre engagement score
+    # Just multiplies the number of movies watched in users top genre by their average rating for those movies
+    # A user with a favourite genre of "Drama" and an engagement score of 30
+    #   vs a user with a favourite genre of "Action" and an engagement score of 45
+    #   Shows that the "Action" user is more engaged in their top genre than the "Drama" user
+    most_watched_genre = db.session.query(Movie.genre, db.func.count(Movie.id).label('count')).join(UserMovie).filter(UserMovie.user_id == current_user.id).group_by(Movie.genre).order_by(db.desc('count')).first()
+    if most_watched_genre:
+        most_watched_genre_count = most_watched_genre[1]
+        genre_engagement_score = db.session.query(db.func.avg(UserMovie.user_rating)).join(Movie).filter(Movie.genre == most_watched_genre[0], UserMovie.user_id == current_user.id).scalar() or 0
+        top_genre_engagement_score = most_watched_genre_count * genre_engagement_score
+    else:
+        top_genre_engagement_score = 0
+    
+    return render_template('visualiseMoviesStatistics.html', 
+        total_runtime=total_runtime,
+        top_actors=top_actors,  
+        top_genres=top_genres,  
+        genres_count=genres_count,
+        genre_diversity_score=genre_diversity_score,
+        top_rated_movies=top_rated_movies,
+        top_genre_engagement_score=top_genre_engagement_score)
 
 ### The following code is profile ###
 
