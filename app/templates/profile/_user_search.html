@@ -269,6 +269,20 @@
                     if (data.message) {  // Successful response contains message fields
                         button.textContent = 'Added successfully';
                         button.classList.add('added');
+
+                        // Get user information and add to the friend list
+                        const userItem = button.closest('.user-result-item');
+                        const userInfo = userItem.querySelector('.user-result-info');
+                        const avatarDiv = userInfo.querySelector('.user-result-avatar');
+                        const userName = userInfo.querySelector('.user-result-name').textContent;
+
+                        // Call the function in the friend list to add a new friend
+                        if (window.addFriendToList) {
+                            window.addFriendToList({
+                                username: userName,
+                                avatar_color: avatarDiv.style.backgroundColor
+                            });
+                        }
                         // Add impulse animation effect
                         button.classList.add('pulse');
                         setTimeout(() => {
