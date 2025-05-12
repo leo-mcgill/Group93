@@ -95,8 +95,9 @@
                 const result = await response.json(); // assuming server returns JSON
 
                 if (response.ok) {
-                    alert('Signup successful!');
+                    alert('Signup successful! Click OK to login.');
                     // optionally reset the form or update the UI
+                    window.location.href = "{{ url_for('newlogin') }}";
                     form.reset();
                 } else {
                     alert(`Error: ${result.error || 'Unknown error'}`);
