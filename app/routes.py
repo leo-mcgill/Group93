@@ -287,8 +287,8 @@ def add_friend():
         if current_user.is_friends_with(friend):
             return jsonify({"error": "Already in their friend list"}), 400
         
-        # Add the current user to the friend's friend list
-        current_user.friends.append(current_user)
+        # Add the friend to current user's friend list
+        current_user.friends.append(friend)
         db.session.commit()
 
         return jsonify({"message": f"You were added as a friend to {friend.username}!"}), 200
@@ -466,8 +466,28 @@ def visualiseMoviesSharedSuggested():
 @application.route("/profile")
 @login_required
 def profile():
-    friends = current_user.friends
-    return render_template("profile.html",friends=friends)
+    # 获取查询参数中的用户名
+    username = request.args.get('username')
+
+    # 如果没有提供用户名或用户名是当前登录用户，则显示当前用户的个人资料
+    if not username or username == current_user.username:
+        return render_template("profile.html", 
+                               profile_user=current_user, 
+                               friends=current_user.friends,
+                               is_own_profile=True)
+    
+    # 查找请求的用户
+    profile_user = User.query.filter_by(username=username).first()
+    # 如果用户不存在，重定向到当前用户的个人资料
+    if not profile_user:
+        flash("User not found", "error")
+        return redirect(url_for('profile'))
+    
+    # 显示请求的用户的个人资料
+    return render_template("profile.html", 
+                           profile_user=profile_user, 
+                           friends=profile_user.friends,
+                           is_own_profile=False)
 
 @application.route('/update_avatar_color', methods=['POST'])
 @login_required

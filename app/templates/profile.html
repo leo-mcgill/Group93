@@ -21,11 +21,13 @@
         </div>
         
         <!-- Module ③: User search -->
+         {% if is_own_profile %}
         <div class="profile-section user-search-section">
             <div id="user-search-content">
                 {% include "profile/_user_search.html" ignore missing %}
             </div>
         </div>
+        {% endif %}
     </div>
     
     <!-- Right sidebar -->

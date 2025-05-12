@@ -1,9 +1,10 @@
 <div class="user-search-wrapper">
-    <h3 class="search-title">Add friends</h3>
+    <h3 class="search-title">Search User</h3>
 
     <!-- Search input box -->
     <div class="search-input-container">
-        <input type="text" id="user-search-input" class="user-search-input" placeholder="Please enter the username..." autocomplete="off">
+        <input type="text" id="user-search-input" class="user-search-input" placeholder="Please enter the username..."
+            autocomplete="off">
         <button id="search-button" class="search-button">
             <i class="search-icon">&#128269;</i>
         </button>
@@ -173,6 +174,40 @@
             transform: scale(1);
         }
     }
+
+    .user-result-actions {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+    }
+
+    .view-profile-btn {
+        text-decoration: none;
+        color: #0d6efd;
+        opacity: 0;
+        transition: opacity 0.3s, transform 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        background: none;
+        border: none;
+        padding: 4px;
+        margin-right: 5px;
+    }
+
+    .user-result-item:hover .view-profile-btn {
+        opacity: 0.7;
+    }
+
+    .view-profile-btn:hover {
+        opacity: 1 !important;
+        transform: scale(1.1);
+    }
+
+    .profile-view-icon {
+        font-size: 16px;
+    }
 </style>
 
 <script>
@@ -226,11 +261,16 @@
                             </div>
                             <span class="user-result-name">${user.username}</span>
                         </div>
-                        <button class="add-friend-btn ${isFriend ? 'added' : ''}" 
-                                data-username="${user.username}" 
+                        <div class="user-result-actions">
+                            <a href="/profile?username=${user.username}" class="view-profile-btn" title="View profile">
+                                <span class="profile-view-icon">👤</span>
+                            </a>
+                            <button class="add-friend-btn ${isFriend ? 'added' : ''}"
+                                data-username="${user.username}"
                                 ${isFriend ? 'disabled' : ''}>
-                            ${isFriend ? 'Added successfully' : 'Add friends'}
-                        </button>
+                                ${isFriend ? 'Added successfully' : 'Add friends'}
+                            </button>
+                        </div>
                     `;
 
                         searchResults.appendChild(userElement);

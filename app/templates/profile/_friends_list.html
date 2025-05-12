@@ -12,8 +12,10 @@
                         </div>
                         <span class="friend-name">{{ friend.username }}</span>
                     </div>
+                    {% if is_own_profile %}
                     <button class="remove-friend-btn" title="Delete friend">×</button>
-                    <a href="{{ url_for('profile', username=friend.username) }}" class="view-profile-link" title="查看资料">
+                    {% endif %}
+                    <a href="{{ url_for('profile', username=friend.username) }}" class="view-profile-link" title="View profile">
                         <span class="profile-icon">👤</span>
                     </a>
                 </div>
@@ -178,6 +180,7 @@
 </style>
 
 <script>
+{% if is_own_profile %}
 document.addEventListener('DOMContentLoaded', function() {
     const friendsContainer = document.getElementById('friends-container');
     
@@ -306,4 +309,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Expose the function to the global scope so that the search module can be called
     window.addFriendToList = addFriendToList;
 });
+{% else %}
+document.addEventListener('DOMContentLoaded', function() {
+    // No additional script needed for viewing other user's friend list
+});
+{% endif %}
 </script>
