@@ -434,3 +434,133 @@
         }
     }
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add animation to the score bar
+    const ratingBars = document.querySelectorAll('.rating-bar');
+    
+    // Detecting Visibility with IntersectionObserver
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // Triggers an animation when the element becomes visible
+                setTimeout(() => {
+                    entry.target.style.width = entry.target.style.width;
+                }, 100);
+                // Stop observing the triggered elements
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 }); // Triggered when 10% of the elements are visible
+    
+    // Start observing all rating bars
+    ratingBars.forEach(bar => {
+        observer.observe(bar);
+    });
+    
+    // Enable the rating editing function only in the user's own profile
+    const isOwnProfile = {{ is_own_profile|tojson }};
+    
+    if (isOwnProfile) {
+        // Get all movie cards
+        const movieCards = document.querySelectorAll('.movie-card');
+        
+        movieCards.forEach(card => {
+            const editBtn = card.querySelector('.edit-rating-btn');
+            const ratingForm = card.querySelector('.rating-edit-form');
+            const ratingInput = card.querySelector('.rating-input');
+            const saveBtn = card.querySelector('.save-rating-btn');
+            const cancelBtn = card.querySelector('.cancel-rating-btn');
+            const movieId = card.dataset.movieId;
+            const currentRating = card.dataset.currentRating;
+            
+            // Click the Edit button
+            if (editBtn) {
+                editBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    ratingForm.style.display = 'flex';
+                    ratingInput.value = currentRating;
+                    ratingInput.focus();
+                });
+            }
+            
+            // Click the Save button
+            if (saveBtn) {
+                saveBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const newRating = parseFloat(ratingInput.value);
+                    
+                    if (isNaN(newRating) || newRating < 0 || newRating > 10) {
+                        alert('Please enter a valid rating between 0 and 10');
+                        return;
+                    }
+                    
+                    // Send a rating update request
+                    fetch('/update_movie_rating', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            movie_id: movieId,
+                            rating: newRating
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Update the displayed ratings
+                            card.querySelector('.movie-rating').textContent = `${newRating}/10`;
+                            card.dataset.currentRating = newRating;
+                            ratingForm.style.display = 'none';
+                            
+                            // Shortly display the success message
+                            const successMsg = document.createElement('div');
+                            successMsg.className = 'rating-update-success';
+                            successMsg.textContent = 'Rating updated!';
+                            card.appendChild(successMsg);
+                            
+                            setTimeout(() => {
+                                if (successMsg.parentNode) {
+                                    successMsg.parentNode.removeChild(successMsg);
+                                }
+                                // Refresh the page to update statistics
+                                window.location.reload();
+                            }, 1500);
+                        } else {
+                            alert('Failed to update rating: ' + (data.error || 'Unknown error'));
+                        }
+                    })
+                    .catch(error => {
+                        alert('Error: ' + error);
+                    });
+                });
+            }
+            
+            // Click the Cancel button
+            if (cancelBtn) {
+                cancelBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    ratingForm.style.display = 'none';
+                });
+            }
+        });
+    }
+    
+    // Movie card click effect
+    const movieCards = document.querySelectorAll('.movie-card');
+    movieCards.forEach(card => {
+        card.addEventListener('click', function(e) {
+            // if you click on the edit button or form area, no card click event will be executed
+            if (e.target.closest('.edit-rating-btn') || e.target.closest('.rating-edit-form')) {
+                return;
+            }
+            
+            // Here you can add the behavior after clicking on the movie card
+            // For example, display movie details pop-up window or jump to movie details page
+            console.log('Movie clicked:', this.dataset.movieId);
+        });
+    });
+});
+</script>
