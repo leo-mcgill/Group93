@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
-{% block title %}Visualise Data - Statistics{% endblock %}
+{% block title %}Visualise Data - Shared Statistics{% endblock %}
 
 {% set stylesheet_file = 'css_styles/visualise_styles.css' %}
 
 {% block content %}
-<!--Visualise Data section-->
+<!-- Visualise Data section -->
 <div class="body_container">
     <div class="centered_container column_direction">
         <div class="centered_div">
@@ -17,31 +17,42 @@
             </div>
             <div class="title_container">
                 <a href="/visualiseMoviesShared">
-                    <h1 class="not_selected_subtitle">Shared User Movies</h1>
+                    <h1 class="selected_subtitle">Shared User Movies</h1>
                 </a>
             </div>
         </div>
 
         <div class="centered_div">
             <div class="title_container">
-                <a href="/visualiseMovies">
+                <a href="/visualiseMoviesShared">
                     <h1 class="not_selected_view_section">Movie List</h1>
                 </a>
             </div>
             <div class="title_container">
-                <a href="/visualiseMoviesSuggested">
+                <a href="/visualiseMoviesSharedSuggested">
                     <h1 class="not_selected_view_section">Suggested Movies</h1>
                 </a>
             </div>
             <div class="title_container">
-                <a href="/visualiseMoviesStatistics">
-                    <h1 class="selected_view_section">Statistics</h1>  <!-- Highlight the current tab -->
+                <a href="/visualiseMoviesSharedStatistics">
+                    <h1 class="selected_view_section">Statistics</h1> <!-- Highlight the current tab -->
                 </a>
             </div>
         </div>
 
-        <!-- Statistics Content -->
-        <div>
+        <!-- Friend List for Viewing Friend's Statistics -->
+        <div id="friend-list-container">
+            <h2>Select a Friend's Statistics:</h2>
+            {% for friend in friends %}
+                <a href="/visualiseMoviesSharedStatistics?friend_username={{ friend.username }}"><h2 class="friend_element">{{ friend.username }}</h2></a>
+            {% endfor %}
+        </div>
+
+        <!-- Hide the Friend List and Show the Statistics Only After Friend is Selected -->
+        {% if friend %}
+        <div id="statistics-container">
+            <h1 class="not_selected_view_section">{{ friend.username }}'s Statistics:</h1>
+
             <div class="statistics_section">
                 <h2>Total Runtime of All Movies Watched</h2>
                 <p>{{ total_runtime }} minutes</p>
@@ -71,7 +82,7 @@
             </div>
 
             <div class="statistics_section">
-                <h2>Your 3 Highest Rated Movies</h2>
+                <h2>Top 3 Highest Rated Movies</h2>
                 <ul>
                     {% for title, rating in top_rated_movies %}
                         <li>{{ title }} - Rating: {{ rating }}</li>
@@ -84,7 +95,23 @@
                 <p>{{ top_genre_engagement_score }}</p>
             </div>
         </div>
+        {% endif %}
     </div>
 </div>
 
+{% endblock %}
+
+{% block javascript %}
+<script type="text/javascript">
+    function showFriendStats(friendUsername) {
+        // Hide the friend list
+        document.getElementById('friend-list-container').style.display = 'none';
+
+        // Show the statistics container
+        document.getElementById('statistics-container').style.display = 'block';
+
+        // Optionally, you could update the URL to reflect the friend's name
+        window.history.pushState('', '', '/visualiseMoviesSharedStatistics?friend_username=' + friendUsername);
+    }
+</script>
 {% endblock %}

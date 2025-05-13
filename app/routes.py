@@ -468,39 +468,42 @@ def visualiseMoviesSharedSuggested():
 def visualiseMoviesStatistics():
     # Query total runtime of all movies watched by the user
     total_runtime = db.session.query(db.func.sum(Movie.runtime)).join(UserMovie).filter(UserMovie.user_id == current_user.id).scalar() or 0
+    
+    # Query all movies the user has watched (with actors and genres as comma-separated strings)
     user_movies = db.session.query(Movie.actors, Movie.genre).join(UserMovie).filter(UserMovie.user_id == current_user.id).all()
+
+    # Process the actors data and count their occurrences
     actor_list = []
     genre_list = []  # Create a list to store genres
     for movie in user_movies:
+        # Split the actors by commas and strip any leading/trailing whitespace
         actors = [actor.strip() for actor in movie.actors.split(',')]
         actor_list.extend(actors)
+        
+        # Split the genres by commas and strip any leading/trailing whitespace
         genres = [genre.strip() for genre in movie.genre.split(',')]
         genre_list.extend(genres)
 
-    # Count the most common actors and genres
+    # Count the most common actors
     actor_counts = Counter(actor_list)
     top_actors = actor_counts.most_common(3)
+
+    # Count the most common genres
     genre_counts = Counter(genre_list)
     top_genres = genre_counts.most_common(3)
-    
+
     # Query the most watched genres
     genres_count = db.session.query(Movie.genre, db.func.count(Movie.id).label('count')).join(UserMovie).filter(UserMovie.user_id == current_user.id).group_by(Movie.genre).order_by(db.desc('count')).limit(5).all()
-    
+
     # Calculate the genre diversity score
-    # a higher diversity score shows that the user watches a higher variety of genres.
     total_movies = Movie.query.join(UserMovie).filter(UserMovie.user_id == current_user.id).count()
     unique_genres = db.session.query(db.func.count(db.distinct(Movie.genre))).join(UserMovie).filter(UserMovie.user_id == current_user.id).scalar() or 0
     genre_diversity_score = (unique_genres / total_movies) * 100 if total_movies > 0 else 0
-    genre_diversity_score = round(genre_diversity_score,1)
-    
+
     # Query the user's 3 highest rated movies
     top_rated_movies = db.session.query(Movie.title, UserMovie.user_rating).join(UserMovie).filter(UserMovie.user_id == current_user.id).order_by(db.desc(UserMovie.user_rating)).limit(3).all()
-    
+
     # Calculate top-genre engagement score
-    # Just multiplies the number of movies watched in users top genre by their average rating for those movies
-    # A user with a favourite genre of "Drama" and an engagement score of 30
-    #   vs a user with a favourite genre of "Action" and an engagement score of 45
-    #   Shows that the "Action" user is more engaged in their top genre than the "Drama" user
     most_watched_genre = db.session.query(Movie.genre, db.func.count(Movie.id).label('count')).join(UserMovie).filter(UserMovie.user_id == current_user.id).group_by(Movie.genre).order_by(db.desc('count')).first()
     if most_watched_genre:
         most_watched_genre_count = most_watched_genre[1]
@@ -508,15 +511,91 @@ def visualiseMoviesStatistics():
         top_genre_engagement_score = most_watched_genre_count * genre_engagement_score
     else:
         top_genre_engagement_score = 0
-    
+
+    # Render the statistics page with the gathered data
     return render_template('visualiseMoviesStatistics.html', 
-        total_runtime=total_runtime,
-        top_actors=top_actors,  
-        top_genres=top_genres,  
-        genres_count=genres_count,
-        genre_diversity_score=genre_diversity_score,
-        top_rated_movies=top_rated_movies,
-        top_genre_engagement_score=top_genre_engagement_score)
+                           total_runtime=total_runtime,
+                           top_actors=top_actors,  # Pass the top actors to the template
+                           top_genres=top_genres,  # Pass the top genres to the template
+                           genres_count=genres_count,
+                           genre_diversity_score=genre_diversity_score,
+                           top_rated_movies=top_rated_movies,
+                           top_genre_engagement_score=top_genre_engagement_score)
+    
+
+@application.route('/visualiseMoviesSharedStatistics', methods=['GET', 'POST'])
+@login_required
+def visualiseMoviesSharedStatistics():
+    # Get the friend's username from the query parameter
+    friend_username = request.args.get('friend_username')
+
+    # Fetch the list of friends for the user
+    friends = current_user.friends
+
+    if friend_username:
+        # Fetch the friend's user object
+        friend = User.query.filter_by(username=friend_username).first()
+        if not friend:
+            flash("Friend not found.", "danger")
+            return redirect(url_for('home'))
+
+        # Query all movies that the friend has watched (with actors and genres as comma-separated strings)
+        user_movies = db.session.query(Movie.actors, Movie.genre).join(UserMovie).filter(UserMovie.user_id == friend.id).all()
+    
+        total_runtime = db.session.query(db.func.sum(Movie.runtime)).join(UserMovie).filter(UserMovie.user_id == friend.id).scalar() or 0
+
+    else:
+        # If no friend is selected, don't load the statistics section yet
+        return render_template('visualiseMoviesSharedStatistics.html', friends=friends, friend=None)
+
+    # Process the friend’s movie data (same logic as the user's)
+    actor_list = []
+    genre_list = []
+    for movie in user_movies:
+        actors = [actor.strip() for actor in movie.actors.split(',')]
+        actor_list.extend(actors)
+
+        genres = [genre.strip() for genre in movie.genre.split(',')]
+        genre_list.extend(genres)
+
+    # Count the most common actors and genres for the friend
+    actor_counts = Counter(actor_list)
+    top_actors = actor_counts.most_common(3)
+
+    genre_counts = Counter(genre_list)
+    top_genres = genre_counts.most_common(3)
+
+    # Query the most watched genres
+    genres_count = db.session.query(Movie.genre, db.func.count(Movie.id).label('count')).join(UserMovie).filter(UserMovie.user_id == friend.id).group_by(Movie.genre).order_by(db.desc('count')).limit(5).all()
+
+    # Calculate the genre diversity score for the friend
+    total_movies = Movie.query.join(UserMovie).filter(UserMovie.user_id == friend.id).count()
+    unique_genres = db.session.query(db.func.count(db.distinct(Movie.genre))).join(UserMovie).filter(UserMovie.user_id == friend.id).scalar() or 0
+    genre_diversity_score = (unique_genres / total_movies) * 100 if total_movies > 0 else 0
+
+    # Query the friend's top 3 highest rated movies
+    top_rated_movies = db.session.query(Movie.title, UserMovie.user_rating).join(UserMovie).filter(UserMovie.user_id == friend.id).order_by(db.desc(UserMovie.user_rating)).limit(3).all()
+
+    # Calculate top-genre engagement score for the friend
+    most_watched_genre = db.session.query(Movie.genre, db.func.count(Movie.id).label('count')).join(UserMovie).filter(UserMovie.user_id == friend.id).group_by(Movie.genre).order_by(db.desc('count')).first()
+    if most_watched_genre:
+        most_watched_genre_count = most_watched_genre[1]
+        genre_engagement_score = db.session.query(db.func.avg(UserMovie.user_rating)).join(Movie).filter(Movie.genre == most_watched_genre[0], UserMovie.user_id == friend.id).scalar() or 0
+        top_genre_engagement_score = most_watched_genre_count * genre_engagement_score
+    else:
+        top_genre_engagement_score = 0
+
+    # Render the statistics page for the friend's data
+    return render_template('visualiseMoviesSharedStatistics.html',
+                           friends=friends,
+                           friend=friend,
+                           total_runtime=total_runtime,
+                           top_actors=top_actors,
+                           top_genres=top_genres,
+                           genres_count=genres_count,
+                           genre_diversity_score=genre_diversity_score,
+                           top_rated_movies=top_rated_movies,
+                           top_genre_engagement_score=top_genre_engagement_score)
 
 ### The following code is profile ###
 
