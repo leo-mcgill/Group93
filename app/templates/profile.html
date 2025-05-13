@@ -119,20 +119,20 @@
 <!--Add some placeholder content so that the basic layout can still be seen when the sub-template is missing -->
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-        // 获取当前页面是否是用户自己的个人资料
+        // Get whether the current page is the user's own profile
         const isOwnProfile = {% if is_own_profile %}true{% else %}false{% endif %};
 
-    // 获取导航栏中的按钮容器
+    // Get the button container in the navigation bar
     const buttonContainer = document.querySelector('.navbar .button-container');
 
-    // 根据是否是用户自己的个人资料来控制按钮的显示
+    // Control the display of buttons based on whether it is the user's own profile
     if (isOwnProfile) {
-        // 如果是用户自己的个人资料，隐藏按钮
+        // If it is the user's own profile, hide the button
         if (buttonContainer) {
             buttonContainer.style.display = 'none';
         }
     } else {
-        // 如果是查看其他用户的个人资料，显示按钮
+        // If you are viewing the profile of other users, the button will be displayed
         if (buttonContainer) {
             buttonContainer.style.display = 'flex';
         }
