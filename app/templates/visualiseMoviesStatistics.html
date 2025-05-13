@@ -6,40 +6,38 @@
 
 {% block content %}
 <!--Visualise Data section-->
-<div class="body_container">
-    <div class="centered_container column_direction">
-        <div class="centered_div">
-            <!-- Tabs Navigation -->
-            <div class="title_container">
-                <a href="/visualiseMovies">
-                    <h1 class="not_selected_subtitle">Your Movies</h1>
-                </a>
-            </div>
-            <div class="title_container">
-                <a href="/visualiseMoviesShared">
-                    <h1 class="not_selected_subtitle">Shared User Movies</h1>
-                </a>
-            </div>
+<div class="body_container column_direction">
+    <div class="centered_div">
+        <div class="title_container">
+            <a href="/visualiseMovies">
+                <div class="not_selected_view_section">Your Movie List</div>
+            </a>
         </div>
-
-        <div class="centered_div">
-            <div class="title_container">
-                <a href="/visualiseMovies">
-                    <h1 class="not_selected_view_section">Movie List</h1>
-                </a>
-            </div>
-            <div class="title_container">
-                <a href="/visualiseMoviesSuggested">
-                    <h1 class="not_selected_view_section">Suggested Movies</h1>
-                </a>
-            </div>
-            <div class="title_container">
-                <a href="/visualiseMoviesStatistics">
-                    <h1 class="selected_view_section">Statistics</h1>  <!-- Highlight the current tab -->
-                </a>
-            </div>
+        <div class="title_container">
+            <a href="/visualiseMoviesSuggested">
+                <div class="not_selected_view_section">Suggested Movies</div>
+            </a>
         </div>
-
+        <div class="title_container">
+            <a href="/visualiseMoviesStatistics">
+                <div class="selected_subtitle">Statistics</div>
+            </a>
+        </div>
+        <div class="title_container">
+            <a href="/visualiseMoviesShared">
+                <div class="not_selected_view_section">Shared Movies</div>
+            </a>
+        </div>
+        <div class="title_container">
+            <a href="/visualiseMoviesSharedSuggested">
+                <div class="not_selected_view_section">Suggested Shared Movies</div>
+            </a>
+        </div>
+        <div class="title_container">
+            <a href="/visualiseMoviesSharedStatistics">
+                <div class="not_selected_view_section">Shared Statistics</div> <!-- Highlight the current tab -->
+            </a>
+        </div>
         <!-- Statistics Content -->
         <div>
             <div class="statistics_section">
