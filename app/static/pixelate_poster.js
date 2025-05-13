@@ -1,7 +1,7 @@
 window.addEventListener('DOMContentLoaded', () => {
     const canvases = document.querySelectorAll('canvas');
-    const targetWidth = 5;
-    const targetHeight = 7;
+    const targetWidth = 20;
+    const targetHeight = 30;
 
     canvases.forEach(canvas => {
         const src = canvas.getAttribute('data-src');
