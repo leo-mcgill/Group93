@@ -110,3 +110,4 @@ def get_friend_movies(friend_username):
 
     movies = query.all()
     return movies
+
