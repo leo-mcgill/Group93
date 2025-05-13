@@ -38,13 +38,6 @@
                 {% include "profile/_movie_collection.html" ignore missing %}
             </div>
         </div>
-
-        <!-- Module ⑤: Message board -->
-        <div class="profile-section message-board-section">
-            <div id="message-board-content">
-                {% include "profile/_message_board.html" ignore missing %}
-            </div>
-        </div>
     </div>
 </div>
 
@@ -82,26 +75,6 @@
         border-radius: 8px;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         padding: 20px;
-    }
-
-    .user-info-section {
-        /*User information module style in the upper left corner */
-    }
-
-    .friends-list-section {
-        /*Friend list module style in the lower left corner */
-    }
-
-    .user-search-section {
-        /*Search box module style in the lower left corner */
-    }
-
-    .movie-list-section {
-        /*Movie List Module Style in the upper right corner */
-    }
-
-    .message-board-section {
-        /*The message board module style in the lower right corner */
     }
 
     /*Responsive design */
@@ -143,7 +116,6 @@ document.addEventListener('DOMContentLoaded', function () {
         { id: 'friends-list-content', title: 'Friends list' },
         { id: 'user-search-content', title: 'Search for users' },
         { id: 'movie-list-content', title: 'Movie List' },
-        { id: 'message-board-content', title: 'Message board' }
     ];
 
     sections.forEach(section => {
