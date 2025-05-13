@@ -116,7 +116,7 @@ def get_favorite_movies(user_id, limit=6):
     # Get the highest user-rated movie
     favorite_movies = UserMovie.query.filter_by(user_id=user_id)\
         .filter(UserMovie.user_rating.isnot(None))\
-        .order_by(UserMovie.user_rating.desc())\
+        .order_by(UserMovie.user_rating.desc(),UserMovie.id.desc())\
         .limit(limit)\
         .all()
     
