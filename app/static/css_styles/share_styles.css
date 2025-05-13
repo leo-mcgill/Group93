@@ -1,30 +1,59 @@
+.title_container {
+    margin: 0 auto;
+}
+
 .share_user_container {
-    background-color: darkgreen;
-    padding-left: 30px;
-    padding-right: 30px;
-    padding-bottom: 30px;
+    background-color: #fafafa3e;
+    border-radius: 1rem;
+    padding: 50px;
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+
+.share_user_container form {
+    gap: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.shareform-input {
+    width: 100%;
+    position: relative;
+}
+
+.shareform-input input {
+    border: none;
+    outline: none;
+    padding: 0.5rem 1rem;
+    margin-top: 0.5rem;
+    font-size: 1.25rem;
+    box-shadow: 2px #f1f1f1;
+    border-radius: 0.5rem;
+    width: 100%;
 }
 
 .share_submit {
-    font-size: 30px;
+    font-size: 1.25rem;
     border: none;
-    background-color: lightgreen;
-    border-radius: 4px;
-    padding-left: 15px;
-    padding-right: 15px;
+    background-color: #ffd437;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+
 }
 
 .autocomplete-results {
-    //position: absolute;
+    position: absolute;
     z-index: 1000;
-    width: 100%;
     max-height: 200px;
     overflow-y: auto;
-    background-color: white;
-    //border: 1px solid #ccc;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #202020;
     margin-top: 5px;
     padding: 0;
+    width: 100%;
     list-style-type: none;
 }
 
@@ -34,5 +63,21 @@
 }
 
 .autocomplete-item:hover {
-    background-color: #f0f0f0;
+    background-color: #202020;
+}
+
+
+.about_container {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.about_container .friend_element {
+    font-size: 1rem;
+    background-color: #fafafa3e;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.5rem;
 }
