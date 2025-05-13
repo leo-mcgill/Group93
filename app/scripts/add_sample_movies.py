@@ -9,7 +9,7 @@ import json
 
 with application.app_context():
 
-    with open('example_movies.json', 'r') as f:
+    with open('scripts/example_movies.json', 'r') as f:
         data = json.load(f)
 
     for movie in data:
