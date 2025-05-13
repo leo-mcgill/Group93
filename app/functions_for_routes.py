@@ -111,6 +111,7 @@ def get_friend_movies(friend_username):
     movies = query.all()
     return movies
 
+
 # Get the highest user-rated movie
 def get_favorite_movies(user_id, limit=6):
     # Get the highest user-rated movie

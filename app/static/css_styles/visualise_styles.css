@@ -91,6 +91,45 @@ width: 100%;;
     border-radius: 0.5rem;
 }
 
+.title_container a {
+    text-decoration: none;
+    color: #333;
+    padding: 10px 20px;
+    display: inline-block;
+}
+
+.selected_view_section {
+    font-weight: bold;
+    color: #007bff;  /* Highlight color for the selected tab */
+}
+
+.not_selected_view_section {
+    color: #6c757d;  /* Lighter color for non-selected tabs */
+}
+
+.statistics_section {
+    margin-bottom: 20px;
+}
+
+.statistics_section h2 {
+    font-size: 22px;
+    color: #333;
+}
+
+.statistics_section p {
+    font-size: 18px;
+    color: #555;
+}
+
+.statistics_section ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.statistics_section ul li {
+    font-size: 16px;
+    color: #555;
+  
 .heading-top-genre {
     margin-top: 2rem;
 }
