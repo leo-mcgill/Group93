@@ -1,7 +1,7 @@
 #Group 93 CITS3403 Project 2025
 #functions used by routes. These functions are imported by routes.py
 
-from models import *
+from app.models import *
 from sqlalchemy.orm import aliased
 
 from collections import Counter
