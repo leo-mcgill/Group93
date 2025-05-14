@@ -1,3 +1,6 @@
+#Group 93 CITS3403 Project 2025
+#Configurations for the flask app.
+
 import os
 
 # Get the base directory of the app

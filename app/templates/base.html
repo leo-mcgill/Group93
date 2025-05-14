@@ -1,4 +1,7 @@
+<!--Group 93 CITS3403 Project 2025-->
+
 <!-- templates/base.html -->
+<!-- Head content specifies metadata and links stylesheets -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,11 +16,10 @@
     {% endif %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css_styles/loginButtonStyle.css') }}">
 </head>
+
+<!--body content-->
 <body>
-
-
-  
-    
+    <!--navbar for navigating between pages-->
     <nav class="navbar">
         <div class="website_title">Movie Tracker</div>
         <ul class="nav_links">
@@ -28,9 +30,9 @@
             {% if current_user.is_authenticated %}
             <li {% if underlined_tab_index == 5%}class="underlined_tab"{% endif %}><a href="/logout">Logout ({{ current_user.username }})</a></li>
             {% else %}
-               <!-- <li {% if underlined_tab_index == 6%}class="underlined_tab"{% endif %}><a href="/signup">Sign Up</a></li>--> 
             {% endif %}
         </ul>
+        <!--if user is logged in, include a profile page button-->
         <div class="button-container">
             {% if current_user.is_authenticated %}
                 {% include 'profileButton.html' %}
@@ -40,9 +42,10 @@
         </div>
     </nav>
 
-    <!-- Page-specific content will be injected here -->
+    <!-- extended page content will be added here -->
     {% block content %}{% endblock %}
 </body>
+<!-- footer containing developer names -->
 <footer>
     <div class="footer_title_container">
         <h2 class="footer_text">Developers</h2>

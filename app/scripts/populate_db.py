@@ -1,3 +1,6 @@
+#Group 93 CITS3403 Project 2025
+#script to add test data.
+
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -12,9 +15,8 @@ with application.app_context():
     db.session.add(user)
     db.session.commit()
     
-    
     #movie = Movie(title="Up", user_id=user.id)
     #db.session.add(movie)
     #db.session.commit()
     
-    print("Test data added.")
+    print("Test user added.")

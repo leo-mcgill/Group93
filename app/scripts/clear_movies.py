@@ -1,4 +1,5 @@
-#py script to remove all entries from all movie table
+#Group 93 CITS3403 Project 2025
+#script to remove all data from movie table
 
 import sys
 import os

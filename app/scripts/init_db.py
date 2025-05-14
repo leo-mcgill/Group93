@@ -1,3 +1,6 @@
+#Group 93 CITS3403 Project 2025
+#script to create db and tables
+
 import sys
 import os
 

@@ -1,6 +1,10 @@
+#Group 93 CITS3403 Project 2025
+#functions used by routes. These functions are imported by routes.py
+
 from models import *
 from sqlalchemy.orm import aliased
 
+# packs the movie_list into a json. This excludes user ratings.
 def pack_movie_data_list(movies):
     movies_data = []
     for movie in movies:
@@ -20,7 +24,7 @@ def pack_movie_data_list(movies):
         })
     return movies_data
 
-
+# packs the movie data into a json. This includes user ratings.
 def pack_movie_data_tuple(movies):
     movies_data = []
     for movie, user_rating in movies:
@@ -41,13 +45,14 @@ def pack_movie_data_tuple(movies):
         })
     return movies_data
 
+# creates and returns a query for the movies that have been rated of a user.
 def query_for_movies_rated(current_user):
     user_movie_alias = aliased(UserMovie)
 
     query = (
         db.session.query(
             Movie,
-            user_movie_alias.user_rating  # pulls the current user's rating if exists
+            user_movie_alias.user_rating
         )
         .join(  # innerjoin to only get rated movies
             user_movie_alias,
@@ -56,9 +61,9 @@ def query_for_movies_rated(current_user):
         .filter(user_movie_alias.user_rating.isnot(None))  # Only movies with a rating
     )
 
-    #movies = query.all()
     return query
 
+# Uses a simple sum of ratings of all movies of genres, then returns the max genre of a a user's movies
 def calculate_top_genre(movies):
     movie_genre_ratings = {}
 
@@ -77,6 +82,7 @@ def calculate_top_genre(movies):
 
     return top_genre
 
+# Looks through list of all movies and takes out all the movies which belong to a specific genre.
 def get_movies_of_genre(all_movies, max_genre):
     movies_of_genre = []
     for movie in all_movies:
@@ -87,6 +93,7 @@ def get_movies_of_genre(all_movies, max_genre):
             
     return movies_of_genre
 
+# Queries for all the movies that a friend has rated and returns the list of tuples of movie, and friend_ratings.
 def get_friend_movies(friend_username):
     # Return False if no friend is selected
     if friend_username == None:

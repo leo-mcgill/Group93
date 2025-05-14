@@ -1,3 +1,6 @@
+#Group 93 CITS3403 Project 2025
+#models file stores schema used by SQLAlchemy ORM
+
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash

@@ -1,3 +1,6 @@
+//Group 93 CITS3403 Project 2025
+//script to downscale image to not break copyright laws
+
 window.addEventListener('DOMContentLoaded', () => {
     const canvases = document.querySelectorAll('canvas');
     const targetWidth = 20;

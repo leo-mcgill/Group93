@@ -1,3 +1,6 @@
+#Group 93 CITS3403 Project 2025
+#routes file for all routes used by flask app
+
 from flask import Flask, render_template, redirect, url_for, request, flash, jsonify
 from flask_login import login_user, logout_user, login_required, current_user
 from models import User, Movie, UserMovie
@@ -13,7 +16,6 @@ from forms import LoginForm, RegisterForm
 
 from functions_for_routes import *
 
-### The following code is a newly designed login/signup ###
 @application.route("/newlogin")
 def newlogin():
     return render_template("login_modal.html")
@@ -25,7 +27,6 @@ def newsignup():
 @application.route("/forgetPassword")
 def forgetPassword():
     return render_template("forgetPassword_modal.html")
-### The above code is a newly designed login/signup ###
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -48,10 +49,6 @@ def login():
             flash('Invalid credentials.', 'danger')
             return redirect(url_for('newlogin'))
     return render_template("redirectSignUp.html")
-
-@application.route("/signup", methods=["GET"])
-def signup():
-    return render_template("signUp.html", underlined_tab_index=6)
 
 @application.route("/signup_account", methods=["POST"])
 def signup_account():
@@ -119,65 +116,12 @@ def upload_movie():
         title = data.get('movie_title')
         user_rating = data.get('user_rating')
 
-        # Comment this lines of code when you want to add new movies to the database using the OMDB API Key.
-        ###
-        
+        # This checks if the movie exists in the database and if not, returns an error
         existing = Movie.query.filter_by(title=data.get('movie_title')).first()
         if not existing:
             print("Movie title doesnt exist. exiting submission")
-            return jsonify({"error": f"Movie: {title} doesnt exist in database."}), 400
-        
-        ###
-        # Uncomment this lines of code when you want to add new movies to the database using the OMDB API Key.
-        ###
-        """
-        response = requests.get(f"https://www.omdbapi.com/?t={title}&apikey={Config.API_KEY}")
-        movie_data = response.json()
+            return jsonify({"error": f"Movie: {title} doesnt exist in database."}), 400        
 
-        if movie_data.get("Response") == "False":
-            return jsonify({"error": f"Movie: {title} not found"}), 404
-
-        # Safely extract fields
-        runtime_str = movie_data.get("Runtime", "0").replace(" min", "")
-        runtime = safe_int(runtime_str, default=0)
-
-        imdb_rating = safe_float(movie_data.get("imdbRating"))
-        metascore = safe_int(movie_data.get("Metascore"))
-        rt_rating = (
-            movie_data.get("Ratings", [{}])[1].get("Value")
-            if len(movie_data.get("Ratings", [])) > 1
-            else None
-        )
-        
-        
-        movie = Movie.query.filter_by(
-            title=movie_data.get("Title", "Unknown"),
-            year=movie_data.get("Year")).first()
-        
-        
-        if not movie:
-            movie = Movie(
-                title=movie_data.get("Title", "Unknown"),
-                year=movie_data.get("Year"),
-                rated=movie_data.get("Rated"),
-                released=movie_data.get("Released"),
-                runtime=movie_data.get("Runtime"),
-                genre=movie_data.get("Genre"),
-                director=movie_data.get("Director"),
-                writer=movie_data.get("Writer"),
-                actors=movie_data.get("Actors", "Unknown"),
-                language=movie_data.get("Language"),
-                country=movie_data.get("Country"),
-                imdb_rating=movie_data.get("imdbRating"),
-                rt_rating=rt_rating,
-                metascore=movie_data.get("Metascore"),
-                box_office=movie_data.get("BoxOffice"),
-                poster_url=movie_data.get("Poster")
-            )
-            db.session.add(movie)
-            db.session.commit()
-        """
-            
         existing_link = UserMovie.query.filter_by(user_id=current_user.id, movie_id=existing.id).first()
 
         if existing_link:
@@ -359,6 +303,8 @@ def remove_friend():
     except Exception as e:
         db.session.rollback()  # Roll back the database transaction when an exception occurs
         return jsonify({"error": f"An error occurred: {str(e)}"}), 500
+
+# This function queries for movies that the user has rated and returns data about each movie.
 @application.route('/visualiseMovies')
 @login_required
 def visualiseMovies():
@@ -368,7 +314,7 @@ def visualiseMovies():
         query = (
             db.session.query(
                 Movie,
-                user_movie_alias.user_rating  # pulls the current user's rating if exists
+                user_movie_alias.user_rating
             )
             .join(  # innerjoin to only get rated movies
                 user_movie_alias,
@@ -386,6 +332,7 @@ def visualiseMovies():
         print("Could not get movies: " + str(e))
         return jsonify({"error": "Could not get movies", "details": str(e)}), 500
 
+# This function queries for the top genre based on the current movie ratings. It returns a list of all movies of that specific genre from the database.
 @application.route('/visualiseMoviesSuggested')
 @login_required
 def visualiseMoviesSuggested():
@@ -408,8 +355,7 @@ def visualiseMoviesSuggested():
         print("Could not get movies: " + str(e))
         return jsonify({"error": "Could not get movies", "details": str(e)}), 500
 
-
-    
+# This route returns all the movies that have been rated by a friend.
 @application.route('/visualiseMoviesShared')
 @login_required
 def visualiseMoviesShared():
@@ -441,7 +387,7 @@ def visualiseMoviesShared():
         if movies == False:
             return render_template("visualiseMoviesShared.html", underlined_tab_index=3, movies=movies_data, friends=friends_list)
 
-        # Check if friend exists and if the current user is friends with the friend
+        # If friend doesnt exist or if the current user is friends with the friend then return an error
         if not friend or not current_user.is_friends_with(friend):
             return jsonify({"error": "User is not friends with the specified friend"}), 403
 
@@ -453,6 +399,7 @@ def visualiseMoviesShared():
     
     return render_template("visualiseMoviesShared.html", underlined_tab_index=3, movies=movies_data, friends=friends_list)
 
+# This route gets the top genre of a friend based on the ratings of that friend and returns all movies in that genre.
 @application.route('/visualiseMoviesSharedSuggested')
 @login_required
 def visualiseMoviesSharedSuggested():
@@ -555,7 +502,7 @@ def visualiseMoviesStatistics():
                            top_rated_movies=top_rated_movies,
                            top_genre_engagement_score=top_genre_engagement_score)
     
-
+# this route gets statistics of the rated movies of a friend.
 @application.route('/visualiseMoviesSharedStatistics', methods=['GET', 'POST'])
 @login_required
 def visualiseMoviesSharedStatistics():
@@ -629,8 +576,6 @@ def visualiseMoviesSharedStatistics():
                            genre_diversity_score=genre_diversity_score,
                            top_rated_movies=top_rated_movies,
                            top_genre_engagement_score=top_genre_engagement_score)
-
-### The following code is profile ###
 
 @application.route("/profile")
 @login_required
@@ -726,5 +671,3 @@ def search_user():
         },
         'is_friend': is_friend
     })
-
-### The above code is a profile ###

@@ -1,4 +1,5 @@
-#py script to remove all users from user table
+#Group 93 CITS3403 Project 2025
+#script to remove users from User table
 
 import sys
 import os
