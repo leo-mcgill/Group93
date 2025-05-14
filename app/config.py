@@ -4,7 +4,7 @@
 import os
 
 # Get the base directory of the app
-basedir = os.path.abspath(os.path.dirname(__file__))
+basedir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
 # Define the default location for the SQLite database inside the /instance folder
 instance_folder = os.path.join(basedir, 'instance')
