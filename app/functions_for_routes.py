@@ -1,10 +1,6 @@
-#Group 93 CITS3403 Project 2025
-#functions used by routes. These functions are imported by routes.py
-
 from models import *
 from sqlalchemy.orm import aliased
-
-# packs the movie_list into a json. This excludes user ratings.
+from collections import Counter
 def pack_movie_data_list(movies):
     movies_data = []
     for movie in movies:
@@ -24,7 +20,7 @@ def pack_movie_data_list(movies):
         })
     return movies_data
 
-# packs the movie data into a json. This includes user ratings.
+
 def pack_movie_data_tuple(movies):
     movies_data = []
     for movie, user_rating in movies:
@@ -45,14 +41,13 @@ def pack_movie_data_tuple(movies):
         })
     return movies_data
 
-# creates and returns a query for the movies that have been rated of a user.
 def query_for_movies_rated(current_user):
     user_movie_alias = aliased(UserMovie)
 
     query = (
         db.session.query(
             Movie,
-            user_movie_alias.user_rating
+            user_movie_alias.user_rating  # pulls the current user's rating if exists
         )
         .join(  # innerjoin to only get rated movies
             user_movie_alias,
@@ -61,9 +56,9 @@ def query_for_movies_rated(current_user):
         .filter(user_movie_alias.user_rating.isnot(None))  # Only movies with a rating
     )
 
+    #movies = query.all()
     return query
 
-# Uses a simple sum of ratings of all movies of genres, then returns the max genre of a a user's movies
 def calculate_top_genre(movies):
     movie_genre_ratings = {}
 
@@ -82,7 +77,6 @@ def calculate_top_genre(movies):
 
     return top_genre
 
-# Looks through list of all movies and takes out all the movies which belong to a specific genre.
 def get_movies_of_genre(all_movies, max_genre):
     movies_of_genre = []
     for movie in all_movies:
@@ -93,7 +87,6 @@ def get_movies_of_genre(all_movies, max_genre):
             
     return movies_of_genre
 
-# Queries for all the movies that a friend has rated and returns the list of tuples of movie, and friend_ratings.
 def get_friend_movies(friend_username):
     # Return False if no friend is selected
     if friend_username == None:
@@ -118,3 +111,66 @@ def get_friend_movies(friend_username):
     movies = query.all()
     return movies
 
+
+# Get the highest user-rated movie
+def get_favorite_movies(user_id, limit=6):
+    # Get the highest user-rated movie
+    favorite_movies = UserMovie.query.filter_by(user_id=user_id)\
+        .filter(UserMovie.user_rating.isnot(None))\
+        .order_by(UserMovie.user_rating.desc(),UserMovie.id.desc())\
+        .limit(limit)\
+        .all()
+    
+    return favorite_movies
+
+# Obtain user's movie viewing statistics
+def get_movie_stats(user_id):
+    # Get all rated movies from users
+    user_movies = UserMovie.query.filter_by(user_id=user_id)\
+        .filter(UserMovie.user_rating.isnot(None)).all()
+    
+    # Total rated movies
+    total_movies = len(user_movies)
+    
+    if total_movies == 0:
+        return {
+            "total_movies": 0,
+            "avg_rating": 0,
+            "favorite_genres": [],
+            "ratings_distribution": {},
+            "highest_rated": None
+        }
+    
+    # Calculate the average score
+    avg_rating = sum(um.user_rating for um in user_movies) / total_movies
+    
+    # Get all movie types and count
+    genres = []
+    for um in user_movies:
+        if um.movie.genre:
+            for genre in um.movie.genre.split(','):
+                genres.append(genre.strip())
+    
+    # Calculate the most frequently viewed types
+    genre_counter = Counter(genres)
+    top_genres = genre_counter.most_common(3)
+    
+    # Calculate the scoring distribution
+    ratings_distribution = {}
+    for um in user_movies:
+        # Round to the nearest integer
+        rating_int = round(um.user_rating)
+        ratings_distribution[rating_int] = ratings_distribution.get(rating_int, 0) + 1
+    
+    # Find the highest rated movie
+    highest_rated = None
+    if user_movies:
+        highest_rated = max(user_movies, key=lambda um: um.user_rating)
+    
+    return {
+        "total_movies": total_movies,
+        "avg_rating": round(avg_rating, 1),
+        "favorite_genres": top_genres,
+        "ratings_distribution": ratings_distribution,
+        "highest_rated": highest_rated
+    }
