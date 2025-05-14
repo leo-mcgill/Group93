@@ -6,7 +6,7 @@ from flask_login import login_user, logout_user, login_required, current_user
 from app.models import User, Movie, UserMovie
 from sqlalchemy.orm import aliased
 import requests
-from config import Config
+from app.config import Config
 from collections import Counter
 
 from app import login_manager, db

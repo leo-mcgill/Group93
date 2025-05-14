@@ -18,3 +18,10 @@ class Config:
     SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL') or default_database_location
     SECRET_KEY = os.getenv('SECRET_KEY')
     API_KEY = os.getenv('API_KEY')
+    
+class TestingConfig(Config):
+    """Testing configuration, which uses a separate test database."""
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'  # In-memory database
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    TESTING = True
+    SERVER_NAME = 'localhost.localdomain'
