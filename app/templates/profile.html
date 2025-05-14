@@ -32,17 +32,10 @@
 
     <!-- Right sidebar -->
     <div class="profile-right-column">
-        <!-- Module ④: Movie List -->
+        <!-- Module ④: Movie Collection -->
         <div class="profile-section movie-list-section">
             <div id="movie-list-content">
-                {% include "profile/_movie_list.html" ignore missing %}
-            </div>
-        </div>
-
-        <!-- Module ⑤: Message board -->
-        <div class="profile-section message-board-section">
-            <div id="message-board-content">
-                {% include "profile/_message_board.html" ignore missing %}
+                {% include "profile/_movie_collection.html" ignore missing %}
             </div>
         </div>
     </div>
@@ -84,26 +77,6 @@
         padding: 20px;
     }
 
-    .user-info-section {
-        /*User information module style in the upper left corner */
-    }
-
-    .friends-list-section {
-        /*Friend list module style in the lower left corner */
-    }
-
-    .user-search-section {
-        /*Search box module style in the lower left corner */
-    }
-
-    .movie-list-section {
-        /*Movie List Module Style in the upper right corner */
-    }
-
-    .message-board-section {
-        /*The message board module style in the lower right corner */
-    }
-
     /*Responsive design */
     @media (max-width: 768px) {
         .profile-container {
@@ -143,7 +116,6 @@ document.addEventListener('DOMContentLoaded', function () {
         { id: 'friends-list-content', title: 'Friends list' },
         { id: 'user-search-content', title: 'Search for users' },
         { id: 'movie-list-content', title: 'Movie List' },
-        { id: 'message-board-content', title: 'Message board' }
     ];
 
     sections.forEach(section => {

@@ -1,6 +1,6 @@
 from models import *
 from sqlalchemy.orm import aliased
-
+from collections import Counter
 def pack_movie_data_list(movies):
     movies_data = []
     for movie in movies:
@@ -111,3 +111,66 @@ def get_friend_movies(friend_username):
     movies = query.all()
     return movies
 
+
+# Get the highest user-rated movie
+def get_favorite_movies(user_id, limit=6):
+    # Get the highest user-rated movie
+    favorite_movies = UserMovie.query.filter_by(user_id=user_id)\
+        .filter(UserMovie.user_rating.isnot(None))\
+        .order_by(UserMovie.user_rating.desc(),UserMovie.id.desc())\
+        .limit(limit)\
+        .all()
+    
+    return favorite_movies
+
+# Obtain user's movie viewing statistics
+def get_movie_stats(user_id):
+    # Get all rated movies from users
+    user_movies = UserMovie.query.filter_by(user_id=user_id)\
+        .filter(UserMovie.user_rating.isnot(None)).all()
+    
+    # Total rated movies
+    total_movies = len(user_movies)
+    
+    if total_movies == 0:
+        return {
+            "total_movies": 0,
+            "avg_rating": 0,
+            "favorite_genres": [],
+            "ratings_distribution": {},
+            "highest_rated": None
+        }
+    
+    # Calculate the average score
+    avg_rating = sum(um.user_rating for um in user_movies) / total_movies
+    
+    # Get all movie types and count
+    genres = []
+    for um in user_movies:
+        if um.movie.genre:
+            for genre in um.movie.genre.split(','):
+                genres.append(genre.strip())
+    
+    # Calculate the most frequently viewed types
+    genre_counter = Counter(genres)
+    top_genres = genre_counter.most_common(3)
+    
+    # Calculate the scoring distribution
+    ratings_distribution = {}
+    for um in user_movies:
+        # Round to the nearest integer
+        rating_int = round(um.user_rating)
+        ratings_distribution[rating_int] = ratings_distribution.get(rating_int, 0) + 1
+    
+    # Find the highest rated movie
+    highest_rated = None
+    if user_movies:
+        highest_rated = max(user_movies, key=lambda um: um.user_rating)
+    
+    return {
+        "total_movies": total_movies,
+        "avg_rating": round(avg_rating, 1),
+        "favorite_genres": top_genres,
+        "ratings_distribution": ratings_distribution,
+        "highest_rated": highest_rated
+    }

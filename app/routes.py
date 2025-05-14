@@ -638,25 +638,30 @@ def profile():
     # Get the username in the query parameters
     username = request.args.get('username')
 
-    # If the username is not provided or the username is currently logged in, the current user's profile will be displayed
+    # If the username is not provided or the username is currently logged in, the current user's profile will be displayed.
     if not username or username == current_user.username:
-        return render_template("profile.html", 
-                               profile_user=current_user, 
-                               friends=current_user.friends,
-                               is_own_profile=True)
+        profile_user = current_user
+        is_own_profile = True
+    else:
+        # Find the requested user
+        profile_user = User.query.filter_by(username=username).first()
+        # If the user does not exist, redirect to the current user's profile
+        if not profile_user:
+            flash("User not found", "error")
+            return redirect(url_for('profile'))
+        
+        is_own_profile = False
     
-    # Find the requested user
-    profile_user = User.query.filter_by(username=username).first()
-    # If the user does not exist, redirect to the current user's profile
-    if not profile_user:
-        flash("User not found", "error")
-        return redirect(url_for('profile'))
+    # Get movie collection data
+    favorite_movies = get_favorite_movies(profile_user.id)
+    movie_stats = get_movie_stats(profile_user.id)
     
-    # Show the requested user's profile
     return render_template("profile.html", 
                            profile_user=profile_user, 
                            friends=profile_user.friends,
-                           is_own_profile=False)
+                           is_own_profile=is_own_profile,
+                           favorite_movies=favorite_movies,
+                           movie_stats=movie_stats)
 
 @application.route('/update_avatar_color', methods=['POST'])
 @login_required
@@ -727,4 +732,45 @@ def search_user():
         'is_friend': is_friend
     })
 
+# route to update movie ratings
+@application.route('/update_movie_rating', methods=['POST'])
+@login_required
+def update_movie_rating():
+    try:
+        data = request.get_json()
+        movie_id = data.get('movie_id')
+        new_rating = data.get('rating')
+        
+        if not movie_id or new_rating is None:
+            return jsonify({"error": "Missing movie_id or rating"}), 400
+        
+        # Verify that the movie exists
+        movie = Movie.query.get(movie_id)
+        if not movie:
+            return jsonify({"error": "Movie not found"}), 404
+        
+        # Verify that rating is within the valid range
+        try:
+            new_rating = float(new_rating)
+            if new_rating < 0 or new_rating > 10:
+                return jsonify({"error": "Rating must be between 0 and 10"}), 400
+        except ValueError:
+            return jsonify({"error": "Invalid rating value"}), 400
+        
+        # Find or create user movie associations
+        user_movie = UserMovie.query.filter_by(user_id=current_user.id, movie_id=movie_id).first()
+        
+        if user_movie:
+            user_movie.user_rating = new_rating
+            message = f"Rating for '{movie.title}' updated to {new_rating}"
+        else:
+            user_movie = UserMovie(user_id=current_user.id, movie_id=movie_id, user_rating=new_rating)
+            db.session.add(user_movie)
+            message = f"Rating for '{movie.title}' added as {new_rating}"
+        
+        db.session.commit()
+        return jsonify({"success": True, "message": message}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": f"An error occurred: {str(e)}"}), 500
 ### The above code is a profile ###
