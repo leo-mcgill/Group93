@@ -1,138 +1,132 @@
-<!DOCTYPE html>
-<html lang="en">
+<!--Group 93 CITS3403 Project 2025-->
+<!--signup page-->
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Signup modal</title>
-    <link rel="stylesheet" href="../static/css_styles/signup_modal.css">
-</head>
-
-<body>
-    <!-- Outermost login pop-up container -->
-    <div class="signup-page">
-        <!-- Close button: Hide pop-up window after clicking -->
-        <button type="button" class="closeButton" onclick="window.location.href='/'">
-            <svg fill="#000000" height="20px" width="20px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 415.188 415.188" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M412.861,78.976c3.404-6.636,2.831-14.159-0.15-20.404c0.84-7.106-1.02-14.321-7.746-19.855 c-6.262-5.151-12.523-10.305-18.781-15.457c-11.005-9.055-28.237-11.913-38.941,0c-48.619,54.103-99.461,105.856-152.167,155.725 c-39.185-36.605-78.846-72.713-118.223-108.868c-13.82-12.693-33.824-8.71-42.519,6.411c-12.665,6.286-22.931,14.481-31.42,28.468 c-4.042,6.664-3.727,15.076,0,21.764c25.421,45.578,74.557,85.651,114.957,122.529c-5.406,4.839-10.772,9.724-16.287,14.461 c-54.43,46.742-91.144,76.399-23.029,124.325c0.919,0.647,1.856,0.504,2.789,0.882c1.305,0.602,2.557,1.026,4.004,1.264 c0.45,0.017,0.87,0.093,1.313,0.058c1.402,0.114,2.774,0.471,4.195,0.192c36.621-7.18,70.677-35.878,101.576-67.48 c30.1,29.669,62.151,58.013,97.395,74.831c8.391,4.005,18.395,1.671,24.855-3.931c10.832,0.818,20.708-5.913,25.665-15.586 c0.734-0.454,1.207-0.713,2.002-1.21c15.748-9.838,17.187-29.431,5.534-42.936c-26.313-30.492-54.284-59.478-82.798-87.95 C316.426,196.043,380.533,141.939,412.861,78.976z"></path> </g></svg>
-        </button>
-        <!-- Centered container for pop-up content -->
-        <div class="center-signup-page">
-            <form action="{{ url_for('signup_account') }}" class="center-signup-page" method="post">
-                <!-- Input area: Username and Password -->
-                <div class="tab-form">
-                    <!-- Username input item -->
-                    <div class="form-item">
-                        <div class="form-info">Username</div>
-                        <input type="text" id="username" name="username" placeholder="Please enter username" required
-                            maxlength="21" pattern="^\S{3,20}$"
-                            title="The username must consist of 3-20 non-whitespace characters and spaces are not allowed."
-                            oninvalid="
-                            if (this.validity.valueMissing) {
-                              this.setCustomValidity('Username cannot be empty');
-                            } else if (this.validity.patternMismatch) {
-                              this.setCustomValidity(this.title);
-                            }
-                          " oninput="this.setCustomValidity('')">
-                    </div>
-                    <!-- Password input item -->
-                    <div class="form-item">
-                        <div class="form-info">Password</div>
-                        <input type="password" name="password" id="password" placeholder="Please enter password"
-                            required maxlength="21" pattern="^\S{8,20}$"
-                            title="The password must consist of 8-20 non-whitespace characters and spaces are not allowed."
-                            oninvalid="
-                            if (this.validity.valueMissing) {
-                                this.setCustomValidity('Password cannot be empty');
-                              } else if (this.validity.patternMismatch) {
-                                this.setCustomValidity(this.title);
-                              }
-                            " oninput="this.setCustomValidity('')">
-                    </div>
-                    <div class="form-item">
-                        <div class="form-info">Confirm password</div>
-                        <input type="password" name="confirm_password" id="confirm_password"
-                            placeholder="Please enter password again" required maxlength="21" pattern="^\S{8,20}$"
-                            title="The password must consist of 8-20 non-whitespace characters and spaces are not allowed."
-                            oninvalid="if (this.validity.valueMissing) {
-                                this.setCustomValidity('Confirm password cannot be empty');
-                              } else if (this.validity.patternMismatch) {
-                                this.setCustomValidity(this.title);
-                              }
-                              " oninput="this.setCustomValidity('')">
-                    </div>
+{% extends "introductory_base.html" %}
+{% block title %}Signup Modal{% endblock %}
+{% set stylesheet_file = 'css_styles/signup_modal.css' %}
+{% block content %}
+<!-- Outermost login pop-up container -->
+<div class="signup-page">
+    <!-- Close button: Hide pop-up window after clicking -->
+    <button type="button" class="closeButton" onclick="window.location.href='/'">
+        <svg fill="#000000" height="20px" width="20px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 415.188 415.188" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M412.861,78.976c3.404-6.636,2.831-14.159-0.15-20.404c0.84-7.106-1.02-14.321-7.746-19.855 c-6.262-5.151-12.523-10.305-18.781-15.457c-11.005-9.055-28.237-11.913-38.941,0c-48.619,54.103-99.461,105.856-152.167,155.725 c-39.185-36.605-78.846-72.713-118.223-108.868c-13.82-12.693-33.824-8.71-42.519,6.411c-12.665,6.286-22.931,14.481-31.42,28.468 c-4.042,6.664-3.727,15.076,0,21.764c25.421,45.578,74.557,85.651,114.957,122.529c-5.406,4.839-10.772,9.724-16.287,14.461 c-54.43,46.742-91.144,76.399-23.029,124.325c0.919,0.647,1.856,0.504,2.789,0.882c1.305,0.602,2.557,1.026,4.004,1.264 c0.45,0.017,0.87,0.093,1.313,0.058c1.402,0.114,2.774,0.471,4.195,0.192c36.621-7.18,70.677-35.878,101.576-67.48 c30.1,29.669,62.151,58.013,97.395,74.831c8.391,4.005,18.395,1.671,24.855-3.931c10.832,0.818,20.708-5.913,25.665-15.586 c0.734-0.454,1.207-0.713,2.002-1.21c15.748-9.838,17.187-29.431,5.534-42.936c-26.313-30.492-54.284-59.478-82.798-87.95 C316.426,196.043,380.533,141.939,412.861,78.976z"></path> </g></svg>
+    </button>
+    <!-- Centered container for pop-up content -->
+    <div class="center-signup-page">
+        <form action="{{ url_for('signup_account') }}" class="center-signup-page" method="post">
+            <!-- Input area: Username and Password -->
+            <div class="tab-form">
+                <!-- Username input item -->
+                <div class="form-item">
+                    <div class="form-info">Username</div>
+                    <input type="text" id="username" name="username" placeholder="Please enter username" required
+                        maxlength="21" pattern="^\S{3,20}$"
+                        title="The username must consist of 3-20 non-whitespace characters and spaces are not allowed."
+                        oninvalid="
+                        if (this.validity.valueMissing) {
+                          this.setCustomValidity('Username cannot be empty');
+                        } else if (this.validity.patternMismatch) {
+                          this.setCustomValidity(this.title);
+                        }
+                      " oninput="this.setCustomValidity('')">
                 </div>
-                <!-- Submit and Register Buttons -->
-                <button type="submit">Sign Up</button><button type="button"
-                    onclick="window.location.href='{{ url_for('newlogin') }}'">Already have an account?</button>
-            </form>
-        </div>
-
+                <!-- Password input item -->
+                <div class="form-item">
+                    <div class="form-info">Password</div>
+                    <input type="password" name="password" id="password" placeholder="Please enter password"
+                        required maxlength="21" pattern="^\S{8,20}$"
+                        title="The password must consist of 8-20 non-whitespace characters and spaces are not allowed."
+                        oninvalid="
+                        if (this.validity.valueMissing) {
+                            this.setCustomValidity('Password cannot be empty');
+                          } else if (this.validity.patternMismatch) {
+                            this.setCustomValidity(this.title);
+                          }
+                        " oninput="this.setCustomValidity('')">
+                </div>
+                <div class="form-item">
+                    <div class="form-info">Confirm password</div>
+                    <input type="password" name="confirm_password" id="confirm_password"
+                        placeholder="Please enter password again" required maxlength="21" pattern="^\S{8,20}$"
+                        title="The password must consist of 8-20 non-whitespace characters and spaces are not allowed."
+                        oninvalid="if (this.validity.valueMissing) {
+                            this.setCustomValidity('Confirm password cannot be empty');
+                          } else if (this.validity.patternMismatch) {
+                            this.setCustomValidity(this.title);
+                          }
+                          " oninput="this.setCustomValidity('')">
+                </div>
+            </div>
+            <!-- Submit and Register Buttons -->
+            <button type="submit">Sign Up</button><button type="button"
+                onclick="window.location.href='{{ url_for('newlogin') }}'">Already have an account?</button>
+        </form>
     </div>
 
-    <script>
+</div>
 
-        const form = document.querySelector('form.center-signup-page');
+<script>
 
-        form.addEventListener('submit', async function(event) {
-            event.preventDefault(); // stop the default navigation
+    const form = document.querySelector('form.center-signup-page');
 
-            // Validate passwords match
-            const password = form.password.value;
-            const confirmPassword = form.confirm_password.value;
-            if (password !== confirmPassword) {
-                alert('Passwords do not match! Please try again');
-                return;
+    form.addEventListener('submit', async function(event) {
+        event.preventDefault(); // stop the default navigation
+
+        // Validate passwords match
+        const password = form.password.value;
+        const confirmPassword = form.confirm_password.value;
+        if (password !== confirmPassword) {
+            alert('Passwords do not match! Please try again');
+            return;
+        }
+
+        // Collect form data
+        const formData = new FormData(form);
+
+        try {
+            // Send POST request using fetch
+            const response = await fetch("{{ url_for('signup_account') }}", {
+                method: 'POST',
+                body: formData,
+            });
+
+            const result = await response.json(); // assuming server returns JSON
+
+            if (response.ok) {
+                alert('Signup successful! Click OK to login.');
+                // optionally reset the form or update the UI
+                window.location.href = "{{ url_for('newlogin') }}";
+                form.reset();
+            } else {
+                alert(`Error: ${result.error || 'Unknown error'}`);
             }
+        } catch (error) {
+            console.error('Error submitting form:', error);
+            alert('An unexpected error occurred.');
+        }
+    });
 
-            // Collect form data
-            const formData = new FormData(form);
 
-            try {
-                // Send POST request using fetch
-                const response = await fetch("{{ url_for('signup_account') }}", {
-                    method: 'POST',
-                    body: formData,
-                });
+    document.addEventListener('DOMContentLoaded', () => {
+        const MAX = 20;
+        const fields = [
+            { id: 'username', label: 'Username' },
+            { id: 'password', label: 'Password' },
+            { id: 'confirm_password', label: 'Password' }
+        ];
 
-                const result = await response.json(); // assuming server returns JSON
+        fields.forEach(f => {
+            const inp = document.getElementById(f.id);
 
-                if (response.ok) {
-                    alert('Signup successful! Click OK to login.');
-                    // optionally reset the form or update the UI
-                    window.location.href = "{{ url_for('newlogin') }}";
-                    form.reset();
+            inp.addEventListener('input', () => {
+                if (inp.value.length > MAX) {
+                    inp.setCustomValidity(`${f.label} exceeds maximum length of ${MAX} characters`);
+                    inp.reportValidity();
                 } else {
-                    alert(`Error: ${result.error || 'Unknown error'}`);
+                    inp.setCustomValidity('');
                 }
-            } catch (error) {
-                console.error('Error submitting form:', error);
-                alert('An unexpected error occurred.');
-            }
-        });
-
-        
-        document.addEventListener('DOMContentLoaded', () => {
-            const MAX = 20;
-            const fields = [
-                { id: 'username', label: 'Username' },
-                { id: 'password', label: 'Password' },
-                { id: 'confirm_password', label: 'Password' }
-            ];
-
-            fields.forEach(f => {
-                const inp = document.getElementById(f.id);
-
-                inp.addEventListener('input', () => {
-                    if (inp.value.length > MAX) {
-                        inp.setCustomValidity(`${f.label} exceeds maximum length of ${MAX} characters`);
-                        inp.reportValidity();
-                    } else {
-                        inp.setCustomValidity('');
-                    }
-                });
             });
         });
-    </script>
-</body>
-
-</html>
+    });
+</script>
+{% endblock %}

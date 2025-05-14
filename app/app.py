@@ -1,3 +1,6 @@
+#Group 93 CITS3403 Project 2025
+# Main start point for the flask application.
+
 from flask import Flask
 from flask_login import LoginManager
 

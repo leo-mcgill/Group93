@@ -1,3 +1,6 @@
+#Group 93 CITS3403 Project 2025
+#script to add sample movies from example_movies.json
+
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))

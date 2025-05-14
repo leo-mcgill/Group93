@@ -1,0 +1,19 @@
+<!--Group 93 CITS3403 Project 2025-->
+<!-- Base for the login screens -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Website Name{% endblock %}</title>
+    {% if stylesheet_file is defined %}
+    <link rel="stylesheet" href="{{ url_for('static', filename=stylesheet_file) }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css_styles/footer_styles.css') }}">
+    {% endif %}
+</head>
+
+<body>
+    <!-- extended page content will be added here -->
+    {% block content %}{% endblock %}
+</body>

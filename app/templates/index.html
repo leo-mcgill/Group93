@@ -1,6 +1,10 @@
+<!--Group 93 CITS3403 Project 2025-->
+<!--Default page which shows login/signup buttons-->
+
 <!-- templates/index.html -->
-{% extends "base.html" %} {% block title %}Introduction{% endblock %} {% block
-content %}
+{% extends "base.html" %}
+{% block title %}Introduction{% endblock %}
+{% block content %}
 <div class="body_container">
   <div class="centered_container">
     {% if current_user.is_authenticated == False %}

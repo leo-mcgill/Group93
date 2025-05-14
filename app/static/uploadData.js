@@ -1,3 +1,7 @@
+//Group 93 CITS3403 Project 2025
+//fetch request to upload movie.
+//upload_move uploads rating and movie to the user
+
 document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("movieForm");
     const input = document.getElementById("movie_title");
@@ -70,6 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
         }, 300);  // Debounce delay
         */
+        //////
        
         //This code autocompletes movie titles based on the current titles in movie table. Comment this out when you want to add movies to the database and have an OMDB API Key.
         
@@ -89,6 +94,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     });
                 });
         }, 300);  // Debounce delay
+
+        //////
         
     });
 
