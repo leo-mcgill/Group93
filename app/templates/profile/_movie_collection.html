@@ -1,6 +1,6 @@
 <div class="movie-collection-wrapper">
     <h3 class="collection-title">Movie Collection</h3>
-    
+
     <!-- Movie viewing statistics -->
     <div class="movie-stats">
         <div class="stat-item">
@@ -18,26 +18,26 @@
         </div>
         {% endif %}
     </div>
-    
+
     <!-- Rating distribution -->
     {% if movie_stats.ratings_distribution %}
     <div class="rating-distribution">
         <h4>Rating Distribution</h4>
         <div class="rating-bars">
             {% for i in range(1, 11) %}
-                {% set count = movie_stats.ratings_distribution.get(i, 0) %}
-                {% set percentage = (count / movie_stats.total_movies * 100) if movie_stats.total_movies > 0 else 0 %}
-                <div class="rating-bar-container">
-                    <span class="rating-label">{{ i }}</span>
-                    <div class="rating-bar-wrapper">
-                        <div class="rating-bar" style="width: {{ percentage }}%;" data-count="{{ count }}"></div>
-                    </div>
+            {% set count = movie_stats.ratings_distribution.get(i, 0) %}
+            {% set percentage = (count / movie_stats.total_movies * 100) if movie_stats.total_movies > 0 else 0 %}
+            <div class="rating-bar-container">
+                <span class="rating-label">{{ i }}</span>
+                <div class="rating-bar-wrapper">
+                    <div class="rating-bar" style="width: {{ percentage }}%;" data-count="{{ count }}"></div>
                 </div>
+            </div>
             {% endfor %}
         </div>
     </div>
     {% endif %}
-    
+
     <!-- Favorite movies -->
     {% if favorite_movies %}
     <div class="favorite-movies">
@@ -46,7 +46,8 @@
             {% for um in favorite_movies %}
             <div class="movie-card" data-movie-id="{{ um.movie.id }}" data-current-rating="{{ um.user_rating }}">
                 <div class="movie-poster">
-                    <img src="{{ um.movie.poster_url }}" alt="{{ um.movie.title }}" onerror="this.src='/static/images/no_poster.jpg'">
+                    <canvas class="pixelated-poster" data-src="{{ um.movie.poster_url }}"
+                        data-alt="{{ um.movie.title }}" data-fallback="/static/images/no_poster.jpg"></canvas>
                     <div class="movie-rating">{{ um.user_rating }}/10</div>
                     {% if is_own_profile %}
                     <div class="movie-actions">
@@ -85,7 +86,7 @@
     .movie-collection-wrapper {
         padding: 10px 0;
     }
-    
+
     .collection-title {
         font-size: 1.5rem;
         margin-bottom: 20px;
@@ -94,7 +95,7 @@
         text-align: center;
         position: relative;
     }
-    
+
     .collection-title:after {
         content: '';
         position: absolute;
@@ -106,7 +107,7 @@
         background-color: #0d6efd;
         border-radius: 3px;
     }
-    
+
     /* Movie viewing statistics style */
     .movie-stats {
         display: flex;
@@ -115,9 +116,9 @@
         padding: 15px;
         background-color: #f8f9fa;
         border-radius: 8px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
     }
-    
+
     .stat-item {
         display: flex;
         flex-direction: column;
@@ -125,50 +126,50 @@
         text-align: center;
         flex: 1;
     }
-    
+
     .stat-value {
         font-size: 1.8rem;
         font-weight: bold;
         color: #0d6efd;
         margin-bottom: 5px;
     }
-    
+
     .stat-label {
         font-size: 0.85rem;
         color: #6c757d;
         text-transform: uppercase;
         letter-spacing: 0.5px;
     }
-    
+
     /* Rating distribution style */
     .rating-distribution {
         margin-bottom: 25px;
     }
-    
+
     .rating-distribution h4 {
         font-size: 1.2rem;
         margin-bottom: 15px;
         color: #333;
     }
-    
+
     .rating-bars {
         display: flex;
         flex-direction: column;
         gap: 8px;
     }
-    
+
     .rating-bar-container {
         display: flex;
         align-items: center;
     }
-    
+
     .rating-label {
         width: 30px;
         text-align: center;
         font-weight: bold;
         color: #555;
     }
-    
+
     .rating-bar-wrapper {
         flex: 1;
         height: 12px;
@@ -177,7 +178,7 @@
         overflow: hidden;
         position: relative;
     }
-    
+
     .rating-bar {
         height: 100%;
         background-color: #0d6efd;
@@ -186,7 +187,7 @@
         transition: width 1s ease-out;
         position: relative;
     }
-    
+
     .rating-bar:hover::after {
         content: attr(data-count) " movie(s)";
         position: absolute;
@@ -199,46 +200,47 @@
         font-size: 0.75rem;
         white-space: nowrap;
     }
-    
+
     /* Favorite movie style */
     .favorite-movies {
         margin-top: 30px;
     }
-    
+
     .favorite-movies h4 {
         font-size: 1.2rem;
         margin-bottom: 15px;
         color: #333;
     }
-    
+
     .movie-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
         gap: 20px;
     }
-    
+
     .movie-card {
         transition: transform 0.3s ease, box-shadow 0.3s ease;
         border-radius: 8px;
         overflow: hidden;
-        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
         background-color: white;
         cursor: pointer;
         position: relative;
     }
-    
+
     .movie-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
     }
-    
+
     .movie-poster {
         position: relative;
         height: 0;
-        padding-top: 150%; /* 2:3 aspect ratio */
+        padding-top: 150%;
+        /* 2:3 aspect ratio */
         overflow: hidden;
     }
-    
+
     .movie-poster img {
         position: absolute;
         top: 0;
@@ -248,11 +250,11 @@
         object-fit: cover;
         transition: transform 0.5s ease;
     }
-    
+
     .movie-card:hover .movie-poster img {
         transform: scale(1.05);
     }
-    
+
     .movie-rating {
         position: absolute;
         top: 8px;
@@ -264,11 +266,11 @@
         font-weight: bold;
         font-size: 0.8rem;
     }
-    
+
     .movie-info {
         padding: 10px;
     }
-    
+
     .movie-title {
         font-weight: 600;
         font-size: 0.95rem;
@@ -278,12 +280,12 @@
         overflow: hidden;
         text-overflow: ellipsis;
     }
-    
+
     .movie-year {
         font-size: 0.8rem;
         color: #6c757d;
     }
-    
+
     /* Modify the rating style */
     .movie-actions {
         position: absolute;
@@ -292,11 +294,11 @@
         opacity: 0;
         transition: opacity 0.3s;
     }
-    
+
     .movie-card:hover .movie-actions {
         opacity: 1;
     }
-    
+
     .edit-rating-btn {
         background-color: rgba(0, 0, 0, 0.6);
         color: white;
@@ -306,7 +308,7 @@
         cursor: pointer;
         font-size: 12px;
     }
-    
+
     .rating-edit-form {
         position: absolute;
         top: 0;
@@ -323,7 +325,7 @@
         box-sizing: border-box;
         border-radius: 8px;
     }
-    
+
     .rating-input {
         width: 80%;
         padding: 8px;
@@ -332,30 +334,31 @@
         margin-bottom: 10px;
         text-align: center;
     }
-    
+
     .rating-buttons {
         display: flex;
         gap: 8px;
     }
-    
-    .save-rating-btn, .cancel-rating-btn {
+
+    .save-rating-btn,
+    .cancel-rating-btn {
         padding: 5px 10px;
         border: none;
         border-radius: 4px;
         cursor: pointer;
         font-size: 12px;
     }
-    
+
     .save-rating-btn {
         background-color: #0d6efd;
         color: white;
     }
-    
+
     .cancel-rating-btn {
         background-color: #6c757d;
         color: white;
     }
-    
+
     /* Score update message */
     .rating-update-success {
         position: absolute;
@@ -370,17 +373,27 @@
         z-index: 20;
         animation: fadeIn 0.3s, fadeOut 0.3s 1.2s;
     }
-    
+
     @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
     }
-    
+
     @keyframes fadeOut {
-        from { opacity: 1; }
-        to { opacity: 0; }
+        from {
+            opacity: 1;
+        }
+
+        to {
+            opacity: 0;
+        }
     }
-    
+
     /* No favorite status */
     .no-favorites {
         text-align: center;
@@ -389,12 +402,12 @@
         border-radius: 8px;
         margin-top: 20px;
     }
-    
+
     .no-favorites p {
         margin-bottom: 15px;
         color: #6c757d;
     }
-    
+
     .rate-movies-btn {
         display: inline-block;
         background-color: #0d6efd;
@@ -405,67 +418,86 @@
         font-weight: 500;
         transition: background-color 0.3s;
     }
-    
+
     .rate-movies-btn:hover {
         background-color: #0b5ed7;
     }
-    
+
     /* Responsive adjustment */
     @media (max-width: 768px) {
         .movie-grid {
             grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
             gap: 15px;
         }
-        
+
         .movie-stats {
             flex-direction: column;
             gap: 15px;
         }
-        
+
         .stat-item {
             flex-direction: row;
             justify-content: space-between;
             width: 100%;
         }
-        
+
         .stat-value {
             margin-bottom: 0;
             margin-right: 10px;
         }
     }
+
+    .pixelated-poster {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        image-rendering: pixelated;
+        image-rendering: -moz-crisp-edges;
+        image-rendering: crisp-edges;
+    }
+
+    /* Ensure that movie-card hover effect works with canvas */
+    .movie-card:hover .movie-poster canvas {
+        transform: scale(1.05);
+    }
 </style>
 
+<script src="/static/pixelate_poster.js"></script>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Add animation to the score bar
-    const ratingBars = document.querySelectorAll('.rating-bar');
-    
-    // Detecting Visibility with IntersectionObserver
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                // Triggers an animation when the element becomes visible
-                setTimeout(() => {
-                    entry.target.style.width = entry.target.style.width;
-                }, 100);
-                // Stop observing the triggered elements
-                observer.unobserve(entry.target);
-            }
+    document.addEventListener('DOMContentLoaded', function () {
+        // Add animation to the score bar
+        const ratingBars = document.querySelectorAll('.rating-bar');
+
+        // Detecting Visibility with IntersectionObserver
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Triggers an animation when the element becomes visible
+                    setTimeout(() => {
+                        entry.target.style.width = entry.target.style.width;
+                    }, 100);
+                    // Stop observing the triggered elements
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 }); // Triggered when 10% of the elements are visible
+
+        // Start observing all rating bars
+        ratingBars.forEach(bar => {
+            observer.observe(bar);
         });
-    }, { threshold: 0.1 }); // Triggered when 10% of the elements are visible
-    
-    // Start observing all rating bars
-    ratingBars.forEach(bar => {
-        observer.observe(bar);
-    });
-    
-    // Enable the rating editing function only in the user's own profile
-    const isOwnProfile = {{ is_own_profile|tojson }};
-    
+
+        // Enable the rating editing function only in the user's own profile
+        const isOwnProfile = {{ is_own_profile| tojson
+    }};
+
     if (isOwnProfile) {
         // Get all movie cards
         const movieCards = document.querySelectorAll('.movie-card');
-        
+
         movieCards.forEach(card => {
             const editBtn = card.querySelector('.edit-rating-btn');
             const ratingForm = card.querySelector('.rating-edit-form');
@@ -474,28 +506,28 @@ document.addEventListener('DOMContentLoaded', function() {
             const cancelBtn = card.querySelector('.cancel-rating-btn');
             const movieId = card.dataset.movieId;
             const currentRating = card.dataset.currentRating;
-            
+
             // Click the Edit button
             if (editBtn) {
-                editBtn.addEventListener('click', function(e) {
+                editBtn.addEventListener('click', function (e) {
                     e.stopPropagation();
                     ratingForm.style.display = 'flex';
                     ratingInput.value = currentRating;
                     ratingInput.focus();
                 });
             }
-            
+
             // Click the Save button
             if (saveBtn) {
-                saveBtn.addEventListener('click', function(e) {
+                saveBtn.addEventListener('click', function (e) {
                     e.stopPropagation();
                     const newRating = parseFloat(ratingInput.value);
-                    
+
                     if (isNaN(newRating) || newRating < 0 || newRating > 10) {
                         alert('Please enter a valid rating between 0 and 10');
                         return;
                     }
-                    
+
                     // Send a rating update request
                     fetch('/update_movie_rating', {
                         method: 'POST',
@@ -507,56 +539,56 @@ document.addEventListener('DOMContentLoaded', function() {
                             rating: newRating
                         })
                     })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            // Update the displayed ratings
-                            card.querySelector('.movie-rating').textContent = `${newRating}/10`;
-                            card.dataset.currentRating = newRating;
-                            ratingForm.style.display = 'none';
-                            
-                            // Shortly display the success message
-                            const successMsg = document.createElement('div');
-                            successMsg.className = 'rating-update-success';
-                            successMsg.textContent = 'Rating updated!';
-                            card.appendChild(successMsg);
-                            
-                            setTimeout(() => {
-                                if (successMsg.parentNode) {
-                                    successMsg.parentNode.removeChild(successMsg);
-                                }
-                                // Refresh the page to update statistics
-                                window.location.reload();
-                            }, 1500);
-                        } else {
-                            alert('Failed to update rating: ' + (data.error || 'Unknown error'));
-                        }
-                    })
-                    .catch(error => {
-                        alert('Error: ' + error);
-                    });
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                // Update the displayed ratings
+                                card.querySelector('.movie-rating').textContent = `${newRating}/10`;
+                                card.dataset.currentRating = newRating;
+                                ratingForm.style.display = 'none';
+
+                                // Shortly display the success message
+                                const successMsg = document.createElement('div');
+                                successMsg.className = 'rating-update-success';
+                                successMsg.textContent = 'Rating updated!';
+                                card.appendChild(successMsg);
+
+                                setTimeout(() => {
+                                    if (successMsg.parentNode) {
+                                        successMsg.parentNode.removeChild(successMsg);
+                                    }
+                                    // Refresh the page to update statistics
+                                    window.location.reload();
+                                }, 1500);
+                            } else {
+                                alert('Failed to update rating: ' + (data.error || 'Unknown error'));
+                            }
+                        })
+                        .catch(error => {
+                            alert('Error: ' + error);
+                        });
                 });
             }
-            
+
             // Click the Cancel button
             if (cancelBtn) {
-                cancelBtn.addEventListener('click', function(e) {
+                cancelBtn.addEventListener('click', function (e) {
                     e.stopPropagation();
                     ratingForm.style.display = 'none';
                 });
             }
         });
     }
-    
+
     // Movie card click effect
     const movieCards = document.querySelectorAll('.movie-card');
     movieCards.forEach(card => {
-        card.addEventListener('click', function(e) {
+        card.addEventListener('click', function (e) {
             // if you click on the edit button or form area, no card click event will be executed
             if (e.target.closest('.edit-rating-btn') || e.target.closest('.rating-edit-form')) {
                 return;
             }
-            
+
             // Here you can add the behavior after clicking on the movie card
             // For example, display movie details pop-up window or jump to movie details page
             console.log('Movie clicked:', this.dataset.movieId);
