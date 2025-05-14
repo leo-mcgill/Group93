@@ -3,16 +3,18 @@
 
 import sys
 import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 
-from app import application, db
-from models import User, Movie
+from app import create_app, db
+from app.models import User, Movie
 
 import json
 
+application = create_app()
+
 with application.app_context():
 
-    with open('scripts/example_movies.json', 'r') as f:
+    with open('app/scripts/example_movies.json', 'r') as f:
         data = json.load(f)
 
     for movie in data:
