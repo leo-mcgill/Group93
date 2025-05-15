@@ -271,7 +271,7 @@
                             <button class="add-friend-btn ${isFriend ? 'added' : ''}"
                                 data-username="${user.username}"
                                 ${isFriend ? 'disabled' : ''}>
-                                ${isFriend ? 'Added successfully' : 'Add friends'}
+                                ${isFriend ? 'Shared successfully' : 'Share with user'}
                             </button>
                         </div>
                     `;
@@ -300,7 +300,7 @@
             button.textContent = 'Adding...';
             button.disabled = true;
 
-            fetch('/add_friend', {
+            fetch('/share_with_user', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -310,7 +310,7 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.message) {  // Successful response contains message fields
-                        button.textContent = 'Added successfully';
+                        button.textContent = 'Shared successfully';
                         button.classList.add('added');
 
                         // Get user information and add to the friend list
@@ -335,17 +335,17 @@
                         button.textContent = data.error;
                         button.disabled = false;
                         setTimeout(() => {
-                            button.textContent = 'Add friend';
+                            button.textContent = 'Share with user';
                         }, 2000);
                     }
                 })
                 .catch(error => {
-                    button.textContent = 'Add friend failed';
+                    button.textContent = 'Share failed';
                     button.disabled = false;
                     setTimeout(() => {
-                        button.textContent = 'Add friend';
+                        button.textContent = 'Share with user';
                     }, 2000);
-                    console.error('Add friend error:', error);
+                    console.error('Share with user error:', error);
                 });
         }
 
