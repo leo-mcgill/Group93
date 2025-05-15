@@ -116,12 +116,12 @@ width: 100%;;
 
 .statistics_section h2 {
     font-size: 22px;
-    color: #333;
+    color: #fafafa;
 }
 
 .statistics_section p {
     font-size: 18px;
-    color: #555;
+    color: #fafafa;
 }
 
 .statistics_section ul {
@@ -131,7 +131,7 @@ width: 100%;;
 
 .statistics_section ul li {
     font-size: 16px;
-    color: #555;
+    color: #fafafa;
   
 .heading-top-genre {
     margin-top: 2rem;
