@@ -20,6 +20,10 @@ https://www.omdbapi.com/    (OMDB Website)
 APA Referencing:  
 OMDb API - The Open Movie Database. (2000). Omdbapi.com. https://www.omdbapi.com/  
 
+## References of AI LLMs used
+APA Referencing:
+OpenAI. (2025). ChatGPT (May 15 version) [Large language model]. https://chat.openai.com/chat
+
 ## Instructions to run Flask application  
 **1:** create a python virtual environment (Only need to do this once)  
 **2:** activate your virtual environment  
