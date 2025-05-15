@@ -14,7 +14,7 @@ login_manager = LoginManager()
 login_manager.init_app(application)
 login_manager.login_view = 'login'
 
-import routes
+from routes import *
 
 if __name__ == '__main__':
     application.run(debug=True) 
