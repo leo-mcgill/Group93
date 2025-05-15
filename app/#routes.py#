@@ -223,11 +223,11 @@ def init_routes(application):
                 return jsonify({"error": "The user does not exist"}), 404
             
             # Check if are a friend
-            if not friend.is_friends_with(current_user):
+            if not current.is_friends_with(friend):
                 return jsonify({"error": "This user is not in your share list"}), 400
             
             # Remove from the friend list
-            friend.friends.remove(current_user)
+            current.friends.remove(current_user)
             db.session.commit()
 
             return jsonify({"message": f"You have stopped sharing your data with {friend.username}"}), 200
@@ -345,7 +345,7 @@ def init_routes(application):
 
             friend = User.query.filter_by(username=friend_username).first()
 
-            movies = get_friend_movies(current_user, friend_username)
+            movies = get_friend_movies(friend_username)
             
             # False means no friend is selected. And then renders the template with an empty friends list.
             if movies == False:
@@ -387,7 +387,7 @@ def init_routes(application):
         try:
             friend_username = request.args.get('friend_username', type=str)
 
-            movies = get_friend_movies(current_user, friend_username)
+            movies = get_friend_movies(friend_username)
             if movies == False:
                 return render_template("visualiseMoviesSharedSuggested.html", underlined_tab_index=3, movies=movies_data, friends=friends_list)
             
