@@ -1,3 +1,60 @@
+<!--Group 93 CITS3403 Project 2025-->
+<!--profile button element-->
+
 <div class="profile-container">
-    <div class="profile-circle-btn" onclick='window.location.href="{{ url_for("profile") }}"'>Profile</div>
+    <div class="profile-button-wrapper">
+        <div class="profile-circle-btn" onclick='window.location.href="{{ url_for("profile") }}"'>Profile</div>
+        <div class="profile-tooltip">My Profile</div>
+    </div>
 </div>
+
+<style>
+    .profile-container {
+        position: relative;
+        display: inline-block;
+    }
+    
+    .profile-button-wrapper {
+        position: relative;
+    }
+    
+    .profile-circle-btn {
+        /* Keep the existing style unchanged */
+        cursor: pointer;
+    }
+    
+    .profile-tooltip {
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: rgba(0, 0, 0, 0.7);
+        color: white;
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 12px;
+        white-space: nowrap;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s, visibility 0.3s;
+        z-index: 1000;
+        margin-top: 5px;
+    }
+    
+    /* Add a small triangle indicator */
+    .profile-tooltip::before {
+        content: '';
+        position: absolute;
+        top: -5px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-width: 0 5px 5px 5px;
+        border-style: solid;
+        border-color: transparent transparent rgba(0, 0, 0, 0.7) transparent;
+    }
+    
+    .profile-button-wrapper:hover .profile-tooltip {
+        opacity: 1;
+        visibility: visible;
+    }
+</style>

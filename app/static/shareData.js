@@ -1,3 +1,7 @@
+//Group 93 CITS3403 Project 2025
+//fetch request to get autofilled usernames
+//also, POST request to submit a username to share with
+
 document.addEventListener("DOMContentLoaded", function () {
     const loginInput = document.getElementById("login_username");
     const autocompleteResults = document.getElementById("autocomplete-results");
@@ -33,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // You can now send this username to the server to add the friend
         // Example:
-        fetch('/add_friend', {
+        fetch('/share_with_user', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username: friendUsername })

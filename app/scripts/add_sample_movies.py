@@ -1,15 +1,23 @@
+#Group 93 CITS3403 Project 2025
+#script to add sample movies from example_movies.json
+
 import sys
 import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 
-from app import application, db
-from models import User, Movie
+from app import create_app, db
+from app.models import User, Movie
 
 import json
 
+application = create_app()
+
 with application.app_context():
 
-    with open('example_movies.json', 'r') as f:
+    #on linux path is just example_movies.json
+    #on other OS use app/scripts/example_movies.json
+    with open('app/scripts/example_movies.json', 'r') as f:
+    #with open('example_movies.json', 'r') as f:
         data = json.load(f)
 
     for movie in data:

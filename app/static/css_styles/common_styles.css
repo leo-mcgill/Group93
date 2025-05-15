@@ -1,3 +1,6 @@
+/*Group 93 CITS3403 Project 2025*/
+/*common styles used by all html*/
+
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
 
 * {
@@ -67,15 +70,17 @@ body {
   align-items: center;
   padding: 2rem 0;
   min-height: calc(80vh);
-  max-width: 1200px;
   margin: 0 auto;
 }
 
 .centered_div {
   display: flex;
-  width: 100%;
-  height: 100%;
   flex-wrap: wrap;
+  flex: 1;
+}
+
+.about_div {
+  display: flex;
   flex: 1;
 }
 
@@ -91,7 +96,6 @@ body {
   display: flex;
   margin-top: 0px;
   flex-wrap: wrap;
-  max-width: 1200px;
 }
 
 .title {
@@ -151,7 +155,7 @@ body {
 }
 
 .result_text {
-  color: black;
+  color: white;
 }
 
 .friend_element {
@@ -161,4 +165,10 @@ body {
 .movie_container {
   background-color: #ffd437;
   padding: 30px;
+}
+
+.canvas_dimensions {
+    width: 300px;
+    height: 444px;
+    image-rendering: pixelated;
 }

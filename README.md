@@ -4,12 +4,25 @@ The purpose of this application is to record your ratings, etc of the movies tha
 from a sample set of movies.  The sample set of movies information was pulled from the OMDB  
 (Open movie database). Users can share their recorded movies with other users.  
 
+## Agile Web Development Project (Group 93) – Team Member Information
+
+| UWA ID   | Name           | GitHub Username |
+|---------:|----------------|-----------------|
+| 23334544 | Leo McGill     | leo-mcgill      |
+| 21988007 | Dex June       | lebicahl        |
+| 23673779 | Fubin Qiu      | WGDS            |
+| 23994507 | Khai Ling Ang  | khailing        |
+
 ## Relevant licensing of data used from OMDB  
 https://www.omdbapi.com/legal.htm    (Section 4.1 is relevant)  
 https://www.omdbapi.com/    (OMDB Website)  
 
 APA Referencing:  
 OMDb API - The Open Movie Database. (2000). Omdbapi.com. https://www.omdbapi.com/  
+
+## References of AI LLMs used
+APA Referencing:
+OpenAI. (2025). ChatGPT (May 15 version) [Large language model]. https://chat.openai.com/chat
 
 ## Instructions to run Flask application  
 **1:** create a python virtual environment (Only need to do this once)  

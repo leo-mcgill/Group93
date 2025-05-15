@@ -1,3 +1,6 @@
+/*Group 93 CITS3403 Project 2025*/
+/*styles used by the login page*/
+
 /* --- General reset & basic settings --- */
 * {
     margin: 0;
@@ -7,7 +10,6 @@
 
 body {
   /* Page background color and font settings */
-  background: url("https://assets.nflxext.com/ffe/siteui/vlv3/cb17c41d-6a67-4472-8b91-cca977e65276/web/IN-en-20250505-TRIFECTA-perspective_03ae1a85-5dcf-4d20-a8a6-1e61f7ef73cb_large.jpg");
   background-repeat: no-repeat;
   width: 100%;
   height: 100%;

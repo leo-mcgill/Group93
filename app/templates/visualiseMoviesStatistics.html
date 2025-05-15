@@ -1,0 +1,91 @@
+<!--Group 93 CITS3403 Project 2025-->
+<!--visualise statistics of a shared user-->
+
+{% extends "base.html" %}
+
+{% block title %}Visualise Data - Statistics{% endblock %}
+
+{% set stylesheet_file = 'css_styles/visualise_styles.css' %}
+
+{% block content %}
+<!--Visualise Data section-->
+<div class="body_container column_direction">
+    <div class="centered_div">
+        <div class="title_container">
+            <a href="/visualiseMovies">
+                <div class="not_selected_view_section">Your Movie List</div>
+            </a>
+        </div>
+        <div class="title_container">
+            <a href="/visualiseMoviesSuggested">
+                <div class="not_selected_view_section">Suggested Movies</div>
+            </a>
+        </div>
+        <div class="title_container">
+            <a href="/visualiseMoviesStatistics">
+                <div class="selected_subtitle">Statistics</div>
+            </a>
+        </div>
+        <div class="title_container">
+            <a href="/visualiseMoviesShared">
+                <div class="not_selected_view_section">Shared Movies</div>
+            </a>
+        </div>
+        <div class="title_container">
+            <a href="/visualiseMoviesSharedSuggested">
+                <div class="not_selected_view_section">Suggested Shared Movies</div>
+            </a>
+        </div>
+        <div class="title_container">
+            <a href="/visualiseMoviesSharedStatistics">
+                <div class="not_selected_view_section">Shared Statistics</div> <!-- Highlight the current tab -->
+            </a>
+        </div>
+    </div>
+        <!-- Statistics Content -->
+    <div class>
+        <div class="statistics_section">
+            <h2>Total Runtime of All Movies Watched</h2>
+            <p>{{ total_runtime }} minutes</p>
+        </div>
+
+        <div class="statistics_section">
+            <h2>Top 3 Most Watched Actors/Actresses</h2>
+            <ul>
+                {% for actor, count in top_actors %}
+                    <li>{{ actor }} - {{ count }} movies</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="statistics_section">
+            <h2>Top 3 Most Watched Genres</h2>
+            <ul>
+                {% for genre, count in top_genres %}
+                    <li>{{ genre }} - {{ count }} movies</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="statistics_section">
+            <h2>Genre Diversity Score</h2>
+            <p>{{ genre_diversity_score }}%</p>
+        </div>
+
+        <div class="statistics_section">
+            <h2>Your 3 Highest Rated Movies</h2>
+            <ul>
+                {% for title, rating in top_rated_movies %}
+                    <li>{{ title }} - Rating: {{ rating }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="statistics_section">
+            <h2>Top-Genre Engagement Score</h2>
+            <p>{{ top_genre_engagement_score }}</p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

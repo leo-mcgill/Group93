@@ -1,5 +1,8 @@
+<!--Group 93 CITS3403 Project 2025-->
+<!--friends list element-->
+
 <div class="friends-list-wrapper">
-    <h3 class="friends-title">Friends List</h3>
+    <h3 class="friends-title">Share List</h3>
     
     <!-- Friend List Container -->
     <div id="friends-container" class="friends-container">
@@ -12,15 +15,17 @@
                         </div>
                         <span class="friend-name">{{ friend.username }}</span>
                     </div>
-                    <button class="remove-friend-btn" title="Delete friend">×</button>
-                    <a href="{{ url_for('profile', username=friend.username) }}" class="view-profile-link" title="查看资料">
+                    {% if is_own_profile %}
+                    <button class="remove-friend-btn" title="Unshare use">×</button>
+                    {% endif %}
+                    <a href="{{ url_for('profile', username=friend.username) }}" class="view-profile-link" title="View profile">
                         <span class="profile-icon">👤</span>
                     </a>
                 </div>
                 {% if not loop.last %}<div class="friend-divider"></div>{% endif %}
             {% endfor %}
         {% else %}
-            <div class="no-friends-message">Don't have friends yet, go and add it!</div>
+            <div class="no-friends-message">Don't have any shares yet!</div>
         {% endif %}
     </div>
 </div>
@@ -178,6 +183,7 @@
 </style>
 
 <script>
+{% if is_own_profile %}
 document.addEventListener('DOMContentLoaded', function() {
     const friendsContainer = document.getElementById('friends-container');
     
@@ -190,15 +196,15 @@ document.addEventListener('DOMContentLoaded', function() {
             const nextDivider = friendItem.nextElementSibling;
             
             // Confirm deletion
-            if (confirm(`Are you sure you want to unfriend ${username} ?`)) {
-                removeFriend(username, friendItem, nextDivider);
+            if (confirm(`Are you sure you want to stop sharing with ${username} ?`)) {
+                unshareUser(username, friendItem, nextDivider);
             }
         }
     });
     
-    //  Delete a friend function
-    function removeFriend(username, friendElement, dividerElement) {
-        fetch('/remove_friend', {
+    //  unshareUser function
+    function unshareUser(username, friendElement, dividerElement) {
+        fetch('/unshare_with_user', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -246,64 +252,15 @@ document.addEventListener('DOMContentLoaded', function() {
         if (friendItems.length === 0) {
             const noFriendsMessage = document.createElement('div');
             noFriendsMessage.className = 'no-friends-message';
-            noFriendsMessage.textContent = 'Don\'t have friends yet, go and add it!';
+            noFriendsMessage.textContent = 'Don\'t have any shares yet!';
             friendsContainer.appendChild(noFriendsMessage);
         }
     }
     
-    // Add communication with search module
-    function addFriendToList(user) {
-        // Check if it is already in the list
-        const existingFriend = document.querySelector(`.friend-item[data-username="${user.username}"]`);
-        if (existingFriend) return;
-        
-        // Remove no friend prompt (if it exists)
-        const noFriendsMessage = friendsContainer.querySelector('.no-friends-message');
-        if (noFriendsMessage) {
-            noFriendsMessage.remove();
-        }
-        
-        // Create a new friend
-        const friendItem = document.createElement('div');
-        friendItem.className = 'friend-item';
-        friendItem.dataset.username = user.username;
-        
-        // Username initial letter (for avatar)
-        const initial = user.username.charAt(0).toUpperCase();
-        
-        friendItem.innerHTML = `
-            <div class="friend-info">
-                <div class="friend-avatar" style="background-color: ${user.avatar_color || '#6495ED'}">
-                    ${initial}
-                </div>
-                <span class="friend-name">${user.username}</span>
-            </div>
-            <button class="remove-friend-btn" title="Delete friends">×</button>
-            <a href="/profile?username=${user.username}" class="view-profile-link" title="View friend's profile">
-                <span class="profile-icon">👤</span>
-            </a>
-        `;
-        
-        // Add new friends to the list
-        friendsContainer.appendChild(friendItem);
-        
-        // Add divider
-        const divider = document.createElement('div');
-        divider.className = 'friend-divider';
-        friendsContainer.appendChild(divider);
-        
-        // Add fade in animation effect
-        friendItem.style.opacity = '0';
-        friendItem.style.transform = 'translateY(20px)';
-        
-        setTimeout(() => {
-            friendItem.style.transition = 'opacity 0.5s, transform 0.5s';
-            friendItem.style.opacity = '1';
-            friendItem.style.transform = 'translateY(0)';
-        }, 10);
-    }
-    
-    // Expose the function to the global scope so that the search module can be called
-    window.addFriendToList = addFriendToList;
 });
+{% else %}
+document.addEventListener('DOMContentLoaded', function() {
+    // No additional script needed for viewing other user's friend list
+});
+{% endif %}
 </script>

@@ -1,3 +1,6 @@
+/*Group 93 CITS3403 Project 2025*/
+/*styles used by the visualise page*/
+
 .movies-container-box {
   display: flex;
   margin: 3rem 0;
@@ -91,6 +94,45 @@ width: 100%;;
     border-radius: 0.5rem;
 }
 
+.title_container a {
+    text-decoration: none;
+    color: #333;
+    padding: 10px 20px;
+    display: inline-block;
+}
+
+.selected_view_section {
+    font-weight: bold;
+    color: #007bff;  /* Highlight color for the selected tab */
+}
+
+.not_selected_view_section {
+    color: #6c757d;  /* Lighter color for non-selected tabs */
+}
+
+.statistics_section {
+    margin-bottom: 20px;
+}
+
+.statistics_section h2 {
+    font-size: 22px;
+    color: #fafafa;
+}
+
+.statistics_section p {
+    font-size: 18px;
+    color: #fafafa;
+}
+
+.statistics_section ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.statistics_section ul li {
+    font-size: 16px;
+    color: #fafafa;
+  
 .heading-top-genre {
     margin-top: 2rem;
 }

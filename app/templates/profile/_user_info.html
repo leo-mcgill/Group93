@@ -1,33 +1,42 @@
+<!--Group 93 CITS3403 Project 2025-->
+<!--user-info element-->
+
 <div class="user-info">
     <!-- avatar -->
     <div class="avatar-container">
         <div id="user-avatar" class="user-avatar" 
-             style="background-color: {{ current_user.avatar_color }};" 
+             style="background-color: {{ profile_user.avatar_color }};" 
              title="Click to change the avatar color">
-            <span class="avatar-initial">{{ current_user.username[0]|upper }}</span>
+            <span class="avatar-initial">{{ profile_user.username[0]|upper }}</span>
+            {% if is_own_profile %}
             <div class="avatar-change-overlay">Change</div>
+            {% endif %}
         </div>
         <!-- Color selector (initial hiding) -->
+         {% if is_own_profile %}
         <div id="color-picker-container" class="color-picker-container">
-            <input type="color" id="avatar-color-picker" value="{{ current_user.avatar_color }}">
+            <input type="color" id="avatar-color-picker" value="{{ profile_user.avatar_color }}">
             <button id="save-color" class="save-btn">Save</button>
             <button id="cancel-color" class="cancel-btn">Cancel</button>
         </div>
+        {% endif %}
     </div>
     
     <!-- username -->
-    <h2 class="username">{{ current_user.username }}</h2>
+    <h2 class="username">{{ profile_user.username }}</h2>
     
     <!-- user bio -->
     <div class="bio-container">
-        <div id="bio-display" class="bio-text">{{ current_user.bio }}</div>
+        <div id="bio-display" class="bio-text">{{ profile_user.bio }}</div>
+        {% if is_own_profile %}
         <div id="bio-edit-container" class="bio-edit-container" style="display: none;">
-            <textarea id="bio-input" class="bio-input" maxlength="500">{{ current_user.bio }}</textarea>
+            <textarea id="bio-input" class="bio-input" maxlength="500">{{ profile_user.bio }}</textarea>
             <div class="bio-buttons">
                 <button id="save-bio" class="save-btn">Save</button>
                 <button id="cancel-bio" class="cancel-btn">Cancel</button>
             </div>
         </div>
+        {% endif %}
     </div>
 </div>
 
@@ -79,11 +88,13 @@
         opacity: 0;
         transition: opacity 0.3s;
     }
-    
+
+    {% if is_own_profile %}
     .user-avatar:hover .avatar-change-overlay {
         opacity: 1;
     }
-    
+    {% endif %}
+
     /* Color selector style */
     .color-picker-container {
         display: none;
@@ -167,12 +178,15 @@
         color: white;
     }
     
+    {% if is_own_profile %}
     .cancel-btn:hover {
         background-color: #5c636a;
     }
+    {% endif %}
 </style>
 
 <script>
+{% if is_own_profile %}
 document.addEventListener('DOMContentLoaded', function() {
     // Avatar related elements
     const userAvatar = document.getElementById('user-avatar');
@@ -265,4 +279,5 @@ document.addEventListener('DOMContentLoaded', function() {
         bioEditContainer.style.display = 'none';
     });
 });
+{% endif %}
 </script>
