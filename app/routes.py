@@ -143,65 +143,6 @@ def init_routes(application):
             traceback.print_exc()
             return jsonify({"error": f"Failed to store movie: {str(e)}"}), 500
         
-
-    @application.route('/user_movie/<int:user_movie_id>', methods=['PUT'])
-    @login_required
-    def update_user_movie(user_movie_id):
-        """
-        Update the rating on an existing UserMovie record.
-        Expects JSON: { "user_rating": <float> }
-        """
-        try:
-            data = request.get_json()
-            new_rating = data.get('user_rating', None)
-            if new_rating is None:
-                return jsonify({"error": "Missing 'user_rating' in payload."}), 400
-
-            link = UserMovie.query.filter_by(
-                id=user_movie_id,
-                user_id=current_user.id
-            ).first()
-
-            if not link:
-                return jsonify({"error": "Rating record not found."}), 404
-
-            link.user_rating = new_rating
-            db.session.commit()
-            return jsonify({
-                "message": f"Rating (id={user_movie_id}) updated to {new_rating}."
-            }), 200
-
-        except Exception as e:
-            import traceback; traceback.print_exc()
-            return jsonify({"error": f"Failed to update rating: {str(e)}"}), 500
-
-
-    @application.route('/user_movie/<int:user_movie_id>', methods=['DELETE'])
-    @login_required
-    def delete_user_movie(user_movie_id):
-        """
-        Delete an existing UserMovie record.
-        No JSON payload required.
-        """
-        try:
-            link = UserMovie.query.filter_by(
-                id=user_movie_id,
-                user_id=current_user.id
-            ).first()
-
-            if not link:
-                return jsonify({"error": "Rating record not found."}), 404
-
-            db.session.delete(link)
-            db.session.commit()
-            return jsonify({
-                "message": f"Rating record (id={user_movie_id}) deleted."
-            }), 200
-
-        except Exception as e:
-            import traceback; traceback.print_exc()
-            return jsonify({"error": f"Failed to delete rating: {str(e)}"}), 500
-
         
     ### ROUTE TO SEND API REQUEST TO AUTOCOMPLETE ###
     @application.route("/autocomplete_movie")
