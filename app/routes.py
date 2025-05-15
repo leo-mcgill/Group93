@@ -270,6 +270,39 @@ def init_routes(application):
             db.session.rollback()  # Roll back the database transaction when an exception occurs
             return jsonify({"error": f"An error occurred: {str(e)}"}), 500
 
+    @application.route('/share_with_user', methods=['POST'])
+    @login_required
+    def share_with_user():
+        try:
+            data = request.get_json()
+            friend_username = data.get('username')
+
+            if not friend_username:
+                return jsonify({"error": "Username cannot be empty"}), 400
+
+        # Check if the user exists in the database
+            friend = User.query.filter_by(username=friend_username).first()
+
+            if not friend:
+                return jsonify({"error": "User not found"}), 404
+
+            # Cannot add yourself as a friend
+            if current_user.id == friend.id:
+                return jsonify({"error": "Cannot add yourself as a friend"}), 400
+
+            # Check if already friends
+            if friend.is_friends_with(current_user):
+                return jsonify({"error": "Already in their friend list"}), 400
+
+            # Add the current user to the friend's friend list
+            friend.friends.append(current_user)
+            db.session.commit()
+
+            return jsonify({"message": f"You were added as a friend to {friend.username}!"}), 200
+        except Exception as e:
+            db.session.rollback()  # Roll back the database transaction in case of an exception.
+            return jsonify({"error": f"An error occurred: {str(e)}"}), 500
+
     # This function queries for movies that the user has rated and returns data about each movie.
     @application.route('/visualiseMovies')
     @login_required

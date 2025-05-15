@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // You can now send this username to the server to add the friend
         // Example:
-        fetch('/add_friend', {
+        fetch('/share_with_user', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username: friendUsername })
