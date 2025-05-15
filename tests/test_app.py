@@ -4,32 +4,69 @@ from app.models import User, Movie, UserMovie
 from app.config import TestingConfig
 from flask_login import login_user
 
+
 class UserAuthTestCase(unittest.TestCase):
 
     @classmethod
-    def setUpClass(self):
+    def setUpClass(cls):
         """Set up the app and test database before any tests run."""
-        self.app = create_app(TestingConfig)  # Use TestingConfig for testing
-        self.client = self.app.test_client()
-
-        with self.app.app_context():
-            db.create_all()  # Create all tables in the test database
+        cls.app = create_app(TestingConfig)  # Use TestingConfig for testing
+        cls.client = cls.app.test_client()
 
     @classmethod
-    def tearDownClass(self):
+    def tearDownClass(cls):
         """Clean up the database after all tests are run."""
-        with self.app.app_context():
+        with cls.app.app_context():
             db.drop_all()  # Drop all tables after all tests
 
     def setUp(self):
         """Reset the database before each test."""
         with self.app.app_context():
-            db.create_all()  # Create the tables again for each test
+            db.create_all()  # Create all tables before each test
+
+            # Clear out the User and Movie tables to avoid UNIQUE constraint failure
+            db.session.query(User).delete()
+            db.session.query(Movie).delete()
+            db.session.commit()
+
+            # Create a test user and a user to be added as a friend
+            user = User(username="movieuser")
+            user.set_password("password1")
+            frienduser = User(username="frienduser")
+            frienduser.set_password("password1")
+            db.session.add(user)
+            db.session.add(frienduser)
+            db.session.commit()
+
+            # Create a movie in the database
+            movie = Movie(
+                id=6,
+                title="The Avengers",
+                year="2012",
+                rated="PG-13",
+                released="04 May 2012",
+                runtime="143 min",
+                genre="Action, Sci-Fi",
+                director="Joss Whedon",
+                writer="Joss Whedon, Zak Penn",
+                actors="Robert Downey Jr., Chris Evans, Scarlett Johansson",
+                language="English, Russian",
+                country="United States",
+                imdb_rating=8.0,
+                rt_rating="91%",
+                metascore=69,
+                box_office="$623,357,910",
+                poster_url="https://m.media-amazon.com/images/M/MV5BNGE0YTVjNzUtNzJjOS00NGNlLTgxMzctZTY4YTE1Y2Y1ZTU4XkEyXkFqcGc@._V1_SX300.jpg"
+            )
+            db.session.add(movie)
+            db.session.commit()
+
+
 
     def tearDown(self):
         """Clean up any post-test data."""
         with self.app.app_context():
-            db.session.remove()
+            db.session.remove()  # Remove the session
             db.drop_all()  # Drop all tables after each test
 
     def test_signup(self):
@@ -47,6 +84,125 @@ class UserAuthTestCase(unittest.TestCase):
             user = User.query.filter_by(username='testuser').first()
             self.assertIsNotNone(user)
             self.assertEqual(user.username, 'testuser')
+
+    def test_login(self):
+        """Test login Route"""
+        # Signup first
+        self.client.post('/signup_account', json={
+            'username': 'testuser',
+            'password': 'testpassword'
+        })
         
+        # Then try login
+        response = self.client.post('/login', data={
+            'username': 'testuser',
+            'password': 'testpassword'
+        }, follow_redirects=True)
+        
+        self.assertEqual(response.request.path, '/')
+
+        # Check for successful status code and redirect
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('Welcome to our Movie Tracker Platform', response.data.decode())
+    
+    def test_upload_movie(self):
+        """Testing that a user can (login)->(Upload a movie): """
+        with self.app.app_context():
+            user = User.query.filter_by(username="movieuser").first()  # Retrieve the test user
+            self.client.post('/login', data={
+                'username': user.username,
+                'password': "password1"  # Ensure the password is correct
+            }, follow_redirects=True)
+        
+        # Send POST request to add "The Avengers" to the user's movie list
+        response = self.client.post('/upload_movie', json={
+            'movie_title': 'The Avengers',
+            'user_rating': 8.0
+        })
+
+        # Assert that the response code is 200 (OK)
+        self.assertEqual(response.status_code, 200)
+
+        # Assert the success message is returned
+        result = response.get_json()
+        self.assertEqual(result['message'], 'Movie: The Avengers added to your list!')
+
+        # Check that the movie has been added to the UserMovie table
+        with self.app.app_context():
+            user_movie = UserMovie.query.filter_by(user_id=1, movie_id=6).first()
+            self.assertIsNotNone(user_movie)
+            self.assertEqual(user_movie.user_rating, 8.0)
+
+
+    def test_add_friend_user_not_found(self):
+        """Test that the route returns an error when trying to add a non-existing user as a friend."""
+        with self.app.app_context():
+            user = User.query.filter_by(username="movieuser").first()  # Retrieve the test user
+            self.client.post('/login', data={
+                'username': user.username,
+                'password': "password1"  # Ensure the password is correct
+            }, follow_redirects=True)
+        
+        
+            response = self.client.post('/add_friend', json={
+                'username': 'nonexistentuser'
+            })
+
+        # Assert the status code is 404 (Not Found)
+        self.assertEqual(response.status_code, 404)
+
+        # Assert the error message
+        result = response.get_json()
+        self.assertEqual(result['error'], "User not found")
+
+    def test_add_friend_yourself(self):
+        """Test that the route returns an error when trying to add yourself as a friend."""
+        
+        with self.app.app_context():
+            user = User.query.filter_by(username="movieuser").first()  # Retrieve the test user
+            self.client.post('/login', data={
+                'username': user.username,
+                'password': "password1"  # Ensure the password is correct
+            }, follow_redirects=True)
+
+            response = self.client.post('/add_friend', json={
+            'username': 'movieuser'  # Trying to add yourself
+            })
+            
+        
+
+        # Assert the status code is 400 (Bad Request)
+        self.assertEqual(response.status_code, 400)
+
+        # Assert the error message
+        result = response.get_json()
+        self.assertEqual(result['error'], "Cannot add yourself as a friend")
+
+    def test_add_friend_already_friends(self):
+        """Test that the route returns an error when the users are already friends."""
+        #login first
+        with self.app.app_context():
+            user = User.query.filter_by(username="movieuser").first()  # Retrieve the test user
+            self.client.post('/login', data={
+                'username': user.username,
+                'password': "password1"
+            }, follow_redirects=True)
+        
+            # First, add the user as a friend
+            self.client.post('/add_friend', json={'username': 'frienduser'})
+
+            # Now try to add the same user again
+            response = self.client.post('/add_friend', json={
+                'username': 'frienduser'
+            })
+
+        # Assert the status code is 400 (Bad Request)
+        self.assertEqual(response.status_code, 400)
+
+        # Assert the error message
+        result = response.get_json()
+        self.assertEqual(result['error'], "Already in their friend list")
+        
+
 if __name__ == '__main__':
     unittest.main()
