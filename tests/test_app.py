@@ -136,44 +136,38 @@ class UserAuthTestCase(unittest.TestCase):
 
     def test_add_friend_user_not_found(self):
         """Test that the route returns an error when trying to add a non-existing user as a friend."""
+        #login first and store add_friend response
         with self.app.app_context():
-            user = User.query.filter_by(username="movieuser").first()  # Retrieve the test user
+            user = User.query.filter_by(username="movieuser").first()
             self.client.post('/login', data={
                 'username': user.username,
-                'password': "password1"  # Ensure the password is correct
+                'password': "password1"
             }, follow_redirects=True)
-        
-        
             response = self.client.post('/add_friend', json={
                 'username': 'nonexistentuser'
             })
 
         # Assert the status code is 404 (Not Found)
         self.assertEqual(response.status_code, 404)
-
         # Assert the error message
         result = response.get_json()
         self.assertEqual(result['error'], "User not found")
 
     def test_add_friend_yourself(self):
         """Test that the route returns an error when trying to add yourself as a friend."""
-        
+        #login first
         with self.app.app_context():
-            user = User.query.filter_by(username="movieuser").first()  # Retrieve the test user
+            user = User.query.filter_by(username="movieuser").first()
             self.client.post('/login', data={
                 'username': user.username,
-                'password': "password1"  # Ensure the password is correct
+                'password': "password1"
             }, follow_redirects=True)
 
             response = self.client.post('/add_friend', json={
             'username': 'movieuser'  # Trying to add yourself
             })
-            
-        
-
         # Assert the status code is 400 (Bad Request)
         self.assertEqual(response.status_code, 400)
-
         # Assert the error message
         result = response.get_json()
         self.assertEqual(result['error'], "Cannot add yourself as a friend")
@@ -203,6 +197,76 @@ class UserAuthTestCase(unittest.TestCase):
         result = response.get_json()
         self.assertEqual(result['error'], "Already in their friend list")
         
+    def test_update_bio(self):
+        """Test that a user can update their bio."""
+        with self.app.app_context():
+            user = User.query.filter_by(username="movieuser").first()  # Retrieve the test user
+            self.client.post('/login', data={
+                'username': user.username,
+                'password': "password1"
+            }, follow_redirects=True)
+    
+            new_bio = "This is my new bio!"  # A valid bio
+            response = self.client.post('/update_bio', json={'bio': new_bio})
+
+            # Assert the status code is 200 (OK)
+            self.assertEqual(response.status_code, 200)
+
+            # Assert the success message is returned
+            result = response.get_json()
+            self.assertTrue(result['success'])
+
+            # Check that the bio is updated in the database
+
+            user = User.query.filter_by(username="movieuser").first()
+            self.assertEqual(user.bio, new_bio)
+
+    def test_update_bio_exceeds_length(self):
+        """Test that a user cannot update their bio beyond the maximum length."""
+        with self.app.app_context():
+            user = User.query.filter_by(username="movieuser").first()  # Retrieve the test user
+            self.client.post('/login', data={
+                'username': user.username,
+                'password': "password1"
+            }, follow_redirects=True)
+        
+            long_bio = "A" * 1000  # A bio longer than 500 characters
+            response = self.client.post('/update_bio', json={'bio': long_bio})
+
+        # Assert the status code is 200 (OK)
+        self.assertEqual(response.status_code, 200)
+
+        # Assert the success message is returned
+        result = response.get_json()
+        self.assertTrue(result['success'])
+
+        # Check that the bio is truncated to 500 characters in the database
+        with self.app.app_context():
+            user = User.query.filter_by(username="movieuser").first()
+            self.assertEqual(len(user.bio), 500)  # Ensure the bio is truncated to 500 characters
+
+    def test_update_bio_empty(self):
+        """Test that the bio can be updated to an empty string."""
+        with self.app.app_context():
+            user = User.query.filter_by(username="movieuser").first()  # Retrieve the test user
+            self.client.post('/login', data={
+                'username': user.username,
+                'password': "password1"
+            }, follow_redirects=True)
+        
+            response = self.client.post('/update_bio', json={'bio': ''})
+
+        # Assert the status code is 200 (OK)
+        self.assertEqual(response.status_code, 200)
+
+        # Assert the success message is returned
+        result = response.get_json()
+        self.assertTrue(result['success'])
+
+        # Check that the bio is updated to an empty string in the database
+        with self.app.app_context():
+            user = User.query.filter_by(username="movieuser").first()
+            self.assertEqual(user.bio, '')            
 
 if __name__ == '__main__':
     unittest.main()
