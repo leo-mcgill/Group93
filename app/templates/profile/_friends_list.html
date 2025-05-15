@@ -204,7 +204,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     //  unshareUser function
     function unshareUser(username, friendElement, dividerElement) {
-        fetch('/remove_friend', {
+        fetch('/unshare_with_user', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

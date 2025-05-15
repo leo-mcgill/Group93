@@ -206,7 +206,7 @@ def init_routes(application):
         return jsonify([user.username for user in matching_users])
 
 
-    @application.route('/remove_friend', methods=['POST'])
+    @application.route('/unshare_with_user', methods=['POST'])
     @login_required
     def remove_friend():
         try:
@@ -223,14 +223,14 @@ def init_routes(application):
                 return jsonify({"error": "The user does not exist"}), 404
             
             # Check if are a friend
-            if not current_user.is_friends_with(friend):
-                return jsonify({"error": "This user is not in your friend list"}), 400
+            if not friend.is_friends_with(current_user):
+                return jsonify({"error": "This user is not in your share list"}), 400
             
             # Remove from the friend list
-            current_user.friends.remove(friend)
+            friend.friends.remove(current_user)
             db.session.commit()
 
-            return jsonify({"message": f"You have been removed from the friend list of {friend.username}"}), 200
+            return jsonify({"message": f"You have stopped sharing your data with {friend.username}"}), 200
         except Exception as e:
             db.session.rollback()  # Roll back the database transaction when an exception occurs
             return jsonify({"error": f"An error occurred: {str(e)}"}), 500
