@@ -21,7 +21,8 @@ class Config:
     
 class TestingConfig(Config):
     """Testing configuration, which uses a separate test database."""
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'  # In-memory database
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///test.db'  # Not using in memory database as it wont persist across threads when running selenium tests
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     TESTING = True
     SERVER_NAME = 'localhost.localdomain'
+    WTF_CSRF_ENABLED = False

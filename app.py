@@ -6,5 +6,5 @@ from app import Config
 application = create_app(Config)
 
 if __name__ == '__main__':
-    application.run(debug=True)
+    application.run(debug=True, use_reloader=False)
 

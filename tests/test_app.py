@@ -266,7 +266,10 @@ class UserAuthTestCase(unittest.TestCase):
         # Check that the bio is updated to an empty string in the database
         with self.app.app_context():
             user = User.query.filter_by(username="movieuser").first()
-            self.assertEqual(user.bio, '')            
+            self.assertEqual(user.bio, '')
+            
+            
+                
 
 if __name__ == '__main__':
     unittest.main()
