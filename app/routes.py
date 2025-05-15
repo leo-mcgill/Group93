@@ -432,8 +432,8 @@ def init_routes(application):
             
             movies_of_genre = []
             movies_of_genre = get_movies_of_genre(all_movies, top_genre)
-
-            movies_of_genre = pack_movie_data_tuple(movies)
+            
+            movies_of_genre = pack_movie_data_list(movies_of_genre)
 
         except Exception as e:
             print("Could not get movies: " + str(e))
@@ -492,7 +492,8 @@ def init_routes(application):
             top_genre_engagement_score = 0
 
         # Render the statistics page with the gathered data
-        return render_template('visualiseMoviesStatistics.html', 
+        return render_template('visualiseMoviesStatistics.html',
+                            underlined_tab_index=3,
                             total_runtime=total_runtime,
                             top_actors=top_actors,  # Pass the top actors to the template
                             top_genres=top_genres,  # Pass the top genres to the template
@@ -525,7 +526,7 @@ def init_routes(application):
 
         else:
             # If no friend is selected, don't load the statistics section yet
-            return render_template('visualiseMoviesSharedStatistics.html', friends=friends, friend=None)
+            return render_template('visualiseMoviesSharedStatistics.html', underlined_tab_index=3, friends=friends, friend=None)
 
         # Process the friend’s movie data (same logic as the user's)
         actor_list = []
@@ -566,6 +567,7 @@ def init_routes(application):
 
         # Render the statistics page for the friend's data
         return render_template('visualiseMoviesSharedStatistics.html',
+                            underlined_tab_index=3,
                             friends=friends,
                             friend=friend,
                             total_runtime=total_runtime,

@@ -70,15 +70,17 @@ body {
   align-items: center;
   padding: 2rem 0;
   min-height: calc(80vh);
-  max-width: 1200px;
   margin: 0 auto;
 }
 
 .centered_div {
   display: flex;
-  width: 100%;
-  height: 100%;
   flex-wrap: wrap;
+  flex: 1;
+}
+
+.about_div {
+  display: flex;
   flex: 1;
 }
 
@@ -94,7 +96,6 @@ body {
   display: flex;
   margin-top: 0px;
   flex-wrap: wrap;
-  max-width: 1200px;
 }
 
 .title {
