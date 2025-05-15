@@ -567,15 +567,11 @@ def init_routes(application):
         favorite_movies = get_favorite_movies(profile_user.id)
         movie_stats = get_movie_stats(profile_user.id)
 
-        users_friended_by_current_query = db.session.query(User).join(
+        users_friended_by_current = db.session.query(User).join(
             user_friends, user_friends.c.user_id == User.id
         ).filter(
             user_friends.c.friend_id == profile_user.id
         ).all()
-
-        users_friended_by_current = users_friended_by_current_query
-
-        print(users_friended_by_current)
 
         return render_template("profile.html", 
                             profile_user=profile_user, 
