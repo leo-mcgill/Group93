@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Movie Ratings{% endblock %}
+
+{% set stylesheet_file = 'css_styles/manage_ratings.css' %}
+
+{% block content %}
+<div class="body_container column_direction">
+    <div class="centered_div">
+        <h1>Manage Your Movie Ratings</h1>
+        <table class="ratings_table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Your Rating</th>
+                    <th>Update Rating</th>
+                    <th>Delete Rating</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in user_movies %}
+                <tr>
+                    <td>{{ record.movie.title }}</td>
+                    <td>{{ record.user_rating }}</td>
+                    <td>
+                        <form action="{{ url_for('manage_ratings_update', user_movie_id=record.id) }}" method="post" class="inline_form">
+                            <input type="number" step="0.1" min="0" max="10" name="user_rating" value="{{ record.user_rating }}" required>
+                            <button type="submit" class="btn btn-update">Update</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form action="{{ url_for('manage_ratings_delete', user_movie_id=record.id) }}" method="post" class="inline_form" onsubmit="return confirm('Are you sure you want to delete your rating for {{ record.movie.title }}?');">
+                            <button type="submit" class="btn btn-delete">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

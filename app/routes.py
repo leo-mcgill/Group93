@@ -92,6 +92,8 @@ def init_routes(application):
         movies = Movie.query.all()
         
         return render_template("uploadReview.html", api_key=Config.API_KEY, underlined_tab_index=2, movies = movies)
+    
+
 
     ### Methods to handle N/A responses from OMDB ###
     def safe_float(val, default=None):
@@ -140,6 +142,66 @@ def init_routes(application):
             import traceback
             traceback.print_exc()
             return jsonify({"error": f"Failed to store movie: {str(e)}"}), 500
+        
+
+    @application.route('/user_movie/<int:user_movie_id>', methods=['PUT'])
+    @login_required
+    def update_user_movie(user_movie_id):
+        """
+        Update the rating on an existing UserMovie record.
+        Expects JSON: { "user_rating": <float> }
+        """
+        try:
+            data = request.get_json()
+            new_rating = data.get('user_rating', None)
+            if new_rating is None:
+                return jsonify({"error": "Missing 'user_rating' in payload."}), 400
+
+            link = UserMovie.query.filter_by(
+                id=user_movie_id,
+                user_id=current_user.id
+            ).first()
+
+            if not link:
+                return jsonify({"error": "Rating record not found."}), 404
+
+            link.user_rating = new_rating
+            db.session.commit()
+            return jsonify({
+                "message": f"Rating (id={user_movie_id}) updated to {new_rating}."
+            }), 200
+
+        except Exception as e:
+            import traceback; traceback.print_exc()
+            return jsonify({"error": f"Failed to update rating: {str(e)}"}), 500
+
+
+    @application.route('/user_movie/<int:user_movie_id>', methods=['DELETE'])
+    @login_required
+    def delete_user_movie(user_movie_id):
+        """
+        Delete an existing UserMovie record.
+        No JSON payload required.
+        """
+        try:
+            link = UserMovie.query.filter_by(
+                id=user_movie_id,
+                user_id=current_user.id
+            ).first()
+
+            if not link:
+                return jsonify({"error": "Rating record not found."}), 404
+
+            db.session.delete(link)
+            db.session.commit()
+            return jsonify({
+                "message": f"Rating record (id={user_movie_id}) deleted."
+            }), 200
+
+        except Exception as e:
+            import traceback; traceback.print_exc()
+            return jsonify({"error": f"Failed to delete rating: {str(e)}"}), 500
+
         
     ### ROUTE TO SEND API REQUEST TO AUTOCOMPLETE ###
     @application.route("/autocomplete_movie")
@@ -648,3 +710,70 @@ def init_routes(application):
             },
             'is_friend': is_friend
         })
+    
+    @application.route('/manage_ratings')
+    @login_required
+    def manage_ratings():
+        """
+        Show the table of all movies this user has rated,
+        so they can update or delete each one.
+        """
+        user_movies = (
+            UserMovie.query
+            .join(Movie, Movie.id == UserMovie.movie_id)
+            .filter(UserMovie.user_id == current_user.id)
+            .all()
+        )
+        return render_template(
+            'manage_ratings.html',
+            user_movies=user_movies,
+            underlined_tab_index=6  # if you’re using the same tab bar logic
+        )
+    
+    @application.route('/manage_ratings/update/<int:user_movie_id>', methods=['POST'])
+    @login_required
+    def manage_ratings_update(user_movie_id):
+        """
+        Handle the form POST from the “Update” button.
+        Expects `user_rating` in form-data.
+        """
+        new_rating = request.form.get('user_rating', type=float)
+        if new_rating is None:
+            flash("Please enter a valid rating.", "error")
+            return redirect(url_for('manage_ratings'))
+
+        link = UserMovie.query.filter_by(
+            id=user_movie_id,
+            user_id=current_user.id
+        ).first()
+
+        if not link:
+            flash("Rating record not found.", "error")
+            return redirect(url_for('manage_ratings'))
+
+        link.user_rating = new_rating
+        db.session.commit()
+        flash(f"Rating for “{link.movie.title}” updated to {new_rating}.", "success")
+        return redirect(url_for('manage_ratings'))
+
+
+    @application.route('/manage_ratings/delete/<int:user_movie_id>', methods=['POST'])
+    @login_required
+    def manage_ratings_delete(user_movie_id):
+        """
+        Handle the form POST from the “Delete” button.
+        """
+        link = UserMovie.query.filter_by(
+            id=user_movie_id,
+            user_id=current_user.id
+        ).first()
+
+        if not link:
+            flash("Rating record not found.", "error")
+            return redirect(url_for('manage_ratings'))
+
+        title = link.movie.title
+        db.session.delete(link)
+        db.session.commit()
+        flash(f"Rating for “{title}” deleted.", "success")
+        return redirect(url_for('manage_ratings'))
