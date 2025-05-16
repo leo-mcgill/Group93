@@ -48,16 +48,7 @@
             <a class="user-item" href="/visualiseMoviesSharedStatistics?friend_username={{ friend.username }}"><h2 class="friend_element">{{ friend.username }}</h2></a>
         {% endfor %}
     </div>
-        <!-- Friend List for Viewing Friend's Statistics -->
-        <!--
-        <div id="friend-list-container">
-            <h2>Select a Friend's Statistics:</h2>
-            {% for friend in friends %}
-                <a href="/visualiseMoviesSharedStatistics?friend_username={{ friend.username }}"><h2 class="friend_element">{{ friend.username }}</h2></a>
-            {% endfor %}
-        </div>-->
 
-        <!-- Hide the Friend List and Show the Statistics Only After Friend is Selected -->
         {% if friend %}
         <div id="statistics-container">
             <h1 class="not_selected_view_section">{{ friend.username }}'s Statistics:</h1>
