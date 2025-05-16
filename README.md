@@ -71,6 +71,10 @@ $ flask db upgrade
 Add sample_movies to db so that you can select and upload data about them:  
 $ python scripts/add_sample_movies.py  
 
+*However if you did want to use the API instead of the sample data, set: \
+USE_OMDB_API = True \
+In config.py*
+
 **5:** run the app:  
 $ python movie_tracker_app.py
 OR
@@ -90,9 +94,6 @@ append to .env file:
 API_KEY=OMDB_API_KEY (This is used to pull movie details from OMDB.)  
 it is not required as we can add a test sample of movies from a json file in instruction 5.
 
-*However if you did want to use the API instead of the sample data, set:*
-*USE_OMDB_API = True*
-*In config.py*
 
 **7:** open your browser and go to:  
 http://127.0.0.1:5000/  
