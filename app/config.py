@@ -26,3 +26,6 @@ class TestingConfig(Config):
     TESTING = True
     SERVER_NAME = 'localhost.localdomain'
     WTF_CSRF_ENABLED = False
+
+    #setting a testing secret key so tests can run without .env file
+    SECRET_KEY = ('testing_secret')
