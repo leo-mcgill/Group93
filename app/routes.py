@@ -613,6 +613,7 @@ def init_routes(application):
         total_movies = Movie.query.join(UserMovie).filter(UserMovie.user_id == friend.id).count()
         unique_genres = db.session.query(db.func.count(db.distinct(Movie.genre))).join(UserMovie).filter(UserMovie.user_id == friend.id).scalar() or 0
         genre_diversity_score = (unique_genres / total_movies) * 100 if total_movies > 0 else 0
+        genre_diversity_score = round(genre_diversity_score,2)
 
         # Query the friend's top 3 highest rated movies
         top_rated_movies = db.session.query(Movie.title, UserMovie.user_rating).join(UserMovie).filter(UserMovie.user_id == friend.id).order_by(db.desc(UserMovie.user_rating)).limit(3).all()
@@ -623,6 +624,7 @@ def init_routes(application):
             most_watched_genre_count = most_watched_genre[1]
             genre_engagement_score = db.session.query(db.func.avg(UserMovie.user_rating)).join(Movie).filter(Movie.genre == most_watched_genre[0], UserMovie.user_id == friend.id).scalar() or 0
             top_genre_engagement_score = most_watched_genre_count * genre_engagement_score
+            top_genre_engagement_score = round(top_genre_engagement_score,2)
         else:
             top_genre_engagement_score = 0
 
