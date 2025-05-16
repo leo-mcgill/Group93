@@ -34,19 +34,36 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("shareForm").addEventListener("submit", function(event) {
         event.preventDefault();
         const friendUsername = loginInput.value;
-
-        // You can now send this username to the server to add the friend
-        // Example:
+    
         fetch('/share_with_user', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username: friendUsername })
-        }).then(response => {
-            if (response.ok) {
-                alert("Friend added successfully!");
+        })
+        .then(response => response.json().then(data => ({ status: response.status, body: data })))
+        .then(({ status, body }) => {
+            if (status === 200) {
+                // Create and append a new <h2> element
+                const friendElement = document.createElement("h2");
+                friendElement.classList.add("friend_element");
+                friendElement.textContent = friendUsername;
+    
+                // Append to the about_container
+                const container = document.querySelector(".about_container");
+                container.appendChild(friendElement);
+    
+                // Reset input
+                loginInput.value = '';
+                autocompleteResults.innerHTML = '';
+    
+                alert(body.message);  // success message
             } else {
-                alert("Invalid friend");
+                alert(body.error || "Failed to add friend.");
             }
+        })
+        .catch(error => {
+            console.error("Error adding friend:", error);
+            alert("Something went wrong.");
         });
     });
 });
