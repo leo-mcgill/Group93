@@ -18,6 +18,7 @@ class Config:
     SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL') or default_database_location
     SECRET_KEY = os.getenv('SECRET_KEY')
     API_KEY = os.getenv('API_KEY')
+    USE_OMDB_API = False #Set to True if you want to use omdb api instead of sample data
     
 class TestingConfig(Config):
     """Testing configuration, which uses a separate test database."""
@@ -26,6 +27,6 @@ class TestingConfig(Config):
     TESTING = True
     SERVER_NAME = 'localhost.localdomain'
     WTF_CSRF_ENABLED = False
-
+    USE_OMDB_API = False
     #setting a testing secret key so tests can run without .env file
     SECRET_KEY = ('testing_secret')
