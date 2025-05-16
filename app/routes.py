@@ -348,7 +348,7 @@ def init_routes(application):
 
             friend = User.query.filter_by(username=friend_username).first()
 
-            movies = get_friend_movies(friend_username)
+            movies = get_friend_movies(current_user, friend_username)
             
             # False means no friend is selected. And then renders the template with an empty friends list.
             if movies == False:
@@ -390,7 +390,7 @@ def init_routes(application):
         try:
             friend_username = request.args.get('friend_username', type=str)
 
-            movies = get_friend_movies(friend_username)
+            movies = get_friend_movies(current_user, friend_username)
             if movies == False:
                 return render_template("visualiseMoviesSharedSuggested.html", underlined_tab_index=3, movies=movies_data, friends=friends_list)
             

@@ -159,7 +159,7 @@ def get_movies_of_genre(all_movies, max_genre):
     return movies_of_genre
 
 # Queries for all the movies that a friend has rated and returns the list of tuples of movie, and friend_ratings.
-def get_friend_movies(friend_username):
+def get_friend_movies(current_user, friend_username):
     # Return False if no friend is selected
     if friend_username == None:
         return False
@@ -167,6 +167,17 @@ def get_friend_movies(friend_username):
     friend = User.query.filter_by(username=friend_username).first()
 
     user_movie_alias = aliased(UserMovie)
+
+    users_shared = current_user.friends
+
+    users_shared_usernames = []
+    for user in users_shared:
+        users_shared_usernames.append(user.username)
+
+    #checks if friend_username actually exists in the current user's friend usernames
+    if friend.username not in users_shared_usernames:
+        print("friend_username field was not present in the current user's friends")
+        return None
 
     query = (
         db.session.query(
