@@ -71,9 +71,10 @@ class UserAuthTestCase(unittest.TestCase):
 
     def test_signup(self):
         """Test the signup route."""
-        response = self.client.post('/signup_account', json={
+        response = self.client.post('/signup_account', data={
             'username': 'testuser',
-            'password': 'password123'
+            'password': 'password123',
+            'confirm_password': 'password123'
         })
         
         self.assertEqual(response.status_code, 200)
@@ -88,15 +89,17 @@ class UserAuthTestCase(unittest.TestCase):
     def test_login(self):
         """Test login Route"""
         # Signup first
-        self.client.post('/signup_account', json={
+        self.client.post('/signup_account', data={
             'username': 'testuser',
-            'password': 'testpassword'
+            'password': 'testpassword',
+            'confirm_password': 'testpassword'
         })
         
         # Then try login
         response = self.client.post('/login', data={
             'username': 'testuser',
-            'password': 'testpassword'
+            'password': 'testpassword',
+            'confirm_password': 'testpassword'
         }, follow_redirects=True)
         
         self.assertEqual(response.request.path, '/')
