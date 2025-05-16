@@ -79,8 +79,23 @@
 }
 
 .about_container .friend_element {
-    font-size: 1rem;
+    font-size: 1.5rem;
+    font-weight: 500;
     background-color: #fafafa3e;
-    padding: 0.25rem 0.5rem;
+    padding: 0.5rem 1rem;
     border-radius: 0.5rem;
+    color: #ffffff;
+    text-shadow: 0 0 3px rgba(0, 0, 0, 0.4);
+}
+
+.centered_container {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;  /* space between form and shared list */
+    align-items: flex-start;  /* align tops */
+    flex-wrap: wrap;  /* responsive fallback */
+}
+
+.centered_div.column_direction {
+    width: 300px;  /* consistent column width */
 }
