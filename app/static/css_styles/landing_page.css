@@ -1,0 +1,98 @@
+/* Group 93 CITS3403 Project 2025 - Landing Page Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+  background-color: #202020;
+  color: #f4f4f4;
+  min-height: 100vh;
+}
+
+/* Outer container for the landing page */
+.landing-body-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  gap: 2rem;
+  min-height: 100vh;
+}
+
+/* Flex container to separate login box and about section */
+.landing-centered-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  width: 100%;
+}
+
+
+/* Login/Signup Box */
+.landing-login-box {
+  background-color: #2e2e2e;
+  padding: 3rem 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 400px;
+}
+
+.landing-login-title {
+  font-size: 1.75rem;
+  color: #ffffff;
+  text-align: center;
+  font-weight: 600;
+}
+
+.landing-login-button {
+  font-size: 1.25rem;
+  background-color: #ffd437;
+  color: #202020;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 1rem;
+  width: 100%;
+  max-width: 200px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.landing-login-button:hover {
+  background-color: #f4c400;
+}
+
+/* About Box */
+.landing-about-box {
+  background-color: #1b1b1b;
+  padding: 3rem;                        /* more internal space */
+  border-radius: 1rem;
+  max-width: 850px;                    /* increased width */
+  width: 100%;
+  color: #dddddd;
+  font-size: 1.25rem;                  /* larger font for readability */
+  line-height: 1.8;                    /* more line spacing */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  text-align: center;                  /* center all text inside */
+}
+
+.landing-about-title {
+  font-size: 2rem;
+  color: #ffd437;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.landing-about-text {
+  margin-bottom: 1rem;
+  font-size: 1.75rem;
+}
