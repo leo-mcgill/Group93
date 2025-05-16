@@ -170,10 +170,10 @@ def init_routes(application):
     def search_movies():
         search_query = request.args.get('q', '')
         
-        # Query the database for users whose username contains the search query
+        # Query the database for movies whose title contains the search query
         matching_movies = Movie.query.filter(Movie.title.ilike(f'%{search_query}%')).all()
         
-        # Return a list of matching usernames
+        # Return a list of matching movies
         return jsonify({"results": [movie.title for movie in matching_movies]})
 
     @application.route('/shareData')
