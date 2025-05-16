@@ -553,6 +553,10 @@ def init_routes(application):
         # Get the username in the query parameters
         username = request.args.get('username')
 
+        user = User.query.get(current_user.id)
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+
         # If the username is not provided or the username is currently logged in, the current user's profile will be displayed.
         if not username or username == current_user.username:
             profile_user = current_user

@@ -177,7 +177,7 @@ def get_friend_movies(current_user, friend_username):
     #checks if friend_username actually exists in the current user's friend usernames
     if friend.username not in users_shared_usernames:
         print("friend_username field was not present in the current user's friends")
-        return None
+        return False
 
     query = (
         db.session.query(
