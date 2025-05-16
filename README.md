@@ -56,8 +56,6 @@ If the output is 'RemoteSigned', the policy has been updated successfully.
 **3.** Upgrade pip to the latest version:  
 $ python.exe -m pip install --upgrade pip  
 
-Before continuing, make sure your terminal is in the app directory (cd app)  
-
 **4:** Install requirements on Venv (only need to do this once):  
 $ pip install -r requirements.txt  
 
