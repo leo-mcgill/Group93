@@ -72,7 +72,9 @@ Add sample_movies to db so that you can select and upload data about them:
 $ python scripts/add_sample_movies.py  
 
 **5:** run the app:  
-$ python movie_tracker_app.py  
+$ python movie_tracker_app.py
+OR
+$ flask run 
 
 ## ENV FILE  
 
