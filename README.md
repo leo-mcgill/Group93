@@ -63,8 +63,9 @@ $ pip install -r requirements.txt
 
 There are scripts in /scripts to manage the database
 
-**5:** Initialise the DB:  
-$ python scripts/init_db.py  
+**5:** Create the db using alembic (ORM):
+using the python virtual environment:  
+$ flask db upgrade  
 
 ### IMPORTANT  
 Add sample_movies to db so that you can select and upload data about them:  
