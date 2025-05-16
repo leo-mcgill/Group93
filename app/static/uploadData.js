@@ -55,35 +55,17 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         //This code uses the API key to auto complete the movie title.
-        //Uncomment this when you want to add movies to the database and have an OMDB API Key.
-        /*
+        //Depending on USE_OMDB_API = True/False it will use the correct route
         debounceTimeout = setTimeout(() => {
-            fetch(`/autocomplete_movie?q=${encodeURIComponent(query)}`)
-                .then(res => res.json())
-                .then(data => {
-                    resultBox.innerHTML = "";
-                    data.results.forEach(title => {
-                        const li = document.createElement("li");
-                        li.textContent = title;
-                        li.addEventListener("click", () => {
-                            input.value = title;
-                            resultBox.innerHTML = "";
-                        });
-                        resultBox.appendChild(li);
-                    });
-                });
-        }, 300);  // Debounce delay
-        */
-        //////
-       
-        //This code autocompletes movie titles based on the current titles in movie table. Comment this out when you want to add movies to the database and have an OMDB API Key.
+            const endpoint = USE_OMDB_API
+                ? `/autocomplete_movie?q=${encodeURIComponent(query)}`
+                : `/search_movies?q=${encodeURIComponent(query)}`;
         
-        debounceTimeout = setTimeout(() => {
-            fetch(`/search_movies?q=${query}`)
+            fetch(endpoint)
                 .then(res => res.json())
                 .then(data => {
                     resultBox.innerHTML = "";
-                    data.results.forEach(title => {
+                    (data.results || []).forEach(title => {
                         const li = document.createElement("li");
                         li.textContent = title;
                         li.addEventListener("click", () => {
@@ -94,6 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     });
                 });
         }, 300);  // Debounce delay
+        
 
         //////
         

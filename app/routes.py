@@ -91,7 +91,7 @@ def init_routes(application):
 
         movies = Movie.query.all()
         
-        return render_template("uploadReview.html", api_key=Config.API_KEY, underlined_tab_index=2, movies = movies)
+        return render_template("uploadReview.html", api_key=Config.API_KEY, underlined_tab_index=2, movies = movies, use_omdb_api=Config.USE_OMDB_API)
     
 
 
