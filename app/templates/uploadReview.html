@@ -4,7 +4,6 @@
 {% extends "base.html" %}
 
 {% block title %}Upload Data{% endblock %}
-
 {% set stylesheet_file = 'css_styles/upload_styles.css' %}
 
 {% block content %}
@@ -43,5 +42,8 @@
     
     </div>
 </div>
+<script>
+    const USE_OMDB_API = {{ use_omdb_api | tojson }};
+</script>
 <script src="{{ url_for('static', filename='uploadData.js') }}"></script>
 {% endblock %}

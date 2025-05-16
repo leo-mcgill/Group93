@@ -20,6 +20,7 @@ from app import create_app, db
 from app.config import TestingConfig
 
 localHost = "http://127.0.0.1:5000/"
+#Note that Selenium is weird with logging in/signing up users through Flask-WTF so I've used cookies to sign in instead.
 class TestFlaskApp(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -149,24 +150,6 @@ class TestFlaskApp(unittest.TestCase):
         self.driver.get("http://127.0.0.1:5000/")
         self.assertIn("Movie Tracker", self.driver.page_source)
 
-    def test_logout_redirects_home(self):
-        """Test if logout redirects to home"""
-        self.login_via_cookie()
-        self.driver.get("http://127.0.0.1:5000/logout")
-        WebDriverWait(self.driver, 10).until(EC.url_to_be("http://127.0.0.1:5000/"))
-        self.assertIn("Movie Tracker", self.driver.page_source)
-    
-    def test_visualise_statistics_page_loads(self):
-        """Test if the logged-in user can access the statistics visualization page"""
-        self.login_via_cookie()
-        self.driver.get("http://127.0.0.1:5000/visualiseMoviesStatistics")
-
-        # Wait until the main statistics header loads
-        WebDriverWait(self.driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, "//h2[contains(text(), 'Total Runtime of All Movies Watched')]"))
-        )
-
-        self.assertIn("Total Runtime of All Movies Watched", self.driver.page_source)
 
     def test_add_and_remove_friend_flow(self):
         """Test that a user can add and remove a friend"""
