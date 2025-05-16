@@ -1,2 +1,78 @@
-/*Group 93 CITS3403 Project 2025*/
-/*styles used by redirectSignUp page*/
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.redirect-body-container {
+  font-family: "Roboto", sans-serif;
+  background-color: #202020;
+  color: #f4f4f4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  padding: 3rem 1rem;
+  min-height: 100vh;
+}
+
+/* Content restriction message */
+.redirect-message-box {
+  text-align: center;
+  max-width: 600px;
+}
+
+.redirect-title {
+  font-size: 3rem;
+  color: #ffd437;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-weight: 700;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+.redirect-message {
+  font-size: 1.25rem;
+  line-height: 1.6;
+  color: #dddddd;
+}
+
+/* Login/Signup box */
+.redirect-login-box {
+  background-color: #2e2e2e;
+  padding: 3rem 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 400px;
+}
+
+.redirect-login-title {
+  font-size: 1.75rem;
+  color: #ffffff;
+  font-weight: 600;
+  text-align: center;
+}
+
+.redirect-login-button {
+  font-size: 1.25rem;
+  background-color: #ffd437;
+  color: #202020;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 1rem;
+  width: 100%;
+  max-width: 200px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.redirect-login-button:hover {
+  background-color: #f4c400;
+}
