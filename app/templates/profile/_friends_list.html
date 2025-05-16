@@ -18,9 +18,6 @@
                     {% if is_own_profile %}
                     <button class="remove-friend-btn" title="Unshare use">×</button>
                     {% endif %}
-                    <a href="{{ url_for('profile', username=friend.username) }}" class="view-profile-link" title="View profile">
-                        <span class="profile-icon">👤</span>
-                    </a>
                 </div>
                 {% if not loop.last %}<div class="friend-divider"></div>{% endif %}
             {% endfor %}
