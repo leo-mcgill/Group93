@@ -79,7 +79,7 @@ $ python app.py
 ## ENV FILE  
 
 **6:** create a .env file  
-create a .env file in /app  
+create a .env file in project root.   
 append to .env file:  
 SECRET_KEY = "example_secret_key"  
 
