@@ -266,9 +266,6 @@
                             <span class="user-result-name">${user.username}</span>
                         </div>
                         <div class="user-result-actions">
-                            <a href="/profile?username=${user.username}" class="view-profile-btn" title="View profile">
-                                <span class="profile-view-icon">👤</span>
-                            </a>
                             <button class="add-friend-btn ${isFriend ? 'added' : ''}"
                                 data-username="${user.username}"
                                 ${isFriend ? 'disabled' : ''}>
