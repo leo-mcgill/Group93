@@ -56,6 +56,11 @@ def init_routes(application):
         if request.method == 'POST':
             username = form.username.data
             password = form.password.data
+            confirmPassword = request.form.get('confirm_password')
+
+            if password != confirmPassword:
+                flash("Password do not match.Please try again..", 'warning')
+                return jsonify({'message':'Password do not match'})
             
             existing_user = User.query.filter_by(username=username).first()
             if existing_user:
