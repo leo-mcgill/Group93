@@ -20,9 +20,11 @@ https://www.omdbapi.com/    (OMDB Website)
 APA Referencing:  
 OMDb API - The Open Movie Database. (2000). Omdbapi.com. https://www.omdbapi.com/  
 
-## References of AI LLMs used
-APA Referencing:
-OpenAI. (2025). ChatGPT (May 15 version) [Large language model]. https://chat.openai.com/chat
+## References of AI LLMs used  
+APA Referencing:  
+OpenAI. (2025). ChatGPT (May 15 version) [Large language model]. https://chat.openai.com/chat  
+
+GitHub. (2025). GitHub Copilot [Computer software]. https://github.com/features/copilot  
 
 ## Instructions to run Flask application  
 **1:** create a python virtual environment (Only need to do this once)  
@@ -77,7 +79,7 @@ $ python app.py
 ## ENV FILE  
 
 **6:** create a .env file  
-create a .env file in /app  
+create a .env file in project root.   
 append to .env file:  
 SECRET_KEY = "example_secret_key"  
 
@@ -91,7 +93,17 @@ it is not required as we can add a test sample of movies from a json file in ins
 **7:** open your browser and go to:  
 http://127.0.0.1:5000/  
 
----
+## TESTING using unittest  
+
+To run unittest:  
+from project root and with virtual environment run:  
+python3 -m unittest tests/test_app.py  
+
+To run selenium tests:  
+from project root and with virtual environment run:  
+python3 -m unittest tests/test_selenium.py  
+
+---  
 
 To quit:  
 ctrl + c in terminal  
