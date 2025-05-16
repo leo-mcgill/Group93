@@ -724,4 +724,3 @@ def init_routes(application):
         db.session.commit()
         flash(f"Rating for “{title}” deleted.", "success")
         return redirect(url_for('manage_ratings'))
-
