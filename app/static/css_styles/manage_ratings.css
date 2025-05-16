@@ -1,0 +1,115 @@
+/* Group 93 CITS3403 Project 2025 */
+/* Styles used by the Manage Ratings page */
+
+.title_container {
+    margin: 2rem auto;
+    text-align: center;
+}
+
+.title_container h1 {
+    font-size: 2.25rem;
+    color: #e7e7e7;
+}
+
+/* Main content container aligned with upload page */
+.upload_container {
+    background-color: #fafafa3e;
+    border-radius: 1rem;
+    padding: 2.5rem;
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* Responsive table container */
+.table_container {
+    overflow-x: auto;
+    margin-top: 1.5rem;
+}
+
+/* Table styling */
+.ratings_table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1rem;
+}
+
+.ratings_table th,
+.ratings_table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid #ccc;
+}
+
+.ratings_table th {
+    background-color: #f1f1f1;
+    font-weight: 600;
+    color: #222;
+}
+
+/* Form and input styling */
+.inline_form {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.movieform-input {
+    width: 100%;
+}
+
+.movieform-input input {
+    border: none;
+    outline: none;
+    padding: 0.5rem 1rem;
+    margin-top: 0.25rem;
+    font-size: 1.1rem;
+    box-shadow: 2px #f1f1f1;
+    border-radius: 0.5rem;
+    width: 100px;
+}
+
+/* Reuse upload_submit button for consistency */
+.upload_submit {
+    font-size: 1rem;
+    border: none;
+    background-color: #ffd437;
+    border-radius: 0.5rem;
+    padding: 0.4rem 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.upload_submit:hover {
+    background-color: #e6bf2e;
+}
+
+/* Delete button override style */
+.upload_submit.delete-btn {
+    background-color: #914e4e;
+    color: white;
+}
+
+.upload_submit.delete-btn:hover {
+    background-color: #914e4e;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .ratings_table th,
+    .ratings_table td {
+        padding: 0.5rem;
+    }
+
+    .movieform-input input {
+        width: 80px;
+        font-size: 1rem;
+    }
+
+    .upload_submit {
+        font-size: 0.9rem;
+        padding: 0.4rem 0.75rem;
+    }
+}
