@@ -13,6 +13,7 @@
     max-width: 1200px;
     margin: 0 auto;
     width: 100%;
+    min-width:50rem;
 }
 
 .upload_container form {
@@ -82,4 +83,11 @@
     background-color: #fafafa3e;
     padding: 0.25rem 0.5rem;
     border-radius: 0.5rem;
+}
+
+.result-text-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
 }
