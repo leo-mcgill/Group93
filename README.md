@@ -65,7 +65,7 @@ $ pip install -r requirements.txt
 
 There are scripts in /scripts to manage the database
 
-**5:** Create the db using alembic (ORM):
+**5:** Create the db using alembic (ORM):  
 using the python virtual environment:  
 $ flask db upgrade  
 
