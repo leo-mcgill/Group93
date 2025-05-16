@@ -91,6 +91,16 @@ it is not required as we can add a test sample of movies from a json file in ins
 **7:** open your browser and go to:  
 http://127.0.0.1:5000/  
 
+## TESTING using unittest
+
+To run unittest:
+from project root and with virtual environment run:
+python3 -m unittest tests/test_app.py 
+
+To run selenium tests:
+from project root and with virtual environment run:
+python3 -m unittest tests/test_selenium.py
+
 ---
 
 To quit:  
