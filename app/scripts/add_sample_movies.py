@@ -16,7 +16,7 @@ with application.app_context():
 
     #on linux path is just example_movies.json
     #on other OS use app/scripts/example_movies.json
-    with open('app/scripts/example_movies.json', 'r') as f:
+    with open('./example_movies.json', 'r') as f:
     #with open('example_movies.json', 'r') as f:
         data = json.load(f)
 
