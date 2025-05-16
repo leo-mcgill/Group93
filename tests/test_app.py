@@ -21,7 +21,6 @@ class UserAuthTestCase(unittest.TestCase):
 
     def setUp(self):
         """Reset the database before each test."""
-        testApplication = create_application(TestingConfig)
         with self.app.app_context():
             db.create_all()  # Create all tables before each test
 
