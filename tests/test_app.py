@@ -134,68 +134,66 @@ class UserAuthTestCase(unittest.TestCase):
             self.assertEqual(user_movie.user_rating, 8.0)
 
 
-    def test_add_friend_user_not_found(self):
-        """Test that the route returns an error when trying to add a non-existing user as a friend."""
-        #login first and store add_friend response
-        with self.app.app_context():
-            user = User.query.filter_by(username="movieuser").first()
-            self.client.post('/login', data={
-                'username': user.username,
-                'password': "password1"
+    def test_share_with_user_user_not_found(self):
+        """Test that the route returns an error when trying to share with a non-existing user."""
+        with self.client as client:
+            # Log in
+            client.post('/login', data={
+                'username': 'movieuser',
+                'password': 'password1'
             }, follow_redirects=True)
-            response = self.client.post('/add_friend', json={
+
+            # Post to the correct new route
+            response = client.post('/share_with_user', json={
                 'username': 'nonexistentuser'
             })
 
-        # Assert the status code is 404 (Not Found)
-        self.assertEqual(response.status_code, 404)
-        # Assert the error message
-        result = response.get_json()
-        self.assertEqual(result['error'], "User not found")
+            self.assertEqual(response.status_code, 404)
+            result = response.get_json()
+            self.assertIsNotNone(result)
+            self.assertEqual(result['error'], "User not found")
 
-    def test_add_friend_yourself(self):
+    def test_share_user_with_self(self):
         """Test that the route returns an error when trying to add yourself as a friend."""
         #login first
-        with self.app.app_context():
-            user = User.query.filter_by(username="movieuser").first()
-            self.client.post('/login', data={
-                'username': user.username,
-                'password': "password1"
+        with self.client as client:
+            client.post('/login', data={
+                'username': 'movieuser',
+                'password': 'password1'
             }, follow_redirects=True)
 
-            response = self.client.post('/add_friend', json={
-            'username': 'movieuser'  # Trying to add yourself
+            response = client.post('/share_with_user', json={
+                'username': 'movieuser'
             })
-        # Assert the status code is 400 (Bad Request)
-        self.assertEqual(response.status_code, 400)
-        # Assert the error message
-        result = response.get_json()
-        self.assertEqual(result['error'], "Cannot add yourself as a friend")
 
-    def test_add_friend_already_friends(self):
-        """Test that the route returns an error when the users are already friends."""
-        #login first
-        with self.app.app_context():
-            user = User.query.filter_by(username="movieuser").first()  # Retrieve the test user
-            self.client.post('/login', data={
-                'username': user.username,
-                'password': "password1"
+            self.assertEqual(response.status_code, 400)
+            result = response.get_json()
+            self.assertIsNotNone(result)
+            self.assertEqual(result['error'], "Cannot add yourself as a friend")
+
+    def test_share_with_user_already_shared(self):
+        """Test that sharing with an already-friended user returns 400."""
+        with self.client as client:
+            client.post('/login', data={
+                'username': 'movieuser',
+                'password': 'password1'
             }, follow_redirects=True)
-        
-            # First, add the user as a friend
-            self.client.post('/add_friend', json={'username': 'frienduser'})
 
-            # Now try to add the same user again
-            response = self.client.post('/add_friend', json={
+            # First share attempt
+            response1 = client.post('/share_with_user', json={
+                'username': 'frienduser'
+            })
+            self.assertEqual(response1.status_code, 200)
+
+            # Second share attempt — should fail
+            response2 = client.post('/share_with_user', json={
                 'username': 'frienduser'
             })
 
-        # Assert the status code is 400 (Bad Request)
-        self.assertEqual(response.status_code, 400)
-
-        # Assert the error message
-        result = response.get_json()
-        self.assertEqual(result['error'], "Already in their friend list")
+            self.assertEqual(response2.status_code, 400)
+            result = response2.get_json()
+            self.assertIsNotNone(result)
+            self.assertEqual(result['error'], "Already in their friend list")
         
     def test_update_bio(self):
         """Test that a user can update their bio."""
